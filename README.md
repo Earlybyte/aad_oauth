@@ -1,6 +1,6 @@
 # Azure Active Directory OAuth
 
-A Flutter OAuth package for performing user authentication against Azure Active Directory OAuth2 v2.0 endpoint for your apps. Forked from [hitherejoe.FlutterOAuth](https://github.com/hitherejoe/FlutterOAuth).
+A Flutter OAuth package for performing user authentication against Azure Active Directory OAuth2 v2.0 endpoint. Forked from [hitherejoe.FlutterOAuth](https://github.com/hitherejoe/FlutterOAuth).
 
 Supported Flows:
  - [Authorization code flow (including refresh token flow)](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)
