@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:aad_oauth/model/token.dart';
-import 'package:meta/meta.dart';
 import "dart:convert" as Convert;
+import 'package:flutter/material.dart';
 
 
 class AuthStorage {

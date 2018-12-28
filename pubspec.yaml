@@ -1,8 +1,8 @@
 name: aad_oauth
 description: Fluter Azure Active Directory OAuth Package
 version: 0.0.1
-author:
-homepage:
+author: Earlybyte Gmbh <info@earlybyte.ch>
+homepage: https://www.earlybyte.ch/
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
