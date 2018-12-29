@@ -1,3 +1,7 @@
+## [0.1.1] - 20181229
+
+* Added an example
+
 ## [0.1.0] - 20181229
 
 * Adjusted library interface
