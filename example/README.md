@@ -1,16 +1,15 @@
-# example
+# aad-oauth-example
 
-A new Flutter project.
+A Flutter OAuth package example for performing user authentication against Azure Active Directory OAuth2 v2.0 endpoint.
 
-## Getting Started
+## Usage
 
-This project is a starting point for a Flutter application.
+Register an App in the [Azure App registration portal](https://apps.dev.microsoft.com/). Use native app as plattform type (with callback URL: https://login.live.com/oauth20_desktop.srf).
 
-A few resources to get you started if this is your first Flutter project:
+Add your Azure tenant ID and client ID (ID of App) in the main.dart source-code:
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+```dart
+static final Config config = new Config("YOUR_TENANT_ID", "YOUR CLIENT ID", "openid profile offline_access");
+```
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Afterwards you can login and get an access token for accessing other resources.

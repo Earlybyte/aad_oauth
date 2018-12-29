@@ -1,3 +1,7 @@
+## [0.1.2] - 20181229
+
+* Added example README
+
 ## [0.1.1] - 20181229
 
 * Added an example
