@@ -1,3 +1,8 @@
+## [0.1.0] - 20181229
+
+* Adjusted library interface
+* Bug fixing
+
 ## [0.0.1] - 20181228
 
 * Initial release

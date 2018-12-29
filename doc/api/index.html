@@ -21,7 +21,7 @@
 
 <header id="title">
   <ol class="breadcrumbs gt-separated dark hidden-xs">
-    <li><a href="https://www.earlybyte.ch/">aad_oauth package</a></li>
+    <li><a href="https://github.com/Earlybyte/aad_oauth">aad_oauth package</a></li>
   </ol>
   <div class="self-name">aad_oauth</div>
   <form class="search navbar-right" role="search">
@@ -44,43 +44,36 @@
           <li><a href="model_token/model_token-library.html">token</a></li>
           <li><a href="request_token_refresh_request/request_token_refresh_request-library.html">token_refresh_request</a></li>
           <li><a href="request_token_request/request_token_request-library.html">token_request</a></li>
-         
     </ol>
   </div>
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
       <section class="desc markdown">
         <h1 id="azure-active-directory-oauth">Azure Active Directory OAuth</h1>
-<p>A Flutter OAuth package for performing user authentication against Azure Active Directory OAuth2 v2.0 endpoint for your apps. Forked from <a href="https://github.com/hitherejoe/FlutterOAuth">hitherejoe.FlutterOAuth</a>.</p>
+<p>A Flutter OAuth package for performing user authentication against Azure Active Directory OAuth2 v2.0 endpoint. Forked from <a href="https://github.com/hitherejoe/FlutterOAuth">hitherejoe.FlutterOAuth</a>.</p>
 <p>Supported Flows:</p><ul><li><a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow">Authorization code flow (including refresh token flow)</a></li></ul>
 <h2 id="usage">Usage</h2>
-<p>Performing authorization for an API is straight forward using this library. In most cases you
-will just be able to use the following approach:</p>
-<pre class="language-dart"><code class="language-dart">final String azureClientId = "YOUR_CLIENT_ID";
-final String azureTennant = "YOUR_TENANT_ID";
-final Config oAuthConfig = new Config(
-    "https://login.microsoftonline.com/$azureTennant/oauth2/v2.0/authorize",
-    "https://login.microsoftonline.com/$azureTennant/oauth2/v2.0/token",
-    azureClientId,
-    "https://login.live.com/oauth20_desktop.srf",
-    "code",
-    "openid profile offline_access",
-    contentType: "application/x-www-form-urlencoded");
-final AadOAuth oauth = new AadOAuth(oAuthConfig);
+<p>For using this library you have to create an azure app at the <a href="https://apps.dev.microsoft.com/">Azure App registration portal</a>. Use native app as plattform type (with callback URL: <a href="https://login.live.com/oauth20_desktop.srf)">https://login.live.com/oauth20_desktop.srf)</a>.</p>
+<p>Afterwards you have to initialize the library as follow:</p>
+<pre class="language-dart"><code class="language-dart">final Config config = new Config(
+  "YOUR TENANT ID",
+  "YOUR CLIENT ID",
+  "openid profile offline_access");
+final AadOAuth oauth = new AadOAuth(config);
 </code></pre>
-<p>This allows you to pass in an Authorization URL, Token request URL, Client ID, Redirect URL, Response Type (always "code"), Scope
-and the content type (always "application/x-www-form-urlencoded").</p>
-<p>Then once you have an OAuth instance, you can simply call <code>getAccessToken()</code> method to retrieve a access token:</p>
-<pre class="language-dart"><code class="language-dart">String accessToken = await oauth.getAccessToken();
+<p>This allows you to pass in an tenant ID, client ID and scope.</p>
+<p>Then once you have an OAuth instance, you can call <code>login()</code> and afterwards <code>getAccessToken()</code> to retrieve an access token:</p>
+<pre class="language-dart"><code class="language-dart">await oauth.login();
+String accessToken = await oauth.getAccessToken();
 </code></pre>
-<p><code>getAccessToken()</code> will perform necessary authentication steps (full authorization code flow or just refresh code flow).</p>
-<p>Tokens are cached in memory. If you want to destroy the tokens you can call <code>logout()</code></p>
+<p>You can also call <code>getAccessToken()</code> directly. It will automatically login and retrive an access token.</p>
+<p>Tokens are cached in memory. to destroy the tokens you can call <code>logout()</code>:</p>
 <pre class="language-dart"><code class="language-dart">await oauth.logout();
 </code></pre>
 <h2 id="installation">Installation</h2>
-<p>Add the following you your pubspec.yaml dependancies:</p>
+<p>Add the following to your pubspec.yaml dependencies:</p>
 <pre class="language-yaml"><code class="language-yaml">dependencies:
-  aad_oauth: "^0.0.1"
+  aad_oauth: "^0.1.0"
 </code></pre>
       </section>
       
@@ -141,7 +134,7 @@ and the content type (always "application/x-www-form-urlencoded").</p>
 
 <footer>
   <span class="no-break">
-    aad_oauth 0.0.1
+    aad_oauth 0.1.0
   </span>
 
 </footer>

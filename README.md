@@ -7,35 +7,30 @@ Supported Flows:
 
 ## Usage
 
-Performing authorization for an API is straight forward using this library. In most cases you
-will just be able to use the following approach:
+For using this library you have to create an azure app at the [Azure App registration portal](https://apps.dev.microsoft.com/). Use native app as plattform type (with callback URL: https://login.live.com/oauth20_desktop.srf).
+
+Afterwards you have to initialize the library as follow:
 
 ```dart
-final String azureClientId = "YOUR_CLIENT_ID";
-final String azureTennant = "YOUR_TENANT_ID";
-final Config oAuthConfig = new Config(
-    "https://login.microsoftonline.com/$azureTennant/oauth2/v2.0/authorize",
-    "https://login.microsoftonline.com/$azureTennant/oauth2/v2.0/token",
-    azureClientId,
-    "https://login.live.com/oauth20_desktop.srf",
-    "code",
-    "openid profile offline_access",
-    contentType: "application/x-www-form-urlencoded");
-final AadOAuth oauth = new AadOAuth(oAuthConfig);
+final Config config = new Config(
+  "YOUR TENANT ID",
+  "YOUR CLIENT ID",
+  "openid profile offline_access");
+final AadOAuth oauth = new AadOAuth(config);
 ```
 
-This allows you to pass in an Authorization URL, Token request URL, Client ID, Redirect URL, Response Type (always "code"), Scope
-and the content type (always "application/x-www-form-urlencoded").
+This allows you to pass in an tenant ID, client ID and scope.
 
-Then once you have an OAuth instance, you can simply call `getAccessToken()` method to retrieve a access token:
+Then once you have an OAuth instance, you can call `login()` and afterwards `getAccessToken()` to retrieve an access token:
 
 ```dart
+await oauth.login();
 String accessToken = await oauth.getAccessToken();
 ```
 
-`getAccessToken()` will perform necessary authentication steps (full authorization code flow or just refresh code flow).
+You can also call `getAccessToken()` directly. It will automatically login and retrive an access token.
 
-Tokens are cached in memory. If you want to destroy the tokens you can call `logout()`
+Tokens are cached in memory. to destroy the tokens you can call `logout()`:
 
 ```dart
 await oauth.logout();
@@ -43,10 +38,10 @@ await oauth.logout();
 
 ## Installation
 
-Add the following you your pubspec.yaml dependancies:
+Add the following to your pubspec.yaml dependencies:
 
 ```yaml
 dependencies:
-  aad_oauth: "^0.0.1"
+  aad_oauth: "^0.1.0"
 ```
 

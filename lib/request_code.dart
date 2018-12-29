@@ -27,11 +27,13 @@ class RequestCode {
         "${_authorizationRequest.url}?$urlParams",
         clearCookies: _authorizationRequest.clearCookies, 
         hidden: true,  
-        rect: (_config.screenSize.height > 0 && _config.screenSize.width > 0) ? Rect.fromLTWH(
-        0.0,
-        25.0,
-        _config.screenSize.width,
-        _config.screenSize.height-25) : null
+        rect: _config.screenSize != null ?
+          (_config.screenSize.height > 0 && _config.screenSize.width > 0) ? Rect.fromLTWH(
+          0.0,
+          25.0,
+          _config.screenSize.width,
+          _config.screenSize.height-25) : null
+        : null
     );
 
 

@@ -34,6 +34,11 @@ class AadOAuth {
     _config.screenSize = screenSize;
   }
 
+  Future<void> login() async {
+    if (!Token.tokenIsValid(_token) )
+      await _performAuthorization();
+  }
+
   Future<String> getAccessToken() async {
     if (!Token.tokenIsValid(_token) )
       await _performAuthorization();
