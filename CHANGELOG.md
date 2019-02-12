@@ -1,3 +1,8 @@
+## [0.1.3] - 20190212
+
+* Fix iOS issue by encoding the URL
+* Change dependency of example to local library
+
 ## [0.1.2] - 20181229
 
 * Added example README
