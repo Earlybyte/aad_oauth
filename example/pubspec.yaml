@@ -1,4 +1,4 @@
-name: aad-oauth-example
+name: aad_oauth_example
 description: A Flutter OAuth package example for performing user authentication against Azure Active Directory OAuth2 v2.0 endpoint.
 
 version: 1.0.0+1
@@ -7,7 +7,8 @@ environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
 dependencies:
-  aad_oauth: "^0.1.1"
+  aad_oauth: 
+    path: ../
   flutter:
     sdk: flutter
 
