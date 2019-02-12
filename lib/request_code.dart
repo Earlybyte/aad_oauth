@@ -24,7 +24,7 @@ class RequestCode {
     // workaround for webview overlapping statusbar
     // if we have a screen size use it to adjust the webview
     await _webView.launch(
-        "${_authorizationRequest.url}?$urlParams",
+        Uri.encodeFull("${_authorizationRequest.url}?$urlParams"),
         clearCookies: _authorizationRequest.clearCookies, 
         hidden: true,  
         rect: _config.screenSize != null ?
