@@ -1,3 +1,7 @@
+## [0.1.4] - 20190325
+
+* Change from memory cache to secure storage
+
 ## [0.1.3] - 20190212
 
 * Fix iOS issue by encoding the URL
