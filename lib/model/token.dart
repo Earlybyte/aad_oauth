@@ -34,7 +34,10 @@ class Token {
       }
       if (model.expiresIn != null ) {
         ret["expires_in"] = model.expiresIn;
-      }      
+      }
+      if (model.expireTimeStamp != null ) {
+        ret["expire_timestamp"] = model.expireTimeStamp.millisecondsSinceEpoch;
+      }    
     }
     return ret;
   }
@@ -51,13 +54,13 @@ class Token {
     model.tokenType = map["token_type"];
     model.expiresIn = map["expires_in"];
     model.refreshToken = map["refresh_token"];
-    model.issueTimeStamp = new DateTime.now();
-    model.expireTimeStamp = model.issueTimeStamp.add(new Duration(seconds: model.expiresIn-model.expireOffSet));
+    model.issueTimeStamp = new DateTime.now().toUtc();
+    model.expireTimeStamp = map.containsKey("expire_timestamp") ? DateTime.fromMillisecondsSinceEpoch(map["expire_timestamp"]) : model.issueTimeStamp.add(new Duration(seconds: model.expiresIn-model.expireOffSet));
     return model;
   }
 
   static bool isExpired(Token token) {
-    return token.expireTimeStamp.isBefore(new DateTime.now());
+    return token.expireTimeStamp.isBefore(new DateTime.now().toUtc());
   }
 
   static bool tokenIsValid(Token token) {
