@@ -7,6 +7,7 @@ import 'model/token.dart';
 import 'request_code.dart';
 import 'request_token.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AadOAuth {
   static Config _config;
@@ -35,6 +36,7 @@ class AadOAuth {
   }
 
   Future<void> login() async {
+    await _removeOldTokenOnFirstLogin();
     if (!Token.tokenIsValid(_token) )
       await _performAuthorization();
   }
@@ -95,6 +97,15 @@ class AadOAuth {
       } catch (e) {
         //do nothing (because later we try to do a full oauth code flow request)
       }
+    }
+  }
+
+  Future<void> _removeOldTokenOnFirstLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final _keyFreshInstall = "freshInstall";
+    if (!prefs.getKeys().contains(_keyFreshInstall)) {
+      logout();
+      await prefs.setBool(_keyFreshInstall, false);
     }
   }
 }
