@@ -1,3 +1,8 @@
+## [0.1.5] - 20190413
+
+* Fix Token expiration issue https://github.com/Earlybyte/aad_oauth/issues/5
+* Remove old token on iOS after fresh install https://github.com/Earlybyte/aad_oauth/issues/3
+
 ## [0.1.4] - 20190325
 
 * Change from memory cache to secure storage
