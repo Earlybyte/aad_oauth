@@ -15,16 +15,16 @@ class RequestToken {
 
   Future<Token> requestToken(String code) async {
     _generateTokenRequest(code);
-    return await _sendTokenRequest(_tokenRequest.params, _tokenRequest.headers);
+    return await _sendTokenRequest(_tokenRequest.url, _tokenRequest.params, _tokenRequest.headers);
   }
 
   Future<Token> requestRefreshToken(String refreshToken) async  {
     _generateTokenRefreshRequest(refreshToken);
-    return await _sendTokenRequest(_tokenRefreshRequest.params, _tokenRefreshRequest.headers);
+    return await _sendTokenRequest(_tokenRefreshRequest.url, _tokenRefreshRequest.params, _tokenRefreshRequest.headers);
   }
 
-  Future<Token> _sendTokenRequest(Map<String, String> params, Map<String, String> headers) async {
-    Response response = await post("${_tokenRequest.url}",
+  Future<Token> _sendTokenRequest(String url, Map<String, String> params, Map<String, String> headers) async {
+    Response response = await post(url,
         body: params,
         headers: headers);
     Map<String, dynamic> tokenJson = json.decode(response.body);

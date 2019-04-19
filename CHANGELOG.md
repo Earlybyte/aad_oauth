@@ -1,3 +1,7 @@
+## [0.1.6] - 20190419
+
+* Fix Token Refresh URL
+
 ## [0.1.5] - 20190413
 
 * Fix Token expiration issue https://github.com/Earlybyte/aad_oauth/issues/5
