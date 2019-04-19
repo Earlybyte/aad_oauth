@@ -12,9 +12,8 @@ class Config {
   final String scope;
   Size screenSize;
 
-  Config(this.azureTennantId, this.clientId, this.scope,
+  Config(this.azureTennantId, this.clientId, this.scope, this.redirectUri,
       {this.clientSecret,
-      this.redirectUri = "https://login.live.com/oauth20_desktop.srf",
       this.responseType = "code",
       this.contentType = "application/x-www-form-urlencoded",
       this.screenSize}) {
