@@ -7,7 +7,7 @@ Supported Flows:
 
 ## Usage
 
-For using this library you have to create an azure app at the [Azure App registration portal](https://apps.dev.microsoft.com/). Use native app as plattform type (with callback URL: https://login.live.com/oauth20_desktop.srf).
+For using this library you have to create an azure app at the [Azure App registration portal](https://apps.dev.microsoft.com/). Use native app as platform type (with callback URL: https://login.live.com/oauth20_desktop.srf).
 
 Afterwards you have to initialize the library as follow:
 
@@ -15,11 +15,12 @@ Afterwards you have to initialize the library as follow:
 final Config config = new Config(
   "YOUR TENANT ID",
   "YOUR CLIENT ID",
-  "openid profile offline_access");
+  "openid profile offline_access",
+  "your redirect url available in azure portal");
 final AadOAuth oauth = new AadOAuth(config);
 ```
 
-This allows you to pass in an tenant ID, client ID and scope.
+This allows you to pass in an tenant ID, client ID, scope and redirect url.
 
 Then once you have an OAuth instance, you can call `login()` and afterwards `getAccessToken()` to retrieve an access token:
 
@@ -28,9 +29,9 @@ await oauth.login();
 String accessToken = await oauth.getAccessToken();
 ```
 
-You can also call `getAccessToken()` directly. It will automatically login and retrive an access token.
+You can also call `getAccessToken()` directly. It will automatically login and retrieve an access token.
 
-Tokens are cached in memory. to destroy the tokens you can call `logout()`:
+Tokens are stored in Keychain for iOS or Keystore for Android. To destroy the tokens you can call `logout()`:
 
 ```dart
 await oauth.logout();
@@ -45,3 +46,6 @@ dependencies:
   aad_oauth: "^0.1.6"
 ```
 
+## Contribution
+
+Contributions can be submitted as pull requests and are highly welcomed. Changes will be bundled together into a release. You can find the next release date and past releases in the [CHANGELOG file](CHANGELOG.md).

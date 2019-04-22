@@ -1,3 +1,8 @@
+## [0.1.7] - 20190430 (not yet released)
+
+* Expose Redirect URL property in config.dart file to public https://github.com/Earlybyte/aad_oauth/issues/7
+* ...
+
 ## [0.1.6] - 20190419
 
 * Fix Token Refresh URL
