@@ -27,7 +27,7 @@ class RequestCode {
         Uri.encodeFull("${_authorizationRequest.url}?$urlParams"),
         clearCookies: _authorizationRequest.clearCookies, 
         hidden: true,  
-        rect: screenSize
+        rect: _config.screenSize
     );
 
 
