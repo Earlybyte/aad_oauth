@@ -10,7 +10,7 @@ class Config {
   final String responseType;
   final String contentType;
   final String scope;
-  Size screenSize;
+  Rect screenSize;
 
   Config(this.azureTennantId, this.clientId, this.scope, this.redirectUri,
       {this.clientSecret,

@@ -31,7 +31,7 @@ class AadOAuth {
     _requestToken = new RequestToken(_config);
   }
 
-  void setWebViewScreenSize(Size screenSize) {
+  void setWebViewScreenSize(Rect screenSize) {
     _config.screenSize = screenSize;
   }
 

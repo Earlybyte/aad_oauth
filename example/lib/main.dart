@@ -41,7 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget build(BuildContext context) {
     // adjust window size for browser login
-    oauth.setWebViewScreenSize(MediaQuery.of(context).size);
+    var screenSize = MediaQuery.of(context).size;
+    var rectSize =  Rect.fromLTWH(0.0, 25.0, screenSize.width, screenSize.height - 25);
+    oauth.setWebViewScreenSize(rectSize);
 
     return new Scaffold(
       appBar: new AppBar(
