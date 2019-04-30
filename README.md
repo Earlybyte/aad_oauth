@@ -43,7 +43,7 @@ Add the following to your pubspec.yaml dependencies:
 
 ```yaml
 dependencies:
-  aad_oauth: "^0.1.6"
+  aad_oauth: "^0.1.7"
 ```
 
 ## Contribution
