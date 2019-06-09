@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:aad_oauth/model/token.dart';
 import "dart:convert" as Convert;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -15,7 +16,16 @@ class AuthStorage {
   }
 
   Future<T> loadTokenToCache<T extends Token>() async {
-    var json = await _secureStorage.read(key:_identifier);
+    String json;
+    try {
+      json = await _secureStorage.read(key:_identifier);
+    } on PlatformException catch (_) {
+      // We may not be able to read the storage - if not
+      // just continue as if there was none
+      // This deals with Android secure storage decryption
+      // problems after a fresh uninstall/reinstall
+    }
+
     if (json == null) return null;
     try {
       var data = Convert.jsonDecode(json);
