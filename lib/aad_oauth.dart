@@ -47,7 +47,7 @@ class AadOAuth {
   Future<String> getAccessToken() async {
     if (!Token.tokenIsValid(_token) )
       await _performAuthorization();
-
+    if (_token == null) return null;
     return _token.accessToken;
   }
 

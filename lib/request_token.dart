@@ -14,6 +14,7 @@ class RequestToken {
   RequestToken(this.config);
 
   Future<Token> requestToken(String code) async {
+    if (code == null) return Future.value(null);
     _generateTokenRequest(code);
     return await _sendTokenRequest(_tokenRequest.url, _tokenRequest.params, _tokenRequest.headers);
   }

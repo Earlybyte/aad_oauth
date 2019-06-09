@@ -36,6 +36,13 @@ class RequestCode {
     _webView.onUrlChanged.listen((String url) {
       Uri uri = Uri.parse(url);
       Uri configUri = Uri.parse(_authorizationRequest.redirectUrl);
+      if (uri.queryParameters.containsKey("error")) {
+        // An error occurred (e.g. user didn't authenticate, or pressed Back
+        // or some othe problem) - leave it to the caller to work out what to
+        // do. Publish a null token
+        _onCodeListener.add(null);
+        return;
+      }
       if (uri.host == configUri.host)
         _onCodeListener.add(uri.queryParameters["code"]);
     });
