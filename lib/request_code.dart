@@ -12,7 +12,7 @@ class RequestCode {
   AuthorizationRequest _authorizationRequest;
 
   var _onCodeStream;
-  
+
   RequestCode(Config config) : _config = config {
     _authorizationRequest = new AuthorizationRequest(config);
   }
@@ -20,26 +20,23 @@ class RequestCode {
   Future<String> requestCode() async {
     var code;
     final String urlParams = _constructUrlParams();
-    
+
     // workaround for webview overlapping statusbar
     // if we have a screen size use it to adjust the webview
     await _webView.launch(
         Uri.encodeFull("${_authorizationRequest.url}?$urlParams"),
-        clearCookies: _authorizationRequest.clearCookies, 
-        hidden: true,  
-        rect: _config.screenSize
-    );
-
+        clearCookies: _authorizationRequest.clearCookies,
+        hidden: true,
+        rect: _config.screenSize);
 
     _webView.onStateChanged.listen((WebViewStateChanged change) {
-        if ( change.type.index == 2)
-          _webView.show();
+      if (change.type.index == 2) _webView.show();
     });
 
     _webView.onUrlChanged.listen((String url) {
       Uri uri = Uri.parse(url);
       Uri configUri = Uri.parse(_authorizationRequest.redirectUrl);
-      if ( uri.host == configUri.host )
+      if (uri.host == configUri.host)
         _onCodeListener.add(uri.queryParameters["code"]);
     });
 
@@ -47,6 +44,10 @@ class RequestCode {
     await _webView.close();
 
     return code;
+  }
+
+  void sizeChanged() {
+    _webView.resize(_config.screenSize);
   }
 
   Future<void> clearCookies() async {
@@ -57,7 +58,8 @@ class RequestCode {
   Stream<String> get _onCode =>
       _onCodeStream ??= _onCodeListener.stream.asBroadcastStream();
 
-  String _constructUrlParams() => _mapToQueryParams(_authorizationRequest.parameters);
+  String _constructUrlParams() =>
+      _mapToQueryParams(_authorizationRequest.parameters);
 
   String _mapToQueryParams(Map<String, String> params) {
     final queryParams = <String>[];
@@ -65,5 +67,4 @@ class RequestCode {
         .forEach((String key, String value) => queryParams.add("$key=$value"));
     return queryParams.join("&");
   }
-
 }
