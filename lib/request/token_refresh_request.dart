@@ -23,4 +23,5 @@ class TokenRefreshRequestDetails {
       "Content-Type": config.contentType
     };
   }
+
 }
