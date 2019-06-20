@@ -21,31 +21,28 @@ class RequestCode {
     var code;
     final String urlParams = _constructUrlParams();
     
-    // workaround for webview overlapping statusbar
-    // if we have a screen size use it to adjust the webview
     await _webView.launch(
         Uri.encodeFull("${_authorizationRequest.url}?$urlParams"),
         clearCookies: _authorizationRequest.clearCookies, 
-        hidden: true,  
+        hidden: false,  
         rect: _config.screenSize
     );
 
-
-    _webView.onStateChanged.listen((WebViewStateChanged change) {
-        if ( change.type.index == 2)
-          _webView.show();
-    });
-
     _webView.onUrlChanged.listen((String url) {
       Uri uri = Uri.parse(url);
-      Uri configUri = Uri.parse(_authorizationRequest.redirectUrl);
-      if ( uri.host == configUri.host )
+
+      if(uri.queryParameters["error"] != null) {
+        _webView.close();
+        throw new Exception("Access denied or authentation canceled."); 
+      }
+      
+      if (uri.queryParameters["code"] != null) {
+        _webView.close();
         _onCodeListener.add(uri.queryParameters["code"]);
+      }       
     });
 
     code = await _onCode.first;
-    await _webView.close();
-
     return code;
   }
 
@@ -65,5 +62,4 @@ class RequestCode {
         .forEach((String key, String value) => queryParams.add("$key=$value"));
     return queryParams.join("&");
   }
-
 }
