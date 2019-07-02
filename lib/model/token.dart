@@ -52,7 +52,9 @@ class Token {
     Token model = new Token();
     model.accessToken = map["access_token"];
     model.tokenType = map["token_type"];
-    model.expiresIn = int.tryParse(map["expires_in"]) ?? 60;
+    model.expiresIn = map["expires_in"] is int
+        ? map["expires_in"]
+        : int.tryParse(map["expires_in"].toString()) ?? 60;
     model.refreshToken = map["refresh_token"];
     model.issueTimeStamp = new DateTime.now().toUtc();
     model.expireTimeStamp = map.containsKey("expire_timestamp")
