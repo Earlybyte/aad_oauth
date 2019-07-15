@@ -10,10 +10,12 @@ class Config {
   final String responseType;
   final String contentType;
   final String scope;
+  final String resource;
   Rect screenSize;
 
   Config(this.azureTennantId, this.clientId, this.scope, this.redirectUri,
       {this.clientSecret,
+      this.resource,
       this.responseType = "code",
       this.contentType = "application/x-www-form-urlencoded",
       this.screenSize}) {
