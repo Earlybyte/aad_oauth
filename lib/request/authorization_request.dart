@@ -18,7 +18,7 @@ class AuthorizationRequest {
       "client_id": config.clientId,
       "response_type": config.responseType,
       "redirect_uri": config.redirectUri,
-      "scope": config.scope,,
+      "scope": config.scope,
       "resource": config.resource
     };
     this.fullScreen = fullScreen;
