@@ -13,7 +13,8 @@ class TokenRefreshRequestDetails {
       "scope": config.scope,
       "redirect_uri": config.redirectUri,
       "grant_type": "refresh_token",
-      "refresh_token": refreshToken
+      "refresh_token": refreshToken,
+      "resource": config.resource
     };
     if ( config.clientSecret != null )
       params.putIfAbsent("client_secret", () => config.clientSecret);
