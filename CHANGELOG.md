@@ -1,3 +1,7 @@
+## [0.1.8] - 20200110
+
+* Fix for double authentication
+
 ## [0.1.7] - 20190430
 
 * Expose Redirect URL property in config.dart file to public https://github.com/Earlybyte/aad_oauth/pull/9
