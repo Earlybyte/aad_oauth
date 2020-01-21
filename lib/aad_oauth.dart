@@ -12,19 +12,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AadOAuth {
   static Config _config;
   AuthStorage _authStorage;
-  Token _token;
   RequestCode _requestCode;
   RequestToken _requestToken;
 
+  Token token;
+
   factory AadOAuth(config) {
-    if ( AadOAuth._instance == null )
+    if (AadOAuth._instance == null)
       AadOAuth._instance = new AadOAuth._internal(config);
     return _instance;
   }
 
   static AadOAuth _instance;
 
-  AadOAuth._internal(config){
+  AadOAuth._internal(config) {
     AadOAuth._config = config;
     _authStorage = _authStorage ?? new AuthStorage();
     _requestCode = new RequestCode(_config);
@@ -37,34 +38,32 @@ class AadOAuth {
 
   Future<void> login() async {
     await _removeOldTokenOnFirstLogin();
-    if (!Token.tokenIsValid(_token) )
-      await _performAuthorization();
+    if (!Token.tokenIsValid(token)) await _performAuthorization();
   }
 
   Future<String> getAccessToken() async {
-    if (!Token.tokenIsValid(_token) )
-      await _performAuthorization();
+    if (!Token.tokenIsValid(token)) await _performAuthorization();
 
-    return _token.accessToken;
+    return token.accessToken;
   }
 
   bool tokenIsValid() {
-    return Token.tokenIsValid(_token);
+    return Token.tokenIsValid(token);
   }
 
   Future<void> logout() async {
     await _authStorage.clear();
     await _requestCode.clearCookies();
-    _token = null;
+    token = null;
     AadOAuth(_config);
   }
 
   Future<void> _performAuthorization() async {
     // load token from cache
-    _token = await _authStorage.loadTokenToCache();
+    token = await _authStorage.loadTokenToCache();
 
     //still have refreh token / try to get new access token with refresh token
-    if (_token != null)
+    if (token != null)
       await _performRefreshAuthFlow();
 
     // if we have no refresh token try to perform full request code oauth flow
@@ -77,23 +76,23 @@ class AadOAuth {
     }
 
     //save token to cache
-    await _authStorage.saveTokenToCache(_token);
+    await _authStorage.saveTokenToCache(token);
   }
 
   Future<void> _performFullAuthFlow() async {
     String code;
     try {
       code = await _requestCode.requestCode();
-      _token = await _requestToken.requestToken(code);
+      token = await _requestToken.requestToken(code);
     } catch (e) {
       rethrow;
     }
   }
 
   Future<void> _performRefreshAuthFlow() async {
-    if (_token.refreshToken != null) {
+    if (token.refreshToken != null) {
       try {
-        _token = await _requestToken.requestRefreshToken(_token.refreshToken);
+        token = await _requestToken.requestRefreshToken(token.refreshToken);
       } catch (e) {
         //do nothing (because later we try to do a full oauth code flow request)
       }
