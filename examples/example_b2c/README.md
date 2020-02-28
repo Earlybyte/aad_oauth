@@ -5,8 +5,9 @@ A Flutter OAuth package example for performing user authentication against Azure
 ## Usage
 
 Setup your B2C directory - [Azure AD B2C Setup](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant/).
-Register an App on the previously created B2C directory - [Azure AD B2C App Register](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-register-applications?tabs=applications). Use native app as plattform type (with callback URL: https://login.live.com/oauth20_desktop.srf).
-Create your user journeys - [Azure AD B2C User Journeys](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-user-flows)
+<br></br>Register an App on the previously created B2C directory - [Azure AD B2C App Register](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-register-applications?tabs=applications).
+<br></br>Use native app as plattform type (with callback URL: https://login.live.com/oauth20_desktop.srf).
+<br></br>Create your user journeys - [Azure AD B2C User Journeys](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-user-flows)
 
 Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secret of App) and redirectUrl in the main.dart source-code:
 
