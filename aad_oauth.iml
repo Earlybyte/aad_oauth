@@ -10,6 +10,8 @@
       <excludeFolder url="file://$MODULE_DIR$/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/example_b2c/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/examples/example_b2c/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/examples/example_b2c/build" />
     </content>
