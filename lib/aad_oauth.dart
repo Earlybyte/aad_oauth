@@ -17,8 +17,7 @@ class AadOAuth {
   RequestToken _requestToken;
 
   factory AadOAuth(config) {
-    if ( AadOAuth._instance == null )
-      AadOAuth._instance = new AadOAuth._internal(config);
+    AadOAuth._instance = new AadOAuth._internal(config);
     return _instance;
   }
 
