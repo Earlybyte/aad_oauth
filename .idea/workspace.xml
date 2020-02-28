@@ -107,6 +107,13 @@
       </file>
     </leaf>
   </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/example/lib/main.dart" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="390" />
     <option name="y" value="-20" />
@@ -124,17 +131,6 @@
             <path>
               <item name="aad_oauth" type="b2602c69:ProjectViewProjectNode" />
               <item name="aad_oauth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="aad_oauth" type="b2602c69:ProjectViewProjectNode" />
-              <item name="aad_oauth" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="aad_oauth" type="b2602c69:ProjectViewProjectNode" />
-              <item name="aad_oauth" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="aad_oauth" type="b2602c69:ProjectViewProjectNode" />
