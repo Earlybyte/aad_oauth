@@ -1,16 +1,26 @@
-# example_b2c
+# aad-b2c-oauth-example
 
-A new Flutter project.
+A Flutter OAuth package example for performing user authentication against Azure Active Directory with B2C OAuth2 v2.0 endpoint.
 
-## Getting Started
+## Usage
 
-This project is a starting point for a Flutter application.
+Setup your B2C directory - [Azure AD B2C Setup](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant/).
+Register an App on the previously created B2C directory - [Azure AD B2C App Register](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-register-applications?tabs=applications). Use native app as plattform type (with callback URL: https://login.live.com/oauth20_desktop.srf).
+Create your user journeys - [Azure AD B2C User Journeys](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-user-flows)
 
-A few resources to get you started if this is your first Flutter project:
+Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secret of App) and redirectUrl in the main.dart source-code:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```dart
+static final Config configB2C = new Config(
+    "YOUR_TENANT_ID",
+    "YOUR_CLIENT_ID",
+    "YOUR_CLIENT_ID offline_access",
+    "https://login.live.com/oauth20_desktop.srf",
+    clientSecret: "YOUR_CLIENT_SECRET",
+    isB2C: true,
+    azureTennantName: "YOUR_TENANT_NAME",
+    userJourney: "YOUR_USER_JOURNEY",
+  );
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Afterwards you can login and get an access token for accessing other resources.
