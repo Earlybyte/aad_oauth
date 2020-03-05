@@ -5,6 +5,7 @@ class Token {
   String accessToken;
   String tokenType;
   String refreshToken;
+  String idToken;
   DateTime issueTimeStamp;
   DateTime expireTimeStamp;
   int expiresIn;
@@ -56,6 +57,7 @@ class Token {
         ? map["expires_in"]
         : int.tryParse(map["expires_in"].toString()) ?? 60;
     model.refreshToken = map["refresh_token"];
+    model.idToken = map.containsKey("id_token") ? map["id_token"] : '';
     model.issueTimeStamp = new DateTime.now().toUtc();
     model.expireTimeStamp = map.containsKey("expire_timestamp")
         ? DateTime.fromMillisecondsSinceEpoch(map["expire_timestamp"])
