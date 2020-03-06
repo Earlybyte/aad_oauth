@@ -24,8 +24,8 @@ class AuthorizationRequest {
     if(config.isB2C){
       parameters.addAll({
         "p": config.userFlow,
-        "nonce": "12345",
-        "response_mode":"query",
+        "nonce": config.nonce,
+        "response_mode": "query",
       });
     }
 

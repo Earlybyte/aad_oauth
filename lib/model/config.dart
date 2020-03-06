@@ -13,6 +13,7 @@ class Config {
   final String contentType;
   final String scope;
   final String resource;
+  final String nonce;
   final bool isB2C;
   Rect screenSize;
   String userAgent;
@@ -24,6 +25,7 @@ class Config {
       this.scope,
       this.redirectUri, {
         this.isB2C = false,
+        this.nonce = "12345",
         this.azureTenantName,
         this.userFlow,
         this.clientSecret,
