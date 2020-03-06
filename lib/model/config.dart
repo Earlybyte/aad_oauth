@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 class Config {
-  final String azureTennantId;
-  final String azureTennantName;
+  final String azureTenantId;
+  final String azureTenantName;
   final String userFlow;
   String authorizationUrl;
   String tokenUrl;
@@ -16,11 +16,15 @@ class Config {
   final bool isB2C;
   Rect screenSize;
   String userAgent;
+  String tokenIdentifier;
 
-  Config(this.azureTennantId, this.clientId, this.scope, this.redirectUri,
-      {
+  Config(
+      this.azureTenantId,
+      this.clientId,
+      this.scope,
+      this.redirectUri, {
         this.isB2C = false,
-        this.azureTennantName,
+        this.azureTenantName,
         this.userFlow,
         this.clientSecret,
         this.resource,
@@ -28,10 +32,13 @@ class Config {
         this.contentType = "application/x-www-form-urlencoded",
         this.screenSize,
         this.userAgent,
+        this.tokenIdentifier = "Token",
       }) {
-    this.authorizationUrl = isB2C ? "https://$azureTennantName.b2clogin.com/$azureTennantName.onmicrosoft.com/oauth2/v2.0/authorize" :
-    "https://login.microsoftonline.com/$azureTennantId/oauth2/v2.0/authorize";
-    this.tokenUrl = isB2C ? "https://$azureTennantName.b2clogin.com/$azureTennantName.onmicrosoft.com/$userFlow/oauth2/v2.0/token" :
-    "https://login.microsoftonline.com/$azureTennantId/oauth2/v2.0/token";
+    this.authorizationUrl = isB2C
+        ? "https://$azureTenantName.b2clogin.com/$azureTenantName.onmicrosoft.com/oauth2/v2.0/authorize"
+        : "https://login.microsoftonline.com/$azureTenantId/oauth2/v2.0/authorize";
+    this.tokenUrl = isB2C
+        ? "https://$azureTenantName.b2clogin.com/$azureTenantName.onmicrosoft.com/$userFlow/oauth2/v2.0/token"
+        : "https://login.microsoftonline.com/$azureTenantId/oauth2/v2.0/token";
   }
 }
