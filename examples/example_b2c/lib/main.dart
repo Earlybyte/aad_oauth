@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
     clientSecret: "YOUR_CLIENT_SECRET",
     isB2C: true,
     azureTennantName: "YOUR_TENANT_NAME",
-    userJourney: "YOUR_USER_JOURNEY___USER_JOURNEY_A",
+    userFlow: "YOUR_USER_JOURNEY___USER_JOURNEY_A",
   );
 
   static final Config configB2Cb = new Config(
@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
     clientSecret: "YOUR_CLIENT_SECRET",
     isB2C: true,
     azureTennantName: "YOUR_TENANT_NAME",
-    userJourney: "YOUR_USER_JOURNEY___USER_JOURNEY_B",
+    userFlow: "YOUR_USER_JOURNEY___USER_JOURNEY_B",
   );
 
   //You can have as many B2C flows as you want

@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 class Config {
   final String azureTennantId;
   final String azureTennantName;
-  final String userJourney;
+  final String userFlow;
   String authorizationUrl;
   String tokenUrl;
   final String clientId;
@@ -21,7 +21,7 @@ class Config {
       {
         this.isB2C = false,
         this.azureTennantName,
-        this.userJourney,
+        this.userFlow,
         this.clientSecret,
         this.resource,
         this.responseType = "code",
@@ -31,7 +31,7 @@ class Config {
       }) {
     this.authorizationUrl = isB2C ? "https://$azureTennantName.b2clogin.com/$azureTennantName.onmicrosoft.com/oauth2/v2.0/authorize" :
     "https://login.microsoftonline.com/$azureTennantId/oauth2/v2.0/authorize";
-    this.tokenUrl = isB2C ? "https://$azureTennantName.b2clogin.com/$azureTennantName.onmicrosoft.com/$userJourney/oauth2/v2.0/token" :
+    this.tokenUrl = isB2C ? "https://$azureTennantName.b2clogin.com/$azureTennantName.onmicrosoft.com/$userFlow/oauth2/v2.0/token" :
     "https://login.microsoftonline.com/$azureTennantId/oauth2/v2.0/token";
   }
 }
