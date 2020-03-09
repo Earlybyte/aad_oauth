@@ -37,6 +37,9 @@ class Token {
       if (model.expireTimeStamp != null) {
         ret["expire_timestamp"] = model.expireTimeStamp.millisecondsSinceEpoch;
       }
+      if (model.idToken != null) {
+        ret["id_token"] = model.idToken;
+      }
     }
     return ret;
   }
