@@ -48,6 +48,13 @@ class AadOAuth {
     return _token.accessToken;
   }
 
+  Future<String> getIdToken() async {
+    if (!Token.tokenIsValid(_token) )
+      await _performAuthorization();
+
+    return _token.idToken;
+  }
+
   bool tokenIsValid() {
     return Token.tokenIsValid(_token);
   }
