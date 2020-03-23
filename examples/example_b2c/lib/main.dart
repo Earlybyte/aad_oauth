@@ -36,28 +36,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   static final Config configB2Ca = new Config(
-    "YOUR_TENANT_ID",
-    "YOUR_CLIENT_ID",
-    "YOUR_CLIENT_ID offline_access",
-    "https://login.live.com/oauth20_desktop.srf",
-    clientSecret: "YOUR_CLIENT_SECRET",
-    isB2C: true,
-    azureTenantName: "YOUR_TENANT_NAME",
-    userFlow: "YOUR_USER_FLOW___USER_FLOW_A",
-  );
+      "YOUR_TENANT_ID",
+      "YOUR_CLIENT_ID",
+      "YOUR_CLIENT_ID offline_access",
+      "https://login.live.com/oauth20_desktop.srf",
+      clientSecret: "YOUR_CLIENT_SECRET",
+      isB2C: true,
+      azureTenantName: "YOUR_TENANT_NAME",
+      userFlow: "YOUR_USER_FLOW___USER_FLOW_A",
+      tokenIdentifier: "UNIQUE IDENTIFIER A");
 
   static final Config configB2Cb = new Config(
-    "YOUR_TENANT_ID",
-    "YOUR_CLIENT_ID",
-    "YOUR_CLIENT_ID offline_access",
-    "https://login.live.com/oauth20_desktop.srf",
-    clientSecret: "YOUR_CLIENT_SECRET",
-    isB2C: true,
-    azureTenantName: "YOUR_TENANT_NAME",
-    userFlow: "YOUR_USER_FLOW___USER_FLOW_B",
-  );
+      "YOUR_TENANT_ID",
+      "YOUR_CLIENT_ID",
+      "YOUR_CLIENT_ID offline_access",
+      "https://login.live.com/oauth20_desktop.srf",
+      clientSecret: "YOUR_CLIENT_SECRET",
+      isB2C: true,
+      azureTenantName: "YOUR_TENANT_NAME",
+      userFlow: "YOUR_USER_FLOW___USER_FLOW_B",
+      tokenIdentifier: "UNIQUE IDENTIFIER B");
 
   //You can have as many B2C flows as you want
 
@@ -67,7 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // adjust window size for browser login
     var screenSize = MediaQuery.of(context).size;
-    var rectSize =  Rect.fromLTWH(0.0, 25.0, screenSize.width, screenSize.height - 25);
+    var rectSize =
+        Rect.fromLTWH(0.0, 25.0, screenSize.width, screenSize.height - 25);
     oauthB2Ca.setWebViewScreenSize(rectSize);
 
     return new Scaffold(
