@@ -11,7 +11,8 @@ class TokenRequestDetails {
       "client_id": config.clientId,
       "code": code,
       "redirect_uri": config.redirectUri,
-      "grant_type": "authorization_code"
+      "grant_type": "authorization_code",
+      "scope": config.scope,
     };
 
     if (config.resource != null)
