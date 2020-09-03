@@ -3,7 +3,9 @@
 A Flutter OAuth package for performing user authentication against Azure Active Directory OAuth2 v2.0 endpoint. Forked from [hitherejoe.FlutterOAuth](https://github.com/hitherejoe/FlutterOAuth).
 
 Supported Flows:
- - [Authorization code flow (including refresh token flow)](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)
+
+- [Authorization code flow (including refresh token flow)](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)
+- [Authorization code flow B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/authorization-code-flow)
 
 ## Usage
 
@@ -56,11 +58,11 @@ static final Config configB2C = new Config(
     isB2C: true,
     azureTennantName: "YOUR_TENANT_NAME",
     userFlow: "YOUR_USER_FLOW",
+    tokenIdentifier: "UNIQUE IDENTIFIER A",
   );
 ```
 
 Afterwards you can login and get an access token for accessing other resources.
-
 
 ## Installation
 
@@ -68,7 +70,7 @@ Add the following to your pubspec.yaml dependencies:
 
 ```yaml
 dependencies:
-  aad_oauth: "^0.1.8"
+  aad_oauth: "^0.1.9"
 ```
 
 ## Contribution
