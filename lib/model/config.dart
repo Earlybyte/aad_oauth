@@ -15,6 +15,7 @@ class Config {
   final String resource;
   final String nonce;
   final bool isB2C;
+  final Map<String, String> additionalAuthParameters;
   Rect screenSize;
   String userAgent;
   String tokenIdentifier;
@@ -35,6 +36,7 @@ class Config {
         this.screenSize,
         this.userAgent,
         this.tokenIdentifier = "Token",
+        this.additionalAuthParameters
       }) {
     this.authorizationUrl = isB2C
         ? "https://$azureTenantName.b2clogin.com/$azureTenantName.onmicrosoft.com/oauth2/v2.0/authorize"

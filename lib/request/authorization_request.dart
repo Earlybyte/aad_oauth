@@ -21,6 +21,8 @@ class AuthorizationRequest {
       "scope": config.scope
     };
 
+    this.parameters.addAll(config.additionalAuthParameters);
+
     if(config.isB2C){
       parameters.addAll({
         "p": config.userFlow,
