@@ -18,7 +18,7 @@ class RequestCode {
   }
 
   Future<String> requestCode() async {
-    var code;
+    String code;
     final String urlParams = _constructUrlParams();
     
     await _webView.launch(
@@ -33,7 +33,7 @@ class RequestCode {
 
       if(uri.queryParameters["error"] != null) {
         _webView.close();
-        throw new Exception("Access denied or authentation canceled."); 
+        _onCodeListener.add(null);
       }
       
       if (uri.queryParameters["code"] != null) {

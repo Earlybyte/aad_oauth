@@ -83,6 +83,9 @@ class AadOAuth {
     String code;
     try {
       code = await _requestCode.requestCode();
+      if (code == null) {
+        throw new Exception("Access denied or authentation canceled.");
+      }
       _token = await _requestToken.requestToken(code);
     } catch (e) {
       rethrow;
