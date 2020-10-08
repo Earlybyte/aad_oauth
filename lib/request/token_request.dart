@@ -9,10 +9,10 @@ class TokenRequestDetails {
     this.url = config.tokenUrl;
     this.params = {
       "client_id": config.clientId,
-      "code": code,
-      "redirect_uri": config.redirectUri,
       "grant_type": "authorization_code",
       "scope": config.scope,
+      "code": code,
+      "redirect_uri": config.redirectUri,
     };
 
     if (config.resource != null)
@@ -20,6 +20,9 @@ class TokenRequestDetails {
 
     if (config.clientSecret != null)
       params.putIfAbsent("client_secret", () => config.clientSecret);
+
+    if (config.codeVerifier != null)
+      params.putIfAbsent("code_verifier", () => config.codeVerifier);
 
     this.headers = {
       "Accept": "application/json",
