@@ -36,13 +36,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static final Config config = new Config("YOUR_TENANT_ID", "YOUR CLIENT ID", "openid profile offline_access", "https://login.live.com/oauth20_desktop.srf",);
+  static final Config config = new Config(
+    tenant: "YOUR_TENANT_ID",
+    clientId: "YOUR_CLIENT_ID",
+    scope: "openid profile offline_access",
+    redirectUri: "https://login.live.com/oauth20_desktop.srf",
+  );
   final AadOAuth oauth = AadOAuth(config);
 
   Widget build(BuildContext context) {
     // adjust window size for browser login
     var screenSize = MediaQuery.of(context).size;
-    var rectSize =  Rect.fromLTWH(0.0, 25.0, screenSize.width, screenSize.height - 25);
+    var rectSize =
+        Rect.fromLTWH(0.0, 25.0, screenSize.width, screenSize.height - 25);
     oauth.setWebViewScreenSize(rectSize);
 
     return new Scaffold(

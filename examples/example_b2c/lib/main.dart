@@ -37,25 +37,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static final Config configB2Ca = new Config(
-      "YOUR_TENANT_ID",
-      "YOUR_CLIENT_ID",
-      "YOUR_CLIENT_ID offline_access",
-      "https://login.live.com/oauth20_desktop.srf",
+      tenant: "YOUR_TENANT_NAME",
+      clientId: "YOUR_CLIENT_ID",
+      scope: "YOUR_CLIENT_ID offline_access",
+      redirectUri: "https://login.live.com/oauth20_desktop.srf",
       clientSecret: "YOUR_CLIENT_SECRET",
       isB2C: true,
-      azureTenantName: "YOUR_TENANT_NAME",
-      userFlow: "YOUR_USER_FLOW___USER_FLOW_A",
+      policy: "YOUR_USER_FLOW___USER_FLOW_A",
       tokenIdentifier: "UNIQUE IDENTIFIER A");
 
   static final Config configB2Cb = new Config(
-      "YOUR_TENANT_ID",
-      "YOUR_CLIENT_ID",
-      "YOUR_CLIENT_ID offline_access",
-      "https://login.live.com/oauth20_desktop.srf",
+      tenant: "YOUR_TENANT_NAME",
+      clientId: "YOUR_CLIENT_ID",
+      scope: "YOUR_CLIENT_ID offline_access",
+      redirectUri: "https://login.live.com/oauth20_desktop.srf",
       clientSecret: "YOUR_CLIENT_SECRET",
       isB2C: true,
-      azureTenantName: "YOUR_TENANT_NAME",
-      userFlow: "YOUR_USER_FLOW___USER_FLOW_B",
+      policy: "YOUR_USER_FLOW___USER_FLOW_B",
       tokenIdentifier: "UNIQUE IDENTIFIER B");
 
   //You can have as many B2C flows as you want

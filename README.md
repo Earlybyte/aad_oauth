@@ -14,11 +14,13 @@ For using this library you have to create an azure app at the [Azure App registr
 Afterwards you have to initialize the library as follow:
 
 ```dart
-final Config config = new Config(
-  "YOUR TENANT ID",
-  "YOUR CLIENT ID",
-  "openid profile offline_access",
-  "your redirect url available in azure portal");
+  static final Config config = new Config(
+    tenant: "YOUR_TENANT_ID",
+    clientId: "YOUR_CLIENT_ID",
+    scope: "openid profile offline_access",
+    redirectUri: "your redirect url available in azure portal"
+  );
+
 final AadOAuth oauth = new AadOAuth(config);
 ```
 
@@ -49,20 +51,18 @@ Setup your B2C directory - [Azure AD B2C Setup](https://docs.microsoft.com/en-us
 Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secret of App) and redirectUrl in the main.dart source-code:
 
 ```dart
-static final Config configB2C = new Config(
-    "YOUR_TENANT_ID",
-    "YOUR_CLIENT_ID",
-    "YOUR_CLIENT_ID offline_access",
-    "https://login.live.com/oauth20_desktop.srf",
-    clientSecret: "YOUR_CLIENT_SECRET",
-    isB2C: true,
-    azureTennantName: "YOUR_TENANT_NAME",
-    userFlow: "YOUR_USER_FLOW",
-    tokenIdentifier: "UNIQUE IDENTIFIER A",
-  );
+  static final Config configB2Ca = new Config(
+      tenant: "YOUR_TENANT_NAME",
+      clientId: "YOUR_CLIENT_ID",
+      scope: "YOUR_CLIENT_ID offline_access",
+      redirectUri: "https://login.live.com/oauth20_desktop.srf",
+      clientSecret: "YOUR_CLIENT_SECRET",
+      isB2C: true,
+      policy: "YOUR_USER_FLOW___USER_FLOW_A",
+      tokenIdentifier: "UNIQUE IDENTIFIER A");
 ```
 
-Afterwards you can login and get an access token for accessing other resources.
+Afterwards you can login and get an access token for accessing other resources. You can also use multiple configs at the same time.
 
 ## Installation
 
@@ -70,7 +70,7 @@ Add the following to your pubspec.yaml dependencies:
 
 ```yaml
 dependencies:
-  aad_oauth: "^0.1.9"
+  aad_oauth: "^0.2.0"
 ```
 
 ## Contribution
