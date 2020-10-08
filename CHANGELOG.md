@@ -1,3 +1,9 @@
+## [0.2.0] - 20201007
+
+Add additional config options https://github.com/Earlybyte/aad_oauth/pull/66
+Throw Exception on return https://github.com/Earlybyte/aad_oauth/pull/55
+Fix Example App https://github.com/Earlybyte/aad_oauth/pull/65
+
 ## [0.1.9] - 20200529
 
 - Added id_token support https://github.com/Earlybyte/aad_oauth/pull/36
