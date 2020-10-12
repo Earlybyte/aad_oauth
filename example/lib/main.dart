@@ -2,27 +2,17 @@ import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => new _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  initState() {
-    super.initState();
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       title: 'AAD OAuth Demo',
-      theme: new ThemeData(
+      theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomePage(title: 'AAD OAuth Home'),
+      home: MyHomePage(title: 'AAD OAuth Home'),
     );
   }
 }
@@ -32,18 +22,19 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static final Config config = new Config(
-    tenant: "YOUR_TENANT_ID",
-    clientId: "YOUR_CLIENT_ID",
-    scope: "openid profile offline_access",
-    redirectUri: "https://login.live.com/oauth20_desktop.srf",
+  static final Config config = Config(
+    tenant: 'YOUR_TENANT_ID',
+    clientId: 'YOUR_CLIENT_ID',
+    scope: 'openid profile offline_access',
+    redirectUri: 'https://login.live.com/oauth20_desktop.srf',
   );
   final AadOAuth oauth = AadOAuth(config);
 
+  @override
   Widget build(BuildContext context) {
     // adjust window size for browser login
     var screenSize = MediaQuery.of(context).size;
@@ -51,15 +42,15 @@ class _MyHomePageState extends State<MyHomePage> {
         Rect.fromLTWH(0.0, 25.0, screenSize.width, screenSize.height - 25);
     oauth.setWebViewScreenSize(rectSize);
 
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(widget.title),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
       ),
       body: ListView(
         children: <Widget>[
           ListTile(
             title: Text(
-              "AzureAD OAuth",
+              'AzureAD OAuth',
               style: Theme.of(context).textTheme.headline5,
             ),
           ),
@@ -87,9 +78,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void showMessage(String text) {
-    var alert = new AlertDialog(content: new Text(text), actions: <Widget>[
-      new FlatButton(
-          child: const Text("Ok"),
+    var alert = AlertDialog(content: Text(text), actions: <Widget>[
+      FlatButton(
+          child: const Text('Ok'),
           onPressed: () {
             Navigator.pop(context);
           })
@@ -100,8 +91,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void login() async {
     try {
       await oauth.login();
-      String accessToken = await oauth.getAccessToken();
-      showMessage("Logged in successfully, your access token: $accessToken");
+      var accessToken = await oauth.getAccessToken();
+      showMessage('Logged in successfully, your access token: $accessToken');
     } catch (e) {
       showError(e);
     }
@@ -109,6 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void logout() async {
     await oauth.logout();
-    showMessage("Logged out");
+    showMessage('Logged out');
   }
 }

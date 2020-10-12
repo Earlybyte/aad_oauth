@@ -41,7 +41,7 @@ class Config {
       {@required this.tenant,
       this.policy,
       @required this.clientId,
-      this.responseType = "code",
+      this.responseType = 'code',
       @required this.redirectUri,
       @required this.scope,
       this.responseMode,
@@ -49,20 +49,20 @@ class Config {
       this.prompt,
       this.codeChallenge,
       this.codeChallengeMethod,
-      this.nonce = "12345",
+      this.nonce = '12345',
       this.tokenIdentifier,
       this.clientSecret,
-      this.contentType = "application/x-www-form-urlencoded",
+      this.contentType = 'application/x-www-form-urlencoded',
       this.resource,
       this.isB2C = false,
       this.loginHint,
       this.domainHint,
       this.codeVerifier}) {
-    this.authorizationUrl = isB2C
-        ? "https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize"
-        : "https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize";
-    this.tokenUrl = isB2C
-        ? "https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token"
-        : "https://login.microsoftonline.com/$tenant/oauth2/v2.0/token";
+    authorizationUrl = isB2C
+        ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
+        : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize';
+    tokenUrl = isB2C
+        ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
+        : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token';
   }
 }

@@ -13,6 +13,7 @@ dependencies:
   shared_preferences: ^0.5.2
   flutter:
     sdk: flutter
+  pedantic: ^1.9.0
 
 dev_dependencies:
   flutter_test:
