@@ -18,9 +18,9 @@ class AadOAuth {
 
   AadOAuth(Config config) {
     _config = config;
-    _authStorage = new AuthStorage(tokenIdentifier: config.tokenIdentifier);
-    _requestCode = new RequestCode(_config);
-    _requestToken = new RequestToken(_config);
+    _authStorage = AuthStorage(tokenIdentifier: config.tokenIdentifier);
+    _requestCode = RequestCode(_config);
+    _requestToken = RequestToken(_config);
   }
 
   void setWebViewScreenSize(Rect screenSize) {
@@ -29,20 +29,19 @@ class AadOAuth {
 
   Future<void> login() async {
     await _removeOldTokenOnFirstLogin();
-    if (!Token.tokenIsValid(_token) )
+    if (!Token.tokenIsValid(_token)) {
       await _performAuthorization();
+    }
   }
 
   Future<String> getAccessToken() async {
-    if (!Token.tokenIsValid(_token) )
-      await _performAuthorization();
+    if (!Token.tokenIsValid(_token)) await _performAuthorization();
 
     return _token.accessToken;
   }
 
   Future<String> getIdToken() async {
-    if (!Token.tokenIsValid(_token) )
-      await _performAuthorization();
+    if (!Token.tokenIsValid(_token)) await _performAuthorization();
 
     return _token.idToken;
   }
@@ -62,12 +61,10 @@ class AadOAuth {
     // load token from cache
     _token = await _authStorage.loadTokenToCache();
 
-    //still have refreh token / try to get new access token with refresh token
-    if (_token != null)
+    //still have refreh token / try to get access token with refresh token
+    if (_token != null) {
       await _performRefreshAuthFlow();
-
-    // if we have no refresh token try to perform full request code oauth flow
-    else {
+    } else {
       try {
         await _performFullAuthFlow();
       } catch (e) {
@@ -84,7 +81,7 @@ class AadOAuth {
     try {
       code = await _requestCode.requestCode();
       if (code == null) {
-        throw new Exception("Access denied or authentation canceled.");
+        throw Exception('Access denied or authentation canceled.');
       }
       _token = await _requestToken.requestToken(code);
     } catch (e) {
@@ -103,10 +100,10 @@ class AadOAuth {
   }
 
   Future<void> _removeOldTokenOnFirstLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final _keyFreshInstall = "freshInstall";
+    var prefs = await SharedPreferences.getInstance();
+    final _keyFreshInstall = 'freshInstall';
     if (!prefs.getKeys().contains(_keyFreshInstall)) {
-      logout();
+      await logout();
       await prefs.setBool(_keyFreshInstall, false);
     }
   }
