@@ -43,6 +43,10 @@ class RequestCode {
     return code;
   }
 
+  void sizeChanged() {
+    _webView.resize(_config.screenSize);
+  }
+
   Future<void> clearCookies() async {
     await _webView.launch('', hidden: true, clearCookies: true);
     await _webView.close();

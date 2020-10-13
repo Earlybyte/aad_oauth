@@ -24,7 +24,10 @@ class AadOAuth {
   }
 
   void setWebViewScreenSize(Rect screenSize) {
-    _config.screenSize = screenSize;
+     if (screenSize != _config.screenSize) {
+      _config.screenSize = screenSize;
+      _requestCode.sizeChanged();
+    }
   }
 
   Future<void> login() async {
