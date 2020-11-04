@@ -46,8 +46,7 @@ class AadOAuth {
     return _token.idToken;
   }
 
-  Future<bool> tokenIsValid() async {
-    _token ??= await _authStorage.loadTokenToCache();
+  bool tokenIsValid() {
     return Token.tokenIsValid(_token);
   }
 
