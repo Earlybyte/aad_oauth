@@ -61,6 +61,14 @@ class _MyHomePageState extends State<MyHomePage> {
   final AadOAuth oauthB2Ca = AadOAuth(configB2Ca);
   final AadOAuth oauthB2Cb = AadOAuth(configB2Cb);
 
+  @override
+  void initState() {
+    super.initState();
+    oauthB2Ca.init();
+    oauthB2Cb.init();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // adjust window size for browser login
     var screenSize = MediaQuery.of(context).size;

@@ -35,6 +35,14 @@ class _MyHomePageState extends State<MyHomePage> {
   final AadOAuth oauth = AadOAuth(config);
 
   @override
+  void initState() {
+    super.initState();
+
+    // Initialize OAuth library
+    oauth.init();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // adjust window size for browser login
     var screenSize = MediaQuery.of(context).size;
