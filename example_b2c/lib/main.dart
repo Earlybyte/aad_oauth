@@ -69,10 +69,18 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     // Initialize OAuth library for B2Ca-Flow
-    oauthB2Ca.init().then((result) => _oauthB2CAInitialized = true);
+    oauthB2Ca.init().then((result) {
+      setState(() {
+        _oauthB2CAInitialized = true;
+      });
+    });
 
     // Initialize OAuth library for B2Cb-Flow
-    oauthB2Cb.init().then((result) => _oauthB2CBInitialized = true);
+    oauthB2Cb.init().then((result) {
+      setState(() {
+        _oauthB2CBInitialized = true;
+      });
+    });
   }
 
   @override

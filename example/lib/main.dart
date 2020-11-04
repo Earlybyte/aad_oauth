@@ -41,7 +41,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     // Initialize OAuth library
-    oauth.init().then((value) => _oauthInitialized = true);
+    oauth.init().then((value) {
+      setState(() {
+        _oauthInitialized = true;
+      });
+    });
   }
 
   @override
