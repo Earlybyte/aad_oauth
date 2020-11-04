@@ -46,7 +46,7 @@ class AadOAuth {
     return _token.idToken;
   }
 
-  bool tokenIsValid() {
+  bool isLoggedIn() {
     return Token.tokenIsValid(_token);
   }
 
