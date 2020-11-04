@@ -57,6 +57,11 @@ class AadOAuth {
     AadOAuth(_config);
   }
 
+  void init(Rect screenSize) async {
+    _token = await _authStorage.loadTokenToCache();
+    setWebViewScreenSize(screenSize);
+  }
+
   Future<void> _performAuthorization() async {
     // load token from cache
     _token = await _authStorage.loadTokenToCache();
