@@ -61,11 +61,18 @@ class _MyHomePageState extends State<MyHomePage> {
   final AadOAuth oauthB2Ca = AadOAuth(configB2Ca);
   final AadOAuth oauthB2Cb = AadOAuth(configB2Cb);
 
+  var _oauthB2CAInitialized = false;
+  var _oauthB2CBInitialized = false;
+
   @override
   void initState() {
     super.initState();
-    oauthB2Ca.init();
-    oauthB2Cb.init();
+
+    // Initialize OAuth library for B2Ca-Flow
+    oauthB2Ca.init().then((result) => _oauthB2CAInitialized = true);
+
+    // Initialize OAuth library for B2Cb-Flow
+    oauthB2Cb.init().then((result) => _oauthB2CBInitialized = true);
   }
 
   @override

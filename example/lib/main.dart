@@ -34,12 +34,14 @@ class _MyHomePageState extends State<MyHomePage> {
   );
   final AadOAuth oauth = AadOAuth(config);
 
+  var _oauthInitialized = false;
+
   @override
   void initState() {
     super.initState();
 
     // Initialize OAuth library
-    oauth.init();
+    oauth.init().then((value) => _oauthInitialized = true);
   }
 
   @override
