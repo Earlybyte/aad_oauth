@@ -57,7 +57,7 @@ class AadOAuth {
     AadOAuth(_config);
   }
 
-  void init() async {
+  Future<void> init() async {
     _token = await _authStorage.loadTokenToCache();
   }
 
