@@ -1,3 +1,7 @@
+## [0.2.1] - 2020xxxx
+
+- Enable to resize webview after init #68
+
 ## [0.2.0] - 20201007
 
 - Add additional config options #66
