@@ -29,7 +29,7 @@ class TokenRequestDetails {
 
     headers = {
       'Accept': 'application/json',
-      'Content-Type': config.contentType
+      'Content-Type': Config.contentType
     };
   }
 }

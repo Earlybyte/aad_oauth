@@ -12,12 +12,12 @@ class Config {
   /// Azure AD token URL.
   String tokenUrl;
 
-  /// The [tenant] value in the path of the request can be used to control who can sign into the application.
-  /// The allowed values are common, organizations, consumers, and tenant identifiers. Or Name of your Azure AD [B2C] tenant.
+  /// The tenant value in the path of the request can be used to control who can sign into the application.
+  /// The allowed values are common, organizations, consumers, and tenant identifiers. Or Name of your Azure AD B2C tenant.
   final String tenant;
 
-  /// [B2C]: The user flow to be run. Specify the name of a user flow you've created in your Azure AD [B2C] tenant.
-  /// For example: [b2c_1_sign_in], [b2c_1_sign_up], or [b2c_1_edit_profile]
+  /// __AAD B2C only__: The user flow to be run. Specify the name of a user flow you've created in your Azure AD B2C tenant.
+  /// For example: b2c_1_sign_in, b2c_1_sign_up, or b2c_1_edit_profile
   final String policy;
 
   /// The Application (client) ID that the Azure portal – App registrations experience assigned to your app.
@@ -26,7 +26,7 @@ class Config {
   /// Must include code for the authorization code flow.
   final String responseType;
 
-  /// The redirect_uri of your app, where authentication responses can be sent and received by your app.
+  /// The redirect uri of your app, where authentication responses can be sent and received by your app.
   /// It must exactly match one of the redirect_uris you registered in the portal, except it must be url encoded.
   /// For native & mobile apps, you should use the default value.
   final String redirectUri;
@@ -37,9 +37,9 @@ class Config {
 
   /// Specifies the method that should be used to send the resulting token back to your app.
   /// Can be one of the following:
-  /// - [query]
-  /// - [fragment]
-  /// - [form_post]
+  /// - query
+  /// - fragment
+  /// - form_post
   final String responseMode;
 
   /// A value included in the request that will also be returned in the token response.
@@ -49,18 +49,18 @@ class Config {
   final String state;
 
   /// Indicates the type of user interaction that is required.
-  /// The only valid values at this time are [login], [none], and [consent].
+  /// The only valid values at this time are *login*, *none*, and *consent*.
   final String prompt;
 
   /// Used to secure authorization code grants via Proof Key for Code Exchange (PKCE).
-  /// Required if code_challenge_method is included.
+  /// Required if [codeChallengeMethod] is included.
   /// For more information, see the PKCE RFC.
   /// This is now recommended for all application types - native apps, SPAs, and confidential clients like web apps.
   final String codeChallenge;
 
   /// The method used to encode the code_verifier for the code_challenge parameter.
   /// This SHOULD be S256, but the spec allows the use of plain if for some reason the client cannot support SHA256.
-  /// If excluded, code_challenge is assumed to be plaintext if code_challenge is included.
+  /// If excluded, code_challenge is assumed to be plaintext if [codeChallenge] is included.
   /// Microsoft identity platform supports both plain and S256.
   /// For more information, see the PKCE RFC.
   /// This is required for single page apps using the authorization code flow.
@@ -76,14 +76,14 @@ class Config {
   /// Otherwise, use domain_hint=organizations.
   String domainHint;
 
-  /// [B2C] A nonce is a strategy used to mitigate token replay attacks.
+  /// __AAD B2C only__: A nonce is a strategy used to mitigate token replay attacks.
   /// Your application can specify a nonce in an authorization request by using the nonce query parameter.
   /// The value you provide in the request is emitted unmodified in the nonce claim of an ID token only.
   /// This claim allows your application to verify the value against the value specified on the request.
   /// Your application should perform this validation during the ID token validation process.
   final String nonce;
 
-  /// [B2C]: Identifies access tokens, to allow multiple concurrent sessions.
+  /// __AAD B2C only__: Identifies access tokens, to allow multiple concurrent sessions.
   String tokenIdentifier;
 
   /// The client secret that you generated for your app in the app registration portal.
@@ -94,10 +94,10 @@ class Config {
   /// For more information, see the PKCE RFC.
   String codeVerifier;
 
-  /// Content type for token request. Use default value.
-  final String contentType;
+  /// Content type for token request.
+  static const String contentType = 'application/x-www-form-urlencoded';
 
-  /// [resource]: unused parameter
+  /// Resource
   final String resource;
 
   /// Using Azure AD B2C instead of standard Azure AD.
@@ -107,7 +107,7 @@ class Config {
   /// Current screen size.
   Rect screenSize;
 
-  /// [userAgent] of web view. (using flutter_webview_plugin)
+  /// User agent of web view. (using flutter_webview_plugin)
   String userAgent;
 
   /// Azure AD OAuth Configuration. Look at individual fields for description.
@@ -126,7 +126,6 @@ class Config {
       this.nonce = '12345',
       this.tokenIdentifier,
       this.clientSecret,
-      this.contentType = 'application/x-www-form-urlencoded',
       this.resource,
       this.isB2C = false,
       this.loginHint,

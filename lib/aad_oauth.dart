@@ -17,7 +17,7 @@ class AadOAuth {
   RequestCode _requestCode;
   RequestToken _requestToken;
 
-  /// Initialize AadOAuth authentication.
+  /// Instantiating AadOAuth authentication.
   /// [config] Parameters according to official Microsoft Documentation.
   AadOAuth(Config config) {
     _config = config;
@@ -26,6 +26,7 @@ class AadOAuth {
     _requestToken = RequestToken(_config);
   }
 
+  /// Set [screenSize] of webview.
   void setWebViewScreenSize(Rect screenSize) {
     if (screenSize != _config.screenSize) {
       _config.screenSize = screenSize;
@@ -55,12 +56,12 @@ class AadOAuth {
     return _token.idToken;
   }
 
-  /// TBD
+  /// Get status of user login by checking token.
   bool tokenIsValid() {
     return Token.tokenIsValid(_token);
   }
 
-  /// Perform logout, clear cache.
+  /// Perform Azure AD logout.
   Future<void> logout() async {
     await _authStorage.clear();
     await _requestCode.clearCookies();
