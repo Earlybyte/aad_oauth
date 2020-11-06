@@ -1,24 +1,46 @@
+/// Access token enabling to securely call protected APIs on behalf of the user.
 class Token {
-  //offset is subtracted from expire time
+  /// Offset which is subtracted from expire time
   final expireOffSet = 5;
 
+  /// The requested access token. The app can use this token to authenticate to the secured resource, such as a web API.
   String accessToken;
+
+  /// Indicates the token type value. The only type that Azure AD supports is [Bearer].
   String tokenType;
+
+  /// An OAuth 2.0 refresh token. The app can use this token acquire additional access tokens after the current access token expires. Refresh_tokens are long-lived, and can be used to retain access to resources for extended periods of time. For more detail on refreshing an access token, refer to the section below.
+  /// Note: Only provided if [offline_access] scope was requested.
   String refreshToken;
+
+  /// A JSON Web Token (JWT). The app can decode the segments of this token to request information about the user who signed in.
+  /// The app can cache the values and display them, and confidential clients can use this for authorization.
+  /// For more information about id_tokens, see the id_token reference.
+  /// Note: Only provided if openid scope was requested.
   String idToken;
+
+  /// Current time when token was issued.
   DateTime issueTimeStamp;
+
+  /// Predicted token expiration time.
   DateTime expireTimeStamp;
+
+  /// How long the access token is valid (in seconds).
   int expiresIn;
 
+  /// Access token enabling to securely call protected APIs on behalf of the user.
   Token();
 
+  /// JSON map to Token factory.
   factory Token.fromJson(Map<String, dynamic> json) => Token.fromMap(json);
 
+  /// Convert this Token to JSON map.
   Map toMap() => Token.toJsonMap(this);
 
   @override
   String toString() => Token.toJsonMap(this).toString();
 
+  /// Convert Token to JSON map.
   static Map toJsonMap(Token model) {
     var ret = {};
     if (model != null) {
@@ -44,6 +66,7 @@ class Token {
     return ret;
   }
 
+  /// Convert JSON map to Token.
   static Token fromMap(Map map) {
     if (map == null) throw Exception('No token from received');
     //error handling as described in https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow#error-response-1
@@ -70,10 +93,12 @@ class Token {
     return model;
   }
 
+  /// Check if Token is expired.
   static bool isExpired(Token token) {
     return token.expireTimeStamp.isBefore(DateTime.now().toUtc());
   }
 
+  /// Check if Token is valid.
   static bool tokenIsValid(Token token) {
     return token != null &&
         !Token.isExpired(token) &&
