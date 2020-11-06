@@ -9,6 +9,7 @@ import 'request_token.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Authenticates a user with Azure Active Directory using OAuth2.0.
 class AadOAuth {
   static Config _config;
   AuthStorage _authStorage;
@@ -16,6 +17,8 @@ class AadOAuth {
   RequestCode _requestCode;
   RequestToken _requestToken;
 
+  /// Instantiating AadOAuth authentication.
+  /// [config] Parameters according to official Microsoft Documentation.
   AadOAuth(Config config) {
     _config = config;
     _authStorage = AuthStorage(tokenIdentifier: config.tokenIdentifier);
@@ -23,13 +26,15 @@ class AadOAuth {
     _requestToken = RequestToken(_config);
   }
 
+  /// Set [screenSize] of webview.
   void setWebViewScreenSize(Rect screenSize) {
-     if (screenSize != _config.screenSize) {
+    if (screenSize != _config.screenSize) {
       _config.screenSize = screenSize;
       _requestCode.sizeChanged();
     }
   }
 
+  /// Perform Azure AD login.
   Future<void> login() async {
     await _removeOldTokenOnFirstLogin();
     if (!Token.tokenIsValid(_token)) {
@@ -37,22 +42,26 @@ class AadOAuth {
     }
   }
 
+  /// Retrieve OAuth access token.
   Future<String> getAccessToken() async {
     if (!Token.tokenIsValid(_token)) await _performAuthorization();
 
     return _token.accessToken;
   }
 
+  /// Retrieve OAuth id token. (JSON Web Token)
   Future<String> getIdToken() async {
     if (!Token.tokenIsValid(_token)) await _performAuthorization();
 
     return _token.idToken;
   }
 
+  /// Get status of user login by checking token.
   bool tokenIsValid() {
     return Token.tokenIsValid(_token);
   }
 
+  /// Perform Azure AD logout.
   Future<void> logout() async {
     await _authStorage.clear();
     await _requestCode.clearCookies();
