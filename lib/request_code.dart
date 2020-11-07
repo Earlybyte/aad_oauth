@@ -20,10 +20,12 @@ class RequestCode {
     final urlParams = _constructUrlParams();
 
     await _webView.launch(
-        Uri.encodeFull('${_authorizationRequest.url}?$urlParams'),
-        clearCookies: _authorizationRequest.clearCookies,
-        hidden: false,
-        rect: _config.screenSize);
+      Uri.encodeFull('${_authorizationRequest.url}?$urlParams'),
+      clearCookies: _authorizationRequest.clearCookies,
+      hidden: false,
+      rect: _config.screenSize,
+      userAgent: _config.userAgent,
+    );
 
     _webView.onUrlChanged.listen((String url) {
       var uri = Uri.parse(url);
