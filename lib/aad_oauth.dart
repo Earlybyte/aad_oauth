@@ -28,7 +28,7 @@ class AadOAuth {
     _initialized = false;
   }
 
-  void init() async {
+  Future<void> init() async {
     if (!_initialized) {
       // load token from cache
       _token = await _authStorage.loadTokenToCache();
