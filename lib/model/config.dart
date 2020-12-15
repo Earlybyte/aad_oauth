@@ -124,7 +124,7 @@ class Config {
       this.codeChallenge,
       this.codeChallengeMethod,
       this.nonce = '12345',
-      this.tokenIdentifier,
+      this.tokenIdentifier = 'Token',
       this.clientSecret,
       this.resource,
       this.isB2C = false,
