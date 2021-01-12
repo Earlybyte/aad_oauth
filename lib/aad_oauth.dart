@@ -16,6 +16,7 @@ class AadOAuth {
   Token _token;
   RequestCode _requestCode;
   RequestToken _requestToken;
+  bool _initialized;
 
   /// Instantiating AadOAuth authentication.
   /// [config] Parameters according to official Microsoft Documentation.
@@ -24,6 +25,15 @@ class AadOAuth {
     _authStorage = AuthStorage(tokenIdentifier: config.tokenIdentifier);
     _requestCode = RequestCode(_config);
     _requestToken = RequestToken(_config);
+    _initialized = false;
+  }
+
+  Future<void> init() async {
+    if (!_initialized) {
+      // load token from cache
+      _token = await _authStorage.loadTokenToCache();
+      _initialized = true;
+    }
   }
 
   /// Set [screenSize] of webview.
@@ -70,9 +80,7 @@ class AadOAuth {
   }
 
   Future<void> _performAuthorization() async {
-    // load token from cache
-    _token = await _authStorage.loadTokenToCache();
-
+    await init();
     //still have refreh token / try to get access token with refresh token
     if (_token != null) {
       await _performRefreshAuthFlow();
