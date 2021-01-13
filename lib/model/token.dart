@@ -90,18 +90,18 @@ class Token {
         ? DateTime.fromMillisecondsSinceEpoch(map['expire_timestamp'])
         : model.issueTimeStamp
             .add(Duration(seconds: model.expiresIn - model.expireOffSet));
+
     return model;
   }
 
-  /// Check if Token is expired.
-  static bool isExpired(Token token) {
-    return token.expireTimeStamp.isBefore(DateTime.now().toUtc());
+  /// Check if Access Token is set and not expired.
+  bool hasValidAccessToken() {
+    return accessToken != null &&
+        expireTimeStamp.isAfter(DateTime.now().toUtc());
   }
 
-  /// Check if Token is valid.
-  static bool tokenIsValid(Token token) {
-    return token != null &&
-        !Token.isExpired(token) &&
-        token.accessToken != null;
+  /// Check if Refresh Token is set.
+  bool hasRefreshToken() {
+    return refreshToken != null;
   }
 }

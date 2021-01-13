@@ -22,18 +22,11 @@ class AadOAuth {
   /// [config] Parameters according to official Microsoft Documentation.
   AadOAuth(Config config) {
     _config = config;
+    _token = Token();
     _authStorage = AuthStorage(tokenIdentifier: config.tokenIdentifier);
     _requestCode = RequestCode(_config);
     _requestToken = RequestToken(_config);
     _initialized = false;
-  }
-
-  Future<void> init() async {
-    if (!_initialized) {
-      // load token from cache
-      _token = await _authStorage.loadTokenToCache();
-      _initialized = true;
-    }
   }
 
   /// Set [screenSize] of webview.
@@ -47,49 +40,44 @@ class AadOAuth {
   /// Perform Azure AD login.
   Future<void> login() async {
     await _removeOldTokenOnFirstLogin();
-    if (!Token.tokenIsValid(_token)) {
+    if (!_token.hasValidAccessToken()) {
       await _performAuthorization();
     }
   }
 
   /// Retrieve OAuth access token.
   Future<String> getAccessToken() async {
-    if (!Token.tokenIsValid(_token)) await _performAuthorization();
+    if (!_token.hasValidAccessToken()) await _performAuthorization();
 
     return _token.accessToken;
   }
 
   /// Retrieve OAuth id token. (JSON Web Token)
   Future<String> getIdToken() async {
-    if (!Token.tokenIsValid(_token)) await _performAuthorization();
+    if (!_token.hasValidAccessToken()) await _performAuthorization();
 
     return _token.idToken;
-  }
-
-  /// Get status of user login by checking token.
-  bool tokenIsValid() {
-    return Token.tokenIsValid(_token);
   }
 
   /// Perform Azure AD logout.
   Future<void> logout() async {
     await _authStorage.clear();
     await _requestCode.clearCookies();
-    _token = null;
+    _token = Token();
     AadOAuth(_config);
   }
 
   Future<void> _performAuthorization() async {
-    await init();
-    //still have refreh token / try to get access token with refresh token
-    if (_token != null) {
+    _token = await _authStorage.loadTokenFromCache();
+
+    //still have refresh token / try to get access token with refresh token
+    if (_token.hasRefreshToken()) {
       await _performRefreshAuthFlow();
-    } else {
-      try {
+      if (!_token.hasValidAccessToken()) {
         await _performFullAuthFlow();
-      } catch (e) {
-        rethrow;
       }
+    } else {
+      await _performFullAuthFlow();
     }
 
     //save token to cache
@@ -97,26 +85,15 @@ class AadOAuth {
   }
 
   Future<void> _performFullAuthFlow() async {
-    String code;
-    try {
-      code = await _requestCode.requestCode();
-      if (code == null) {
-        throw Exception('Access denied or authentation canceled.');
-      }
-      _token = await _requestToken.requestToken(code);
-    } catch (e) {
-      rethrow;
+    var code = await _requestCode.requestCode();
+    if (code == null) {
+      throw Exception('Access denied or authentication canceled.');
     }
+    _token = await _requestToken.requestToken(code);
   }
 
   Future<void> _performRefreshAuthFlow() async {
-    if (_token.refreshToken != null) {
-      try {
-        _token = await _requestToken.requestRefreshToken(_token.refreshToken);
-      } catch (e) {
-        //do nothing (because later we try to do a full oauth code flow request)
-      }
-    }
+    _token = await _requestToken.requestRefreshToken(_token.refreshToken);
   }
 
   Future<void> _removeOldTokenOnFirstLogin() async {
