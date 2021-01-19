@@ -9,3 +9,4 @@ build/
 ios/.generated/
 ios/Flutter/Generated.xcconfig
 ios/Runner/GeneratedPluginRegistrant.*
+example_b2c/ios/Flutter/.last_build_id
