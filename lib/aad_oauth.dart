@@ -13,7 +13,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AadOAuth {
   static Config _config;
   AuthStorage _authStorage;
-  Token _token;
   RequestCode _requestCode;
   RequestToken _requestToken;
 
@@ -21,7 +20,6 @@ class AadOAuth {
   /// [config] Parameters according to official Microsoft Documentation.
   AadOAuth(Config config) {
     _config = config;
-    _token = Token();
     _authStorage = AuthStorage(tokenIdentifier: config.tokenIdentifier);
     _requestCode = RequestCode(_config);
     _requestToken = RequestToken(_config);
@@ -41,55 +39,47 @@ class AadOAuth {
     await _authorization();
   }
 
-  /// Retrieve OAuth access token.
-  Future<String> getAccessToken() async {
-    await _authorization();
-    return _token.accessToken;
-  }
+  /// Retrieve cached OAuth Access Token.
+  Future<String> getAccessToken() async =>
+      (await _authStorage.loadTokenFromCache()).accessToken;
 
-  /// Retrieve OAuth id token. (JSON Web Token)
-  Future<String> getIdToken() async {
-    await _authorization();
-    return _token.idToken;
-  }
+  /// Retrieve cached OAuth Id Token.
+  Future<String> getIdToken() async =>
+      (await _authStorage.loadTokenFromCache()).idToken;
 
   /// Perform Azure AD logout.
   Future<void> logout() async {
     await _authStorage.clear();
     await _requestCode.clearCookies();
-    _token = Token();
-    AadOAuth(_config);
   }
 
-  Future<void> _authorization() async {
-    _token = await _authStorage.loadTokenFromCache();
+  /// Authorize user via refresh token or web gui if necessary.
+  Future<Token> _authorization() async {
+    var token = await _authStorage.loadTokenFromCache();
 
-    if (_token.hasValidAccessToken()) {
-      return;
+    if (token.hasValidAccessToken()) {
+      return token;
     }
 
-    //still have refresh token / try to get access token with refresh token
-    if (_token.hasRefreshToken()) {
-      await _performRefreshAuthFlow();
-    }
-    //fetch access token when needed
-    if (!_token.hasValidAccessToken()) {
-      await _performFullAuthFlow();
+    if (token.hasRefreshToken()) {
+      token = await _requestToken.requestRefreshToken(token.refreshToken);
     }
 
-    await _authStorage.saveTokenToCache(_token);
+    if (!token.hasValidAccessToken()) {
+      token = await _performFullAuthFlow();
+    }
+
+    await _authStorage.saveTokenToCache(token);
+    return token;
   }
 
-  Future<void> _performFullAuthFlow() async {
+  /// Authorize user via refresh token or web gui if necessary.
+  Future<Token> _performFullAuthFlow() async {
     var code = await _requestCode.requestCode();
     if (code == null) {
       throw Exception('Access denied or authentication canceled.');
     }
-    _token = await _requestToken.requestToken(code);
-  }
-
-  Future<void> _performRefreshAuthFlow() async {
-    _token = await _requestToken.requestRefreshToken(_token.refreshToken);
+    return await _requestToken.requestToken(code);
   }
 
   Future<void> _removeOldTokenOnFirstLogin() async {
