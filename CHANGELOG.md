@@ -3,6 +3,7 @@
 - Enable to resize webview after init #68
 - Add dartdoc to most important elements #75
 - Fix token init #89
+- Upgrade plugins #88
 
 ## [0.2.0] - 20201007
 
