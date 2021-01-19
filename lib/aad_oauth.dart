@@ -16,7 +16,6 @@ class AadOAuth {
   Token _token;
   RequestCode _requestCode;
   RequestToken _requestToken;
-  bool _initialized;
 
   /// Instantiating AadOAuth authentication.
   /// [config] Parameters according to official Microsoft Documentation.
@@ -26,7 +25,6 @@ class AadOAuth {
     _authStorage = AuthStorage(tokenIdentifier: config.tokenIdentifier);
     _requestCode = RequestCode(_config);
     _requestToken = RequestToken(_config);
-    _initialized = false;
   }
 
   /// Set [screenSize] of webview.
@@ -40,22 +38,18 @@ class AadOAuth {
   /// Perform Azure AD login.
   Future<void> login() async {
     await _removeOldTokenOnFirstLogin();
-    if (!_token.hasValidAccessToken()) {
-      await _performAuthorization();
-    }
+    await _authorization();
   }
 
   /// Retrieve OAuth access token.
   Future<String> getAccessToken() async {
-    if (!_token.hasValidAccessToken()) await _performAuthorization();
-
+    await _authorization();
     return _token.accessToken;
   }
 
   /// Retrieve OAuth id token. (JSON Web Token)
   Future<String> getIdToken() async {
-    if (!_token.hasValidAccessToken()) await _performAuthorization();
-
+    await _authorization();
     return _token.idToken;
   }
 
@@ -67,20 +61,22 @@ class AadOAuth {
     AadOAuth(_config);
   }
 
-  Future<void> _performAuthorization() async {
+  Future<void> _authorization() async {
     _token = await _authStorage.loadTokenFromCache();
+
+    if (_token.hasValidAccessToken()) {
+      return;
+    }
 
     //still have refresh token / try to get access token with refresh token
     if (_token.hasRefreshToken()) {
       await _performRefreshAuthFlow();
-      if (!_token.hasValidAccessToken()) {
-        await _performFullAuthFlow();
-      }
-    } else {
+    }
+    //fetch access token when needed
+    if (!_token.hasValidAccessToken()) {
       await _performFullAuthFlow();
     }
 
-    //save token to cache
     await _authStorage.saveTokenToCache(_token);
   }
 
