@@ -29,6 +29,13 @@ class RequestCode {
 
     _webView.onUrlChanged.listen((String url) {
       var uri = Uri.parse(url);
+      if (_config.otherPolicies.isNotEmpty) {
+        _config.otherPolicies.forEach((element) {
+          if (uri.path.contains(element)) {
+            _config.updatePolicyTokenUrl(element);
+          }
+        });
+      }
 
       if (uri.queryParameters['error'] != null) {
         _webView.close();

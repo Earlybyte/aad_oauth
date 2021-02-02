@@ -110,10 +110,14 @@ class Config {
   /// User agent of web view. (using flutter_webview_plugin)
   String userAgent;
 
+  /// List of other possible flows that the user can use
+  final List<String> otherPolicies;
+
   /// Azure AD OAuth Configuration. Look at individual fields for description.
   Config(
       {@required this.tenant,
       this.policy,
+      this.otherPolicies = const <String>[],
       @required this.clientId,
       this.responseType = 'code',
       @required this.redirectUri,
@@ -138,5 +142,12 @@ class Config {
     tokenUrl = isB2C
         ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
         : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token';
+  }
+
+  void updatePolicyTokenUrl(String newPolicy) {
+    if (isB2C) {
+      tokenUrl =
+          'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$newPolicy/oauth2/v2.0/token';
+    }
   }
 }
