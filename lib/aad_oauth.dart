@@ -47,6 +47,10 @@ class AadOAuth {
   Future<String> getIdToken() async =>
       (await _authStorage.loadTokenFromCache()).idToken;
 
+  /// Retrieve cached OAuth token predicted expiration time.
+  Future<DateTime> getExpireTimeStamp() async =>
+      (await _authStorage.loadTokenFromCache()).expireTimeStamp;
+
   /// Perform Azure AD logout.
   Future<void> logout() async {
     await _authStorage.clear();
