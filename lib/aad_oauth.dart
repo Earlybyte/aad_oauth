@@ -34,9 +34,15 @@ class AadOAuth {
   }
 
   /// Perform Azure AD login.
-  Future<void> login() async {
+  ///
+  /// Setting [refreshIfAvailable] to [true] will attempt to re-authenticate
+  /// with the existing refresh token, if any, even though the access token may
+  /// still be valid. If there's no refresh token the existing access token
+  /// will be returned, as long as we deem it still valid. In the event that
+  /// both access and refresh tokens are invalid, the web gui will be used.
+  Future<void> login([bool refreshIfAvailable = false]) async {
     await _removeOldTokenOnFirstLogin();
-    await _authorization();
+    await _authorization(refreshIfAvailable);
   }
 
   /// Retrieve cached OAuth Access Token.
@@ -54,11 +60,19 @@ class AadOAuth {
   }
 
   /// Authorize user via refresh token or web gui if necessary.
-  Future<Token> _authorization() async {
+  ///
+  /// Setting [refreshIfAvailable] to [true] will attempt to re-authenticate
+  /// with the existing refresh token, if any, even though the access token may
+  /// still be valid. If there's no refresh token the existing access token
+  /// will be returned, as long as we deem it still valid. In the event that
+  /// both access and refresh tokens are invalid, the web gui will be used.
+  Future<Token> _authorization([bool refreshIfAvailable = false]) async {
     var token = await _authStorage.loadTokenFromCache();
 
-    if (token.hasValidAccessToken()) {
-      return token;
+    if (!refreshIfAvailable) {
+      if (token.hasValidAccessToken()) {
+        return token;
+      }
     }
 
     if (token.hasRefreshToken()) {
