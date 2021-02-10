@@ -40,9 +40,9 @@ class AadOAuth {
   /// still be valid. If there's no refresh token the existing access token
   /// will be returned, as long as we deem it still valid. In the event that
   /// both access and refresh tokens are invalid, the web gui will be used.
-  Future<void> login([bool refreshIfAvailable = false]) async {
+  Future<void> login({bool refreshIfAvailable = false}) async {
     await _removeOldTokenOnFirstLogin();
-    await _authorization(refreshIfAvailable);
+    await _authorization(refreshIfAvailable: refreshIfAvailable);
   }
 
   /// Retrieve cached OAuth Access Token.
@@ -66,7 +66,7 @@ class AadOAuth {
   /// still be valid. If there's no refresh token the existing access token
   /// will be returned, as long as we deem it still valid. In the event that
   /// both access and refresh tokens are invalid, the web gui will be used.
-  Future<Token> _authorization([bool refreshIfAvailable = false]) async {
+  Future<Token> _authorization({bool refreshIfAvailable = false}) async {
     var token = await _authStorage.loadTokenFromCache();
 
     if (!refreshIfAvailable) {
