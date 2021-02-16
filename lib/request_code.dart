@@ -31,8 +31,10 @@ class RequestCode {
       var uri = Uri.parse(url);
       if (_config.otherPolicies.isNotEmpty) {
         _config.otherPolicies.forEach((element) {
-          if (uri.path.contains(element)) {
-            _config.updatePolicyTokenUrl(element);
+          if (uri.pathSegments.contains('authorize')) {
+            if (uri.pathSegments.contains(element)) {
+              _config.updatePolicyTokenUrl(element);
+            }
           }
         });
       }
