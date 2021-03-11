@@ -21,10 +21,11 @@ class RequestCode {
 
     await _webView.launch(
       Uri.encodeFull('${_authorizationRequest.url}?$urlParams'),
-      clearCookies: _authorizationRequest.clearCookies,
+      clearCookies: true,
       hidden: false,
       rect: _config.screenSize,
       userAgent: _config.userAgent,
+      clearCache: true
     );
 
     _webView.onUrlChanged.listen((String url) {
