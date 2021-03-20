@@ -47,7 +47,6 @@ class AadBloc extends Bloc<AadEvent, AadState> {
     }
   }
 
-  String lastUrl = '';
   Future<AadState> processFullLoginFlowPageLoadUrl(String url) async {
     var uri = Uri.parse(url);
 
