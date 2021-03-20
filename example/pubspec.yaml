@@ -4,15 +4,20 @@ description: A Flutter OAuth package example for performing user authentication 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
+
+  
+publish_to: none
 
 dependencies:
   aad_oauth:
     path: ../
   flutter:
     sdk: flutter
-
+  flutter_bloc: ^7.0.0-nullsafety.3
+  bloc: ^7.0.0-nullsafety.3
   cupertino_icons: ^0.1.2
+  webview_flutter: ^2.0.2
 
 dev_dependencies:
   flutter_test:

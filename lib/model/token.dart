@@ -1,35 +1,78 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+
 /// Access token enabling to securely call protected APIs on behalf of the user.
-class Token {
-  /// Offset which is subtracted from expire time
-  final expireOffSet = 5;
+@immutable
+class Token extends Equatable {
+  Token(
+      {dynamic accessToken,
+      dynamic tokenType,
+      dynamic refreshToken,
+      required this.issueTimeStamp,
+      dynamic idToken,
+      dynamic expiresIn,
+      dynamic expireTimeStamp})
+      : accessToken = accessToken is String ? accessToken : '',
+        refreshToken = refreshToken is String ? refreshToken : '',
+        tokenType = tokenType is String ? tokenType : '',
+        idToken = idToken is String ? idToken : '',
+        expiresIn = expiresIn == null
+            ? 60
+            : expiresIn is int
+                ? expiresIn
+                : int.tryParse(expiresIn.toString()) ?? 60 {
+    this.expireTimeStamp =
+        getExpiryTimeStamp(issueTimeStamp, expireTimeStamp, this.expiresIn);
+  }
+
+  static DateTime getExpiryTimeStamp(
+      DateTime issueTimeStamp, dynamic expireTimeStamp, int expiresIn) {
+    final expire = expireTimeStamp != null
+        ? DateTime.fromMillisecondsSinceEpoch(expireTimeStamp)
+            .add(Duration(seconds: -_expireOffSetSeconds))
+        : issueTimeStamp
+            .add(Duration(seconds: expiresIn - _expireOffSetSeconds));
+    if (MaximumExpirySeconds > 0) {
+      final maxExpire =
+          issueTimeStamp.add(Duration(seconds: MaximumExpirySeconds));
+      if (maxExpire.isBefore(expire)) {
+        return maxExpire;
+      }
+    }
+    return expire;
+  }
+
+  /// offset for expiry so we look for a new token before the expiry time
+  static const _expireOffSetSeconds = 10;
+
+  // To debug token refresh, we can force the maximum expiry time low
+  // Must set this to a positive number of seconds to activate
+  static int MaximumExpirySeconds = -1;
 
   /// The requested access token. The app can use this token to authenticate to the secured resource, such as a web API.
-  String accessToken;
+  final String accessToken;
 
   /// Indicates the token type value. The only type that Azure AD supports is Bearer.
-  String tokenType;
+  final String tokenType;
 
   /// An OAuth 2.0 refresh token. The app can use this token acquire additional access tokens after the current access token expires. Refresh_tokens are long-lived, and can be used to retain access to resources for extended periods of time. For more detail on refreshing an access token, refer to the section below.
   /// Note: Only provided if offline_access [scope] was requested.
-  String refreshToken;
+  final String refreshToken;
 
   /// A JSON Web Token (JWT). The app can decode the segments of this token to request information about the user who signed in.
   /// The app can cache the values and display them, and confidential clients can use this for authorization.
   /// For more information about id_tokens, see the id_token reference.
   /// Note: Only provided if openid [scope] was requested.
-  String idToken;
+  final String idToken;
 
   /// Current time when token was issued.
-  DateTime issueTimeStamp;
+  final DateTime issueTimeStamp;
 
   /// Predicted token expiration time.
-  DateTime expireTimeStamp;
+  late final DateTime expireTimeStamp;
 
   /// How long the access token is valid (in seconds).
-  int expiresIn;
-
-  /// Access token enabling to securely call protected APIs on behalf of the user.
-  Token();
+  final int expiresIn;
 
   /// JSON map to Token factory.
   factory Token.fromJson(Map<String, dynamic> json) => Token.fromMap(json);
@@ -43,32 +86,25 @@ class Token {
   /// Convert Token to JSON map.
   static Map toJsonMap(Token model) {
     var ret = {};
-    if (model != null) {
-      if (model.accessToken != null) {
-        ret['access_token'] = model.accessToken;
-      }
-      if (model.tokenType != null) {
-        ret['token_type'] = model.tokenType;
-      }
-      if (model.refreshToken != null) {
-        ret['refresh_token'] = model.refreshToken;
-      }
-      if (model.expiresIn != null) {
-        ret['expires_in'] = model.expiresIn;
-      }
-      if (model.expireTimeStamp != null) {
-        ret['expire_timestamp'] = model.expireTimeStamp.millisecondsSinceEpoch;
-      }
-      if (model.idToken != null) {
-        ret['id_token'] = model.idToken;
-      }
+    if (model.accessToken != '') {
+      ret['access_token'] = model.accessToken;
+    }
+    if (model.tokenType != '') {
+      ret['token_type'] = model.tokenType;
+    }
+    if (model.refreshToken != '') {
+      ret['refresh_token'] = model.refreshToken;
+    }
+    ret['expires_in'] = model.expiresIn;
+    ret['expire_timestamp'] = model.expireTimeStamp.millisecondsSinceEpoch;
+    if (model.idToken != '') {
+      ret['id_token'] = model.idToken;
     }
     return ret;
   }
 
   /// Convert JSON map to Token.
   static Token fromMap(Map map) {
-    if (map == null) throw Exception('No token from received');
     //error handling as described in https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow#error-response-1
     if (map['error'] != null) {
       throw Exception('Error during token request: ' +
@@ -77,31 +113,40 @@ class Token {
           map['error_description']);
     }
 
-    var model = Token();
-    model.accessToken = map['access_token'];
-    model.tokenType = map['token_type'];
-    model.expiresIn = map['expires_in'] is int
-        ? map['expires_in']
-        : int.tryParse(map['expires_in'].toString()) ?? 60;
-    model.refreshToken = map['refresh_token'];
-    model.idToken = map.containsKey('id_token') ? map['id_token'] : '';
-    model.issueTimeStamp = DateTime.now().toUtc();
-    model.expireTimeStamp = map.containsKey('expire_timestamp')
-        ? DateTime.fromMillisecondsSinceEpoch(map['expire_timestamp'])
-        : model.issueTimeStamp
-            .add(Duration(seconds: model.expiresIn - model.expireOffSet));
+    var model = Token(
+        issueTimeStamp: DateTime.now().toUtc(),
+        expireTimeStamp: map['expire_timestamp'],
+        expiresIn: map['expires_in'],
+        idToken: map['id_token'],
+        accessToken: map['access_token'],
+        refreshToken: map['refresh_token'],
+        tokenType: map['token_type']);
 
     return model;
   }
 
   /// Check if Access Token is set and not expired.
-  bool hasValidAccessToken() {
-    return accessToken != null &&
-        expireTimeStamp.isAfter(DateTime.now().toUtc());
+  /// For unit testing, allow optional passing of time
+  /// which should not be in UTC
+  bool hasValidAccessToken([DateTime? atTime]) {
+    return accessToken != '' &&
+        expireTimeStamp.isAfter((atTime ?? DateTime.now()).toUtc());
   }
 
   /// Check if Refresh Token is set.
   bool hasRefreshToken() {
-    return refreshToken != null;
+    return refreshToken != '';
   }
+
+  @override
+  List<Object?> get props => [
+        Token,
+        tokenType,
+        accessToken,
+        idToken,
+        refreshToken,
+        expiresIn,
+        expireTimeStamp,
+        issueTimeStamp,
+      ];
 }

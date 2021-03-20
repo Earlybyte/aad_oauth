@@ -1,4 +1,4 @@
-import 'package:aad_oauth/aad_oauth.dart';
+/*import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +11,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  initState() {
+  void initState() {
     super.initState();
   }
 
@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static final Config configB2Ca = Config(
+  static final AadConfig configB2Ca = AadConfig(
       tenant: 'YOUR_TENANT_NAME',
       clientId: 'YOUR_CLIENT_ID',
       scope: 'YOUR_CLIENT_ID offline_access',
@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
       policy: 'YOUR_USER_FLOW___USER_FLOW_A',
       tokenIdentifier: 'UNIQUE IDENTIFIER A');
 
-  static final Config configB2Cb = Config(
+  static final AadConfig configB2Cb = AadConfig(
       tenant: 'YOUR_TENANT_NAME',
       clientId: 'YOUR_CLIENT_ID',
       scope: 'YOUR_CLIENT_ID offline_access',
@@ -58,15 +58,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //You can have as many B2C flows as you want
 
-  final AadOAuth oauthB2Ca = AadOAuth(configB2Ca);
-  final AadOAuth oauthB2Cb = AadOAuth(configB2Cb);
+  final AadOAuth oauthB2Ca = AadOAuth(config: configB2Ca);
+  final AadOAuth oauthB2Cb = AadOAuth(config: configB2Cb);
 
+  @override
   Widget build(BuildContext context) {
     // adjust window size for browser login
-    var screenSize = MediaQuery.of(context).size;
-    var rectSize =
-        Rect.fromLTWH(0.0, 25.0, screenSize.width, screenSize.height - 25);
-    oauthB2Ca.setWebViewScreenSize(rectSize);
 
     return Scaffold(
       appBar: AppBar(
@@ -150,3 +147,4 @@ class _MyHomePageState extends State<MyHomePage> {
     showMessage('Logged out');
   }
 }
+*/

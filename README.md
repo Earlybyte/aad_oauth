@@ -13,6 +13,8 @@ Supported Flows:
 - [Authorization code flow (including refresh token flow)](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)
 - [Authorization code flow B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/authorization-code-flow)
 
+Note that B2C flow hasn't been tested and will very likely require effort to get working.
+
 ## Usage
 
 For using this library you have to create an azure app at the [Azure App registration portal](https://apps.dev.microsoft.com/). Use native app as platform type (with callback URL: https://login.live.com/oauth20_desktop.srf).
@@ -20,24 +22,57 @@ For using this library you have to create an azure app at the [Azure App registr
 Afterwards you have to initialize the library as follow:
 
 ```dart
-  static final Config config = new Config(
-    tenant: "YOUR_TENANT_ID",
-    clientId: "YOUR_CLIENT_ID",
-    scope: "openid profile offline_access",
-    redirectUri: "your redirect url available in azure portal"
-  );
+    // tokenProvider =
+    //     AuthTokenProvider.config('YOUR_TENANT_ID', 'YOUR_CLIENT_ID', 'additional_scope');
+    // or the long-hand equivalent
+    tokenProvider = AuthTokenProvider.fullConfig(
+      AadConfig(
+        tenant: 'YOUR_TENANT_ID',
+        clientId: 'YOUR_CLIENT_ID'
+        scope: 'openid profile offline_access additional_scope',
+        redirectUri: 'https://login.live.com/oauth20_desktop.srf',
+      ),
+    );
+    tokenProvider.login();
 
-final AadOAuth oauth = new AadOAuth(config);
 ```
 
 This allows you to pass in an tenant ID, client ID, scope and redirect url.
 
-Then once you have an OAuth instance, you can call `login()` and afterwards `getAccessToken()` to retrieve an access token:
+For mobile use, you must embed an AzureLoginWidget in the build() method.
+```dart
+ return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: AzureLoginWidget(
+          authTokenProvider: tokenProvider,
+          whenAuthenticated: Text('Signed In'),
+          whenInitial: Center(child: CircularProgressIndicator()),
+          whenLoginFailed: Text('Login Failed'),
+          whenSignedOut: Text('Signed Out'),
+        ));
+```
+Under mobile, this widget will always pass-through to the appropriate widget tree depending
+on the authentication state. If only whenAuthenticated is provided, then it always passes
+through to whenAuthenticated, regardless of state. 
+
+When a full-flow authentication is required, the widget will pass through to a webview
+initialized with the tenant signin location derived from the configuration.
+
+Under web, the AzureLoginWidget always passes through to whenAuthenticated as state tracking
+is handled directly by underlying javascript library from Microsoft. Under web, when a full
+interactive auth flow is required, the flutter web app will be redirected to the azure login
+page, and will return to the original app once a token is available.
+
+Then once you have a tokenProvider instance, you can call `login()` and afterwards `getAccessToken()` to retrieve an access token:
 
 ```dart
-await oauth.login();
-String accessToken = await oauth.getAccessToken();
+await tokenProvider.login();
+String accessToken = await tokenProvider.getAccessToken();
 ```
+
+
 
 You can also call `getAccessToken()` directly. It will automatically login and retrieve an access token.
 
@@ -46,6 +81,10 @@ Tokens are stored in Keychain for iOS or Keystore for Android. To destroy the to
 ```dart
 await oauth.logout();
 ```
+
+On web platform,
+* tokens are stored by the underlying msauth.js library in the browser localStorage.
+* logout does nothing to forget tokens in this release.
 
 ## B2C Usage
 
@@ -68,6 +107,15 @@ Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secr
       tokenIdentifier: "UNIQUE IDENTIFIER A");
 ```
 
+## Flutter Web Usage
+For Flutter Web, add the MSAL js to your index.html in the `<head>` section:
+```html
+  <script type="text/javascript" src="https://alcdn.msftauth.net/lib/1.4.8/js/msal.js"
+    integrity="sha384-rLIIWk6gwb6EYl6uqmTG4fjUDijpqsPlUxNvjdOcqt/OitOkxXKAJf6HhNEjRDBD"
+    crossorigin="anonymous"></script>
+  <script src="assets/packages/aad_oauth/assets/msal_auth.js"></script>
+```
+
 Afterwards you can login and get an access token for accessing other resources. You can also use multiple configs at the same time.
 
 ## Installation
@@ -76,7 +124,7 @@ Add the following to your pubspec.yaml dependencies:
 
 ```yaml
 dependencies:
-  aad_oauth: "^0.2.0"
+  aad_oauth: "^0.3.0"
 ```
 
 ## Contribution
