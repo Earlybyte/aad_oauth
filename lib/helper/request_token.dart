@@ -15,14 +15,14 @@ class RequestToken {
     final _tokenRequest = TokenRequestDetails(config, code);
 
     return await _sendTokenRequest(
-        _tokenRequest.url, _tokenRequest.params, _tokenRequest.headers);
+        _tokenRequest.url, _tokenRequest.parameters, _tokenRequest.headers);
   }
 
   Future<Token> requestRefreshToken(String refreshToken) async {
     final _tokenRefreshRequest =
         TokenRefreshRequestDetails(config, refreshToken);
     return await _sendTokenRequest(_tokenRefreshRequest.url,
-        _tokenRefreshRequest.params, _tokenRefreshRequest.headers);
+        _tokenRefreshRequest.parameters, _tokenRefreshRequest.headers);
   }
 
   Future<Token> _sendTokenRequest(String url, Map<String, String> params,

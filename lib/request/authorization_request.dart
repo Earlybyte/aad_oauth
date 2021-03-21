@@ -16,39 +16,24 @@ class AuthorizationRequest {
           'scope': config.scope,
           'state': config.state,
         } {
-    if (config.responseMode != null) {
-      parameters.putIfAbsent('response_mode', () => config.responseMode!);
-    }
-
-    if (config.prompt != null) {
-      parameters.putIfAbsent('prompt', () => config.prompt!);
-    }
-
-    if (config.loginHint != null) {
-      parameters.putIfAbsent('login_hint', () => config.loginHint!);
-    }
-
-    if (config.domainHint != null) {
-      parameters.putIfAbsent('domain_hint', () => config.domainHint!);
-    }
-
-    if (config.codeVerifier != null) {
-      parameters.putIfAbsent('code_verifier', () => config.codeVerifier!);
-    }
-
-    if (config.codeChallenge != null) {
-      parameters.putIfAbsent('code_challenge', () => config.codeChallenge!);
-    }
-
-    if (config.codeChallengeMethod != null) {
-      parameters.putIfAbsent(
-          'code_challenge_method', () => config.codeChallengeMethod!);
-    }
+    _addConfigToParameters('response_mode', config.responseMode);
+    _addConfigToParameters('prompt', config.prompt);
+    _addConfigToParameters('login_hint', config.loginHint);
+    _addConfigToParameters('domain_hint', config.domainHint);
+    _addConfigToParameters('code_verifier', config.codeVerifier);
+    _addConfigToParameters('code_challenge', config.codeChallenge);
+    _addConfigToParameters('code_challenge_method', config.codeChallengeMethod);
 
     if (config.isB2C) {
       parameters.addAll({
         'nonce': config.nonce,
       });
+    }
+  }
+
+  void _addConfigToParameters(String name, String? value) {
+    if (value != null) {
+      parameters.putIfAbsent(name, () => value);
     }
   }
 }

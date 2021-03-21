@@ -2,12 +2,12 @@ import 'package:aad_oauth/model/config.dart';
 
 class TokenRefreshRequestDetails {
   String url;
-  Map<String, String> params;
+  Map<String, String> parameters;
   Map<String, String> headers;
 
   TokenRefreshRequestDetails(AadConfig config, String refreshToken)
       : url = config.tokenUrl,
-        params = {
+        parameters = {
           'client_id': config.clientId,
           'scope': config.scope,
           'redirect_uri': config.redirectUri,
@@ -18,8 +18,12 @@ class TokenRefreshRequestDetails {
           'Accept': 'application/json',
           'Content-Type': AadConfig.contentType
         } {
-    if (config.clientSecret != null) {
-      params['client_secret'] = config.clientSecret!;
+    _setParametersFromConfig('client_secret', config.clientSecret);
+  }
+
+  void _setParametersFromConfig(final String name, final String? value) {
+    if (value != null) {
+      parameters[name] = value;
     }
   }
 }

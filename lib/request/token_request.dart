@@ -2,12 +2,12 @@ import 'package:aad_oauth/model/config.dart';
 
 class TokenRequestDetails {
   String url;
-  Map<String, String> params;
+  Map<String, String> parameters;
   Map<String, String> headers;
 
   TokenRequestDetails(AadConfig config, String code)
       : url = config.tokenUrl,
-        params = {
+        parameters = {
           'client_id': config.clientId,
           'grant_type': 'authorization_code',
           'scope': config.scope,
@@ -18,16 +18,14 @@ class TokenRequestDetails {
           'Accept': 'application/json',
           'Content-Type': AadConfig.contentType
         } {
-    if (config.resource != null) {
-      params['resource'] = config.resource!;
-    }
+    _setParametersFromConfig('resource', config.resource);
+    _setParametersFromConfig('client_secret', config.clientSecret);
+    _setParametersFromConfig('code_verifier', config.codeVerifier);
+  }
 
-    if (config.clientSecret != null) {
-      params['client_secret'] = config.clientSecret!;
-    }
-
-    if (config.codeVerifier != null) {
-      params['code_verifier'] = config.codeVerifier!;
+  void _setParametersFromConfig(final String name, final String? value) {
+    if (value != null) {
+      parameters[name] = value;
     }
   }
 }
