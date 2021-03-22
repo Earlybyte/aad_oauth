@@ -18,6 +18,7 @@ dependencies:
   bloc: ^7.0.0-nullsafety.3
   cupertino_icons: ^0.1.2
   webview_flutter: ^2.0.2
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

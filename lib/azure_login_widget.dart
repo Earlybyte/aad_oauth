@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:aad_oauth/auth_token_provider.dart';
 import 'package:aad_oauth/bloc/aad_bloc.dart';
-import 'package:aad_oauth/mobile_azure_token_provider.dart';
-import 'package:aad_oauth/repository/token_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
@@ -29,22 +27,15 @@ class AzureLoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      return whenAuthenticated;
-    }
-    if (authTokenProvider is MobileAzureTokenProvider) {
-      return BlocProvider.value(
-        value: (authTokenProvider as MobileAzureTokenProvider).bloc,
-        child: _AzureLoginSubTree(
-          whenAuthenticated: whenAuthenticated,
-          whenSignedOut: whenSignedOut,
-          whenInitial: whenInitial,
-          whenLoginFailed: whenLoginFailed,
-        ),
-      );
-    } else {
-      return whenAuthenticated;
-    }
+    return BlocProvider.value(
+      value: authTokenProvider.bloc,
+      child: _AzureLoginSubTree(
+        whenAuthenticated: whenAuthenticated,
+        whenSignedOut: whenSignedOut,
+        whenInitial: whenInitial,
+        whenLoginFailed: whenLoginFailed,
+      ),
+    );
   }
 }
 
@@ -91,7 +82,7 @@ class _AzureLoginSubTree extends StatelessWidget {
 class _FullLoginFlowWidget extends StatelessWidget {
   _FullLoginFlowWidget() {
     // Enable hybrid composition on Android
-    if (Platform.isAndroid && !kIsWeb) {
+    if (!kIsWeb && Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
     }
   }

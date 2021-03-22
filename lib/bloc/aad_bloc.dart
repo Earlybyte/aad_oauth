@@ -3,6 +3,7 @@ import 'package:aad_oauth/model/token.dart';
 import 'package:aad_oauth/repository/token_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -12,38 +13,56 @@ part 'aad_state.dart';
 class AadBloc extends Bloc<AadEvent, AadState> {
   AadBloc({
     required this.tokenRepository,
-  }) : super(AadInitialState()) {
-    add(AadLoginRequestEvent());
-  }
+  }) : super(AadInitialState());
   final TokenRepository tokenRepository;
 
   @override
   Stream<AadState> mapEventToState(
     AadEvent event,
   ) async* {
-    if (event is AadLoginRequestEvent) {
-      if (state is AadSignedOutState ||
-          state is AadInternalErrorState ||
-          state is AadAuthenticationFailedState) {
-        yield AadInitialState();
+    if (kIsWeb) {
+      // On web we only handle a token or no token and set our state
+      // correspondingly
+      if (event is AadMsalTokenAvailableEvent) {
+        final curState = state;
+        if (curState is AadWithTokenState &&
+            curState.token.expireTimeStamp.millisecondsSinceEpoch ==
+                event.expiresOn) {
+          return;
+        }
+        final token = Token(
+          accessToken: event.accessToken,
+          issueTimeStamp: DateTime.now(),
+          expireTimeStamp: event.expiresOn,
+        );
+
+        yield AadAuthenticatedState(token: token);
       }
-      yield await processLoginRequested();
-    } else if (event is AadTokenRefreshRequestEvent) {
-      yield await processAccessTokenRefresh();
-    } else if (event is AadLogoutRequestEvent) {
-      await CookieManager().clearCookies();
-      await tokenRepository.clearTokenFromCache();
-      yield AadSignedOutState();
-    } else if (event is AadFullFlowUrlLoadedEvent) {
-      yield await processFullLoginFlowPageLoadUrl(event.url);
-    } else if (event is AadSignInErrorEvent) {
-      yield await AadInternalErrorState(event.description);
-    } else if (event is AadDebugTokenEvent) {
-      await tokenRepository.saveTokenToCache(event.debugToken);
-      yield AadAuthenticatedState(token: event.debugToken);
     } else {
-      yield AadInternalErrorState(
-          'Unexpected/unhandled AadEvent type ${event} received');
+      if (event is AadLoginRequestEvent) {
+        if (state is AadSignedOutState ||
+            state is AadInternalErrorState ||
+            state is AadAuthenticationFailedState) {
+          yield AadInitialState();
+        }
+        yield await processLoginRequested();
+      } else if (event is AadTokenRefreshRequestEvent) {
+        yield await processAccessTokenRefresh();
+      } else if (event is AadLogoutRequestEvent) {
+        await CookieManager().clearCookies();
+        await tokenRepository.clearTokenFromCache();
+        yield AadSignedOutState();
+      } else if (event is AadFullFlowUrlLoadedEvent) {
+        yield await processFullLoginFlowPageLoadUrl(event.url);
+      } else if (event is AadSignInErrorEvent) {
+        yield await AadInternalErrorState(event.description);
+      } else if (event is AadDebugTokenEvent) {
+        await tokenRepository.saveTokenToCache(event.debugToken);
+        yield AadAuthenticatedState(token: event.debugToken);
+      } else {
+        yield AadInternalErrorState(
+            'Unexpected/unhandled AadEvent type ${event} received');
+      }
     }
   }
 

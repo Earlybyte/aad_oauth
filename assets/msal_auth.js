@@ -59,7 +59,10 @@ function GetBearerToken(tokenCallback, errorCallback) {
     }
 
     myMSALObj.acquireTokenSilent(requestObj).then(function (tokenResponse) {
-        return tokenCallback(tokenResponse.accessToken);
+        return tokenCallback({
+            accessToken: tokenResponse.accessToken,
+            expiresOn: tokenResponse.expiresOn.getTime()
+        });
     }).catch(function (error) {
         console.log(error.errorCode);
         // Upon acquireTokenSilent failure (due to consent or interaction or login required ONLY)
@@ -73,6 +76,10 @@ function GetBearerToken(tokenCallback, errorCallback) {
             alert("Unable to sign in: " + error)
         }
     })
+}
+
+function signout() {
+    myMSALObj.logout();
 }
 
 function logToken(token) {

@@ -19,6 +19,14 @@ class AadSignInErrorEvent extends AadEvent {
   List<Object> get props => [runtimeType, description];
 }
 
+class AadNoTokenAvailableEvent extends AadEvent {}
+
+class AadMsalTokenAvailableEvent extends AadEvent {
+  final String accessToken;
+  final int expiresOn;
+  AadMsalTokenAvailableEvent(this.accessToken, this.expiresOn);
+}
+
 class AadLogoutRequestEvent extends AadEvent {}
 
 class AadLoginRequestEvent extends AadEvent {}
