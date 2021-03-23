@@ -13,7 +13,7 @@ class AadTokenRepositoryStub extends TokenRepository {
   @override
   Future<void> saveTokenToCache(Token token) async {}
   @override
-  Future<void> clearTokenFromCache() async {}
+  Future<void> clearTokenFromCache({bool? clearCookies}) async {}
 
   @override
   Future<Token> refreshAccessTokenFlow(Token token) => loadTokenFromCache();

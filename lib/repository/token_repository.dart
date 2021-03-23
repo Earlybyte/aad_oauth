@@ -6,7 +6,7 @@ abstract class TokenRepository {
 
   Future<Token> loadTokenFromCache();
   Future<void> saveTokenToCache(Token token);
-  Future<void> clearTokenFromCache();
+  Future<void> clearTokenFromCache({bool? clearCookies});
 
   Future<Token> refreshAccessTokenFlow(Token token);
 

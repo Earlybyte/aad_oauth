@@ -4,6 +4,7 @@ import 'package:aad_oauth/model/token.dart';
 import 'package:aad_oauth/repository/token_repository.dart';
 import 'package:aad_oauth/request/authorization_request.dart';
 import 'package:aad_oauth/helper/request_token.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class AadTokenRepository extends TokenRepository {
   Token _cachedToken = AuthStorage.emptyToken;
@@ -34,7 +35,10 @@ class AadTokenRepository extends TokenRepository {
   }
 
   @override
-  Future<void> clearTokenFromCache() async {
+  Future<void> clearTokenFromCache({bool? clearCookies}) async {
+    if (clearCookies ?? false) {
+      await CookieManager().clearCookies();
+    }
     _cachedToken = AuthStorage.emptyToken;
     await _authStorage.clear();
   }

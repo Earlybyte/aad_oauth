@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 part 'aad_event.dart';
 part 'aad_state.dart';
@@ -49,8 +48,7 @@ class AadBloc extends Bloc<AadEvent, AadState> {
       } else if (event is AadTokenRefreshRequestEvent) {
         yield await processAccessTokenRefresh();
       } else if (event is AadLogoutRequestEvent) {
-        await CookieManager().clearCookies();
-        await tokenRepository.clearTokenFromCache();
+        await tokenRepository.clearTokenFromCache(clearCookies: true);
         yield AadSignedOutState();
       } else if (event is AadFullFlowUrlLoadedEvent) {
         yield await processFullLoginFlowPageLoadUrl(event.url);
