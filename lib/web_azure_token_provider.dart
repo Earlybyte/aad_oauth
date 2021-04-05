@@ -55,7 +55,7 @@ class WebAzureTokenProvider extends AuthTokenProvider {
   }
 
   // TODO: Need to add proper support for other Azure parameters
-  // web mode doesn't support b2c flows
+  // web mode doesn't support b2c flows (yet)
   WebAzureTokenProvider.config(AadConfig config)
       : authority = 'https://login.microsoftonline.com/${config.tenant}',
         AzureTenantId = config.tenant,

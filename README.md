@@ -57,6 +57,19 @@ Under mobile, this widget will always pass-through to the appropriate widget tre
 on the authentication state. If only whenAuthenticated is provided, then it always passes
 through to whenAuthenticated, regardless of state. 
 
+To use `SurfaceAndroidWebView` for hybrid composition, you must arrange for this yourself. This
+is because to do so you must bump your `minSdkVersion` from `18` to at least `19` in `build.gradle` of
+your application. From the `flutter_webview` documentation, the following snippet will enable
+hybrid composition.
+
+```dart
+    // Enable hybrid composition on Android
+    if (!kIsWeb && Platform.isAndroid) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
+  }
+```
+
 When a full-flow authentication is required, the widget will pass through to a webview
 initialized with the tenant signin location derived from the configuration.
 
@@ -96,7 +109,7 @@ Setup your B2C directory - [Azure AD B2C Setup](https://docs.microsoft.com/en-us
 Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secret of App) and redirectUrl in the main.dart source-code:
 
 ```dart
-  static final Config configB2Ca = new Config(
+  static final Config configB2Ca = new AadConfig(
       tenant: "YOUR_TENANT_NAME",
       clientId: "YOUR_CLIENT_ID",
       scope: "YOUR_CLIENT_ID offline_access",

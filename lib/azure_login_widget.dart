@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:aad_oauth/auth_token_provider.dart';
 import 'package:aad_oauth/bloc/aad_bloc.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,12 +77,6 @@ class _AzureLoginSubTree extends StatelessWidget {
 }
 
 class _FullLoginFlowWidget extends StatelessWidget {
-  _FullLoginFlowWidget() {
-    // Enable hybrid composition on Android
-    if (!kIsWeb && Platform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AadBloc, AadState>(
