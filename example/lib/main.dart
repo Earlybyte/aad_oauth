@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final azureClientId = kIsWeb ? 'WEB_AZURE_CLIENT' : 'MOBILE_AZURE_CLIENT';
 
     // tokenProvider =
-    //     AuthTokenProvider.config(azureTenantId, azureClientId, openIdScope);
+    //     AuthTokenProvider.config(azureTenantId, azureClientId, 'openid profile offline_access ${openIdScope}');
     // or
     tokenProvider = AuthTokenProvider.fullConfig(
       AadConfig(

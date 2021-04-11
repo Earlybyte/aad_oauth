@@ -121,7 +121,24 @@ Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secr
 ```
 
 ## Flutter Web Usage
-For Flutter Web, add the MSAL js to your index.html in the `<head>` section:
+
+On flutter web, this library supports either authorization code flow or implicit code flow, using version 2 and version 1
+of the Microsoft MSAL library respectively. Implicit code flow may have some issues with browsers that don't support
+third party cookies, such as Safari, so it is recommended that you use authorization code flow.
+
+Implicit code flow support will likely be removed in a later version of this library.
+
+For Flutter Web, to use authorization code flow, add the MSAL v2 js to your `index.html` in the `<head>` section:
+```html
+  <script type="text/javascript"
+    src="https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.min.js"
+    integrity="sha384-2Vr9MyareT7qv+wLp1zBt78ZWB4aljfCTMUrml3/cxm0W81ahmDOC6uyNmmn0Vrc"
+    crossorigin="anonymous"></script>
+  <script src="assets/packages/aad_oauth/assets/msal_authv2.js"></script>
+```
+
+For flutter web, to use the older implicit code flow (not recommended), add the MSAL v1 JS to your `index.html` in the `<head>` section:
+
 ```html
   <script type="text/javascript" src="https://alcdn.msftauth.net/lib/1.4.8/js/msal.js"
     integrity="sha384-rLIIWk6gwb6EYl6uqmTG4fjUDijpqsPlUxNvjdOcqt/OitOkxXKAJf6HhNEjRDBD"

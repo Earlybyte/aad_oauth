@@ -60,7 +60,7 @@ class AuthTokenProvider {
   factory AuthTokenProvider.fullConfig(AadConfig config) =>
       getAuthTokenProviderFromConfig(config);
 
-  factory AuthTokenProvider.config(
-          String AzureTenantId, String clientId, String openIdScope) =>
-      getAuthTokenProvider(AzureTenantId, clientId, openIdScope);
+  factory AuthTokenProvider.config(String AzureTenantId, String clientId,
+          String openIdScope, String redirectUri) =>
+      getAuthTokenProvider(AzureTenantId, clientId, openIdScope, redirectUri);
 }

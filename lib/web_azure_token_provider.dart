@@ -9,7 +9,8 @@ import 'dart:async';
 import 'package:js/js.dart';
 
 @JS('initialiseMSAL')
-external void initialiseMSAL(String clientId, String authority, String scope);
+external void initialiseMSAL(
+    String clientId, String authority, String scope, String redirectUri);
 
 @JS('signout')
 external void signout();
@@ -34,35 +35,36 @@ Future<MsalTokenResponse> GetBearerToken() {
 }
 
 class WebAzureTokenProvider extends AuthTokenProvider {
-  final String clientId;
-  final String AzureTenantId;
-  final String scope;
-  final String authority;
-
-  WebAzureTokenProvider(this.AzureTenantId, this.clientId, this.scope)
-      : authority = 'https://login.microsoftonline.com/${AzureTenantId}',
-        super(
+  WebAzureTokenProvider(
+      String AzureTenantId, String clientId, String scope, String redirectUrl)
+      : super(
           tokenRepository: AadTokenRepository(
             config: AadConfig(
-              redirectUri: 'about:blank',
-              clientId: clientId,
               tenant: AzureTenantId,
-              scope: scope,
+              clientId: clientId,
+              scope: 'openid profile offline_access ${scope}',
+              redirectUri: redirectUrl,
             ),
           ),
         ) {
-    initialiseMSAL(clientId, authority, scope);
+    final tr = tokenRepository as AadTokenRepository;
+    initialiseMSAL(
+        tr.config.clientId,
+        'https://login.microsoftonline.com/${tr.config.tenant}',
+        tr.config.scope,
+        tr.config.redirectUri);
   }
 
   // TODO: Need to add proper support for other Azure parameters
   // web mode doesn't support b2c flows (yet)
   WebAzureTokenProvider.config(AadConfig config)
-      : authority = 'https://login.microsoftonline.com/${config.tenant}',
-        AzureTenantId = config.tenant,
-        clientId = config.clientId,
-        scope = config.scope,
-        super(tokenRepository: AadTokenRepository(config: config)) {
-    initialiseMSAL(clientId, authority, scope);
+      : super(tokenRepository: AadTokenRepository(config: config)) {
+    final tr = tokenRepository as AadTokenRepository;
+    initialiseMSAL(
+        tr.config.clientId,
+        'https://login.microsoftonline.com/${tr.config.tenant}',
+        tr.config.scope,
+        tr.config.redirectUri);
   }
 
   @override
@@ -91,9 +93,9 @@ class WebAzureTokenProvider extends AuthTokenProvider {
   }
 }
 
-AuthTokenProvider getAuthTokenProvider(
-        String AzureTenantId, String clientId, String openIdScope) =>
-    WebAzureTokenProvider(AzureTenantId, clientId, openIdScope);
+AuthTokenProvider getAuthTokenProvider(String AzureTenantId, String clientId,
+        String openIdScope, String redirectUri) =>
+    WebAzureTokenProvider(AzureTenantId, clientId, openIdScope, redirectUri);
 
 AuthTokenProvider getAuthTokenProviderFromConfig(AadConfig config) =>
     WebAzureTokenProvider.config(config);
