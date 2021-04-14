@@ -69,8 +69,8 @@ class AadTokenRepository extends TokenRepository {
 
   static String _mapToQueryParams(Map<String, String> params) {
     final queryParams = <String>[];
-    params
-        .forEach((String key, String value) => queryParams.add('$key=$value'));
+    params.forEach((String key, String value) =>
+        queryParams.add('$key=${Uri.encodeQueryComponent(value)}'));
     return queryParams.join('&');
   }
 
