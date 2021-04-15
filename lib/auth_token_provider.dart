@@ -16,12 +16,21 @@ class AuthTokenProvider {
       : bloc = AadBloc(tokenRepository: tokenRepository);
 
   Future<void> login() async {
-    bloc.add(AadLoginRequestEvent());
+    await getAccessToken();
+    return;
   }
 
   Future<void> logout() async {
+    final state = bloc.state;
+    if (state is AadSignedOutState) {
+      return;
+    }
     bloc.add(AadLogoutRequestEvent());
-    //return oauth.logout();
+    await for (final aadState in bloc.stream) {
+      if (aadState is AadSignedOutState) {
+        return;
+      }
+    }
   }
 
   Future<String?> getAccessToken() async {
@@ -36,7 +45,7 @@ class AuthTokenProvider {
       }
     }
 
-    await login();
+    bloc.add(AadLoginRequestEvent());
     await for (final aadState in bloc.stream) {
       //print("Processed ${aadState.runtimeType.toString()} awaiting token");
       if (aadState is AadWithTokenState) {
