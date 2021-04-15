@@ -85,8 +85,9 @@ class _FullLoginFlowWidget extends StatelessWidget {
         return WebView(
           initialUrl: bloc.tokenRepository.authorizationUrl,
           javascriptMode: JavascriptMode.unrestricted,
-          onPageStarted: (String url) {
-            bloc.add(AadFullFlowUrlLoadedEvent(url));
+          navigationDelegate: (navigation) {
+            bloc.add(AadFullFlowUrlLoadedEvent(navigation.url));
+            return NavigationDecision.navigate;
           },
           onWebResourceError: (WebResourceError wre) {
             bloc.add(AadSignInErrorEvent(wre.description));
