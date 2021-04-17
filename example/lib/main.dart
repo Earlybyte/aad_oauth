@@ -38,10 +38,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    final AzureTenantId = 'AZURE_TENANT_ID';
-    final openIdScope = 'additional_scope';
-    // NB: clientId for mobile web can be different to mobile app
-    final azureClientId = kIsWeb ? 'WEB_AZURE_CLIENT' : 'MOBILE_AZURE_CLIENT';
+    // NB: MSALv2 can use same clientId for mobile and SPA web app entry
+    // as both use authorization code flow
+
+    // If you configure MSDALv1, you will need to setup a client with
+    // implicit flow
+
+    final AzureTenantId = 'YOUR_TENANT_ID';
+    final azureClientId = 'YOUR_CLIENT_ID';
+    final openIdScope = 'YOUR_SCOPE';
 
     // tokenProvider =
     //     AuthTokenProvider.config(azureTenantId, azureClientId, 'openid profile offline_access ${openIdScope}');
@@ -51,7 +56,15 @@ class _MyHomePageState extends State<MyHomePage> {
         tenant: AzureTenantId,
         clientId: azureClientId,
         scope: 'openid profile offline_access ${openIdScope}',
-        redirectUri: 'https://login.live.com/oauth20_desktop.srf',
+        // For web: configure redirect URI to match your launch.json here
+        // e.g. for below, use "args": ["-d", "chrome","--web-port", "8483"],
+        // in vscode, launch.json entry for running the example app
+        // Also add http://localhost:8483/ as a Redirect URI in the SPA entry
+        // in Azure directory application configuration.
+        redirectUri: kIsWeb
+            ? 'http://localhost:8483/'
+            // Mobile App
+            : 'https://login.live.com/oauth20_desktop.srf',
       ),
     );
     tokenProvider.login();

@@ -17,7 +17,7 @@ external void signout();
 
 @JS('GetBearerToken')
 external void _GetBearerToken(void Function(MsalTokenResponse) callback,
-    void Function(String) errorCallback);
+    void Function(MsalTokenError) errorCallback);
 
 @JS()
 @anonymous
@@ -25,6 +25,19 @@ class MsalTokenResponse {
   external factory MsalTokenResponse({accessToken, expiresOn});
   external String get accessToken;
   external int get expiresOn;
+}
+
+@JS()
+@anonymous
+class MsalTokenError {
+  external factory MsalTokenError(
+      {errorCode, errorMessage, name, subError, message, stack});
+  external String get errorCode;
+  external String get errorMessage;
+  external String get name;
+  external String get subError;
+  external String get message;
+  external String get stack;
 }
 
 Future<MsalTokenResponse> GetBearerToken() {
@@ -75,6 +88,8 @@ class WebAzureTokenProvider extends AuthTokenProvider {
           accessToken.accessToken, accessToken.expiresOn));
       return accessToken.accessToken;
     } catch (e) {
+      final msalError = e as MsalTokenError;
+      print(msalError.message);
       bloc.add(AadNoTokenAvailableEvent());
       return null;
     }

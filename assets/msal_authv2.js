@@ -1,10 +1,9 @@
-// Create the main myMSALObj instance
-// configuration parameters are located at authConfig.js
+
 let myMSALObj = null;
 
 let username = "";
 
-// Add scopes here for access token to be used at Microsoft Graph API endpoints.
+
 const tokenRequest = {
     scopes: null
 };
@@ -53,7 +52,7 @@ function signout() {
     }
 }
 
-function getTokenPopup(request) {
+function getTokenPopup(request, errorCallback) {
     /**
      * See here for more info on account retrieval:
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
@@ -64,14 +63,12 @@ function getTokenPopup(request) {
         if (error instanceof msal.InteractionRequiredAuthError) {
             // fallback to interaction when silent call fails
             return myMSALObj.acquireTokenPopup(request).then(tokenResponse => {
-                console.log(tokenResponse);
-
                 return tokenResponse;
             }).catch(error => {
-                console.error(error);
+                errorCallback(error);
             });
         } else {
-            console.warn(error);
+            errorCallback(error);
         }
     });
 }
@@ -85,7 +82,7 @@ function getAccount() {
         return;
     } else if (currentAccounts.length > 1) {
         // Multiple users - pick the first one, but this shouldn't happen
-        console.warn("Multiple accounts detected.");
+        console.warn("Multiple accounts detected, selecting first.");
         username = currentAccounts[0].username;
     } else if (currentAccounts.length === 1) {
         username = currentAccounts[0].username;
@@ -96,7 +93,7 @@ function getAccount() {
 function GetBearerToken(tokenCallback, errorCallback) {
 
     if (!getAccount()) {
-        myMSALObj.loginPopup(loginRequest).then(
+        myMSALObj.loginPopup(tokenRequest).then(
             function (loginResponse) {
                 username = loginResponse.account.username;
                 return tokenCallback({
@@ -105,19 +102,17 @@ function GetBearerToken(tokenCallback, errorCallback) {
                 });
             }
         ).catch(error => {
-            console.error(error);
-            errorCallback(error.errorCode);
+            errorCallback(error);
         });
         return
     }
 
-    getTokenPopup(tokenRequest).then(response => {
+    getTokenPopup(tokenRequest, errorCallback).then(response => {
         return tokenCallback({
             accessToken: response.accessToken,
             expiresOn: response.expiresOn.getTime()
         });
     }).catch(error => {
-        console.error(error);
-        errorCallback(error.errorCode);
+        errorCallback(error);
     });
 }
