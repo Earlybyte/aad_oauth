@@ -67,12 +67,12 @@ function GetBearerToken(tokenCallback, errorCallback) {
         console.log(error.errorCode);
         // Upon acquireTokenSilent failure (due to consent or interaction or login required ONLY)
         // Call acquireTokenRedirect
-        if (requiresInteraction(error.errorCode)) {
+        if (requiresInteraction(error)) {
             myMSALObj.acquireTokenRedirect(requestObj)
             return
         } else {
             console.log("Failed to acquire token because error code is not for an interactive requirement" + error.errorCode)
-            errorCallback(error.errorCode);
+            errorCallback(error);
             alert("Unable to sign in: " + error)
         }
     })

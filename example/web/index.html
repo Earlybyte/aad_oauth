@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -24,15 +25,22 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>example</title>
   <link rel="manifest" href="manifest.json">
+  <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.min.js"
+    integrity="sha384-2Vr9MyareT7qv+wLp1zBt78ZWB4aljfCTMUrml3/cxm0W81ahmDOC6uyNmmn0Vrc"
+    crossorigin="anonymous"></script>
+  <script src="assets/packages/aad_oauth/assets/msal_authv2.js"></script>
+<!--
   <script type="text/javascript" src="https://alcdn.msftauth.net/lib/1.4.8/js/msal.js"
     integrity="sha384-rLIIWk6gwb6EYl6uqmTG4fjUDijpqsPlUxNvjdOcqt/OitOkxXKAJf6HhNEjRDBD"
     crossorigin="anonymous"></script>
-  <script src="assets/packages/aad_oauth/assets/msal_auth.js"></script>  
+  <script src="assets/packages/aad_oauth/assets/msal_auth.js"></script>
+-->
 </head>
+
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
@@ -46,4 +54,5 @@
   </script>
   <script src="main.dart.js" type="application/javascript"></script>
 </body>
+
 </html>
