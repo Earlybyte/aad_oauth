@@ -7,15 +7,15 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  webview_flutter: ^2.0.2
-  flutter_secure_storage: ^4.1.0
+  webview_flutter: ^2.0.8
+  flutter_secure_storage: ^4.2.0
   bloc: ^7.0.0
-  flutter_bloc: ^7.0.0
-  equatable: ^2.0.0
-  http: ^0.13.0
+  flutter_bloc: ^7.0.1
+  equatable: ^2.0.2
+  http: ^0.13.3
   flutter:
     sdk: flutter
-  pedantic: ^1.9.0
+  pedantic: ^1.11.0
   js: ^0.6.3
 dev_dependencies:
   flutter_test:
