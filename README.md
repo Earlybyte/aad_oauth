@@ -39,8 +39,6 @@ await oauth.login();
 String accessToken = await oauth.getAccessToken();
 ```
 
-You can also call `getAccessToken()` directly. It will automatically login and retrieve an access token.
-
 Tokens are stored in Keychain for iOS or Keystore for Android. To destroy the tokens you can call `logout()`:
 
 ```dart
