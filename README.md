@@ -61,6 +61,7 @@ can access the token. On mobile app, use `https://login.live.com/oauth20_desktop
 as the webview component can see the token in the redirect URL.
 
 For mobile use, you must embed an AzureLoginWidget in the build() method.
+
 ```dart
  return Scaffold(
         appBar: AppBar(
@@ -82,6 +83,9 @@ To use `SurfaceAndroidWebView` for hybrid composition, you must arrange for this
 is because to do so you must bump your `minSdkVersion` from `18` to at least `19` in `build.gradle` of
 your application. From the `flutter_webview` documentation, the following snippet will enable
 hybrid composition.
+
+Note that without hybrid composition, the webview will not display a keyboard when required on
+the (at time of writing beta) Android 12.
 
 ```dart
     // Enable hybrid composition on Android
@@ -111,11 +115,6 @@ Once you have a tokenProvider instance, you can call `login()` and afterwards `g
 await tokenProvider.login();
 String accessToken = await tokenProvider.getAccessToken();
 ```
-
-
-
-You can also call `getAccessToken()` directly. It will automatically login and retrieve an access token, but may not work on
-some web browsers if it is called without user interaction (clicking on a button).
 
 Tokens are stored in Keychain for iOS or Keystore for Android. To destroy the tokens you can call `logout()`:
 
