@@ -14,11 +14,7 @@ dependencies:
     path: ../
   flutter:
     sdk: flutter
-  flutter_bloc: ^7.0.1
-  bloc: ^7.0.0
   cupertino_icons: ^1.0.3
-  webview_flutter: ^2.0.8
-  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
