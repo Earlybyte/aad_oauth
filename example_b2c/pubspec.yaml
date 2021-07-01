@@ -1,6 +1,6 @@
 name: aad_oauth_example_b2c
 description: A Flutter OAuth package example for performing user authentication against Azure B2C OAuth2 v2.0 endpoint.
-
+publish_to: none
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
