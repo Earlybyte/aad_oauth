@@ -50,7 +50,12 @@ class RequestCode {
   }
 
   Future<void> clearCookies() async {
-    await _webView.launch('', hidden: true, clearCookies: true);
+    await _webView.launch(
+      '',
+      hidden: true,
+      clearCookies: true,
+      clearCache: true,
+    );
     await _webView.close();
   }
 
