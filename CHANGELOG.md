@@ -3,7 +3,7 @@
 - Add refreshIfAvailable flag to login() [#94](https://github.com/Earlybyte/aad_oauth/pull/94)
 - Update Flutter Webview Plugin [#112](https://github.com/Earlybyte/aad_oauth/pull/112)
 - Bumped to version 0.2.1 with latest http support [#113](https://github.com/Earlybyte/aad_oauth/pull/113)
-- 
+- Upgrade packages and fix problems [#114](https://github.com/Earlybyte/aad_oauth/pull/114)
 
 ## [0.2.1] - 20210119
 
