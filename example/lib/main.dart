@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void showMessage(String text) {
     var alert = AlertDialog(content: Text(text), actions: <Widget>[
-      FlatButton(
+      TextButton(
           child: const Text('Ok'),
           onPressed: () {
             Navigator.pop(context);

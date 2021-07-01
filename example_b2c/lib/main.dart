@@ -11,7 +11,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  initState() {
+  void initState() {
     super.initState();
   }
 
@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final AadOAuth oauthB2Ca = AadOAuth(configB2Ca);
   final AadOAuth oauthB2Cb = AadOAuth(configB2Cb);
 
+  @override
   Widget build(BuildContext context) {
     // adjust window size for browser login
     var screenSize = MediaQuery.of(context).size;
@@ -126,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void showMessage(String text) {
     var alert = AlertDialog(content: Text(text), actions: <Widget>[
-      FlatButton(
+      TextButton(
           child: const Text('Ok'),
           onPressed: () {
             Navigator.pop(context);
@@ -138,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void login(AadOAuth oAuth) async {
     try {
       await oAuth.login();
-      String accessToken = await oAuth.getAccessToken();
+      final accessToken = await oAuth.getAccessToken();
       showMessage('Logged in successfully, your access token: $accessToken');
     } catch (e) {
       showError(e);
