@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aad_oauth/auth_token_provider.dart';
 import 'package:aad_oauth/helper/auth_storage.dart';
 import 'package:aad_oauth/model/config.dart';
@@ -38,6 +40,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
+    // Enable hybrid composition - required for keyboard to work on Android 12
+    // and requires minSdkVersion of 19
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+
     // NB: MSALv2 can use same clientId for mobile and SPA web app entry
     // as both use authorization code flow
 

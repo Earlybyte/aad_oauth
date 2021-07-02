@@ -9,6 +9,7 @@ environment:
 dependencies:
   webview_flutter: ^2.0.9
   flutter_secure_storage: ^4.2.0
+  shared_preferences: ^2.0.6
   bloc: ^7.0.0
   flutter_bloc: ^7.0.1
   equatable: ^2.0.2
