@@ -1,4 +1,4 @@
-## [0.2.2] - 20200701
+## [0.2.2] - 20200702
 
 - Add refreshIfAvailable flag to login() [#94](https://github.com/Earlybyte/aad_oauth/pull/94)
 - Update Flutter Webview Plugin [#112](https://github.com/Earlybyte/aad_oauth/pull/112)
