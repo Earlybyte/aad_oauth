@@ -1,26 +1,22 @@
 import 'package:aad_oauth/model/config.dart';
+import 'package:aad_oauth/request/request_details.dart';
 
-class TokenRefreshRequestDetails {
-  String url;
-  Map<String, String> params;
-  Map<String, String> headers;
-
-  TokenRefreshRequestDetails(Config config, String refreshToken) {
-    url = config.tokenUrl;
-    params = {
-      'client_id': config.clientId,
-      'scope': config.scope,
-      'redirect_uri': config.redirectUri,
-      'grant_type': 'refresh_token',
-      'refresh_token': refreshToken
-    };
-    if (config.clientSecret != null) {
-      params.putIfAbsent('client_secret', () => config.clientSecret);
-    }
-
-    headers = {
-      'Accept': 'application/json',
-      'Content-Type': Config.contentType
-    };
+class TokenRefreshRequestDetails extends RequestDetails {
+  TokenRefreshRequestDetails(AadConfig config, String refreshToken)
+      : super(
+          uri: Uri.parse(config.tokenUrl),
+          parameters: {
+            'client_id': config.clientId,
+            'scope': config.scope,
+            'redirect_uri': config.redirectUri,
+            'grant_type': 'refresh_token',
+            'refresh_token': refreshToken
+          },
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': AadConfig.contentType
+          },
+        ) {
+    setParametersFromConfig('client_secret', config.clientSecret);
   }
 }
