@@ -96,11 +96,6 @@ class WebAzureTokenProvider extends AuthTokenProvider {
   }
 
   @override
-  Future<void> login() async {
-    await getAccessToken();
-  }
-
-  @override
   Future<void> logout() async {
     signout();
     bloc.add(AadNoTokenAvailableEvent());

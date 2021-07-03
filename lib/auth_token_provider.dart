@@ -17,7 +17,6 @@ class AuthTokenProvider {
 
   Future<void> login() async {
     await getAccessToken();
-    return;
   }
 
   Future<void> logout() async {
