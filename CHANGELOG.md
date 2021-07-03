@@ -1,12 +1,15 @@
-## [0.3.0-nullsafety.0] - 202103xx
+## [0.3.0-nullsafety.0] - 2021xxxx
 
 - Upgrade depencies to null safety versions
 - Use bloc/flutter bloc
 - Provide login widget using flutter_webview
 
-## [0.2.2] - 2020xxxx
+## [0.2.2] - 20200702
 
 - Add refreshIfAvailable flag to login() [#94](https://github.com/Earlybyte/aad_oauth/pull/94)
+- Update Flutter Webview Plugin [#112](https://github.com/Earlybyte/aad_oauth/pull/112)
+- Bumped to version 0.2.1 with latest http support [#113](https://github.com/Earlybyte/aad_oauth/pull/113)
+- Upgrade packages and fix problems [#114](https://github.com/Earlybyte/aad_oauth/pull/114)
 
 ## [0.2.1] - 20210119
 

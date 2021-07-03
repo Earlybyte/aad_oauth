@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void showMessage(String text) {
     var alert = AlertDialog(content: Text(text), actions: <Widget>[
-      FlatButton(
+      TextButton(
           child: const Text('Ok'),
           onPressed: () {
             Navigator.pop(context);
@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void login(AadOAuth oAuth) async {
     try {
       await oAuth.login();
-      String accessToken = await oAuth.getAccessToken();
+      final accessToken = await oAuth.getAccessToken();
       showMessage('Logged in successfully, your access token: $accessToken');
     } catch (e) {
       showError(e);
