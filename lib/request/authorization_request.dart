@@ -1,25 +1,25 @@
 import 'package:aad_oauth/model/config.dart';
 
 class AuthorizationRequest {
-  String url;
-  String redirectUrl;
-  Map<String, String> parameters;
-  Map<String, String> headers;
-  bool fullScreen;
-  bool clearCookies;
+  final String /*!*/ url;
+  final String /*!*/ redirectUrl;
+  final Map<String, String/*!*/> parameters;
+  final bool fullScreen;
+  final bool clearCookies;
 
   AuthorizationRequest(Config config,
-      {bool fullScreen = true, bool clearCookies = false}) {
-    url = config.authorizationUrl;
-    redirectUrl = config.redirectUri;
-    parameters = {
-      'client_id': config.clientId,
-      'response_type': config.responseType,
-      'redirect_uri': config.redirectUri,
-      'scope': config.scope,
-      'state': config.state,
-    };
-
+      {bool fullScreen = true, bool clearCookies = false})
+      : url = config.authorizationUrl,
+        redirectUrl = config.redirectUri,
+        parameters = {
+          'client_id': config.clientId,
+          'response_type': config.responseType,
+          'redirect_uri': config.redirectUri,
+          'scope': config.scope,
+          'state': config.state,
+        },
+        fullScreen = fullScreen,
+        clearCookies = clearCookies {
     if (config.responseMode != null) {
       parameters.putIfAbsent('response_mode', () => config.responseMode);
     }
@@ -54,8 +54,5 @@ class AuthorizationRequest {
         'nonce': config.nonce,
       });
     }
-
-    this.fullScreen = fullScreen;
-    this.clearCookies = clearCookies;
   }
 }

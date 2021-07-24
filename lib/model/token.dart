@@ -11,7 +11,7 @@ class Token {
 
   /// An OAuth 2.0 refresh token. The app can use this token acquire additional access tokens after the current access token expires. Refresh_tokens are long-lived, and can be used to retain access to resources for extended periods of time. For more detail on refreshing an access token, refer to the section below.
   /// Note: Only provided if offline_access [scope] was requested.
-  String refreshToken;
+  String/*!*/ refreshToken;
 
   /// A JSON Web Token (JWT). The app can decode the segments of this token to request information about the user who signed in.
   /// The app can cache the values and display them, and confidential clients can use this for authorization.
@@ -32,7 +32,7 @@ class Token {
   Token();
 
   /// JSON map to Token factory.
-  factory Token.fromJson(Map<String, dynamic> json) => Token.fromMap(json);
+  factory Token.fromJson(Map<String, dynamic>/*!*/ json) => Token.fromMap(json);
 
   /// Convert this Token to JSON map.
   Map toMap() => Token.toJsonMap(this);

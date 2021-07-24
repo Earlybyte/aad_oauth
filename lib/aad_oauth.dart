@@ -11,19 +11,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Authenticates a user with Azure Active Directory using OAuth2.0.
 class AadOAuth {
-  static Config _config;
-  AuthStorage _authStorage;
-  RequestCode _requestCode;
-  RequestToken _requestToken;
+  final Config _config;
+  final AuthStorage _authStorage;
+  final RequestCode _requestCode;
+  final RequestToken _requestToken;
 
   /// Instantiating AadOAuth authentication.
   /// [config] Parameters according to official Microsoft Documentation.
-  AadOAuth(Config config) {
-    _config = config;
-    _authStorage = AuthStorage(tokenIdentifier: config.tokenIdentifier);
-    _requestCode = RequestCode(_config);
-    _requestToken = RequestToken(_config);
-  }
+  AadOAuth(Config config)
+      : _config = config,
+        _authStorage = AuthStorage(tokenIdentifier: config.tokenIdentifier),
+        _requestCode = RequestCode(config),
+        _requestToken = RequestToken(config);
 
   /// Set [screenSize] of webview.
   void setWebViewScreenSize(Rect screenSize) {

@@ -7,16 +7,17 @@ class RequestCode {
   final StreamController<String> _onCodeListener = StreamController();
   final FlutterWebviewPlugin _webView = FlutterWebviewPlugin();
   final Config _config;
-  AuthorizationRequest _authorizationRequest;
+  final AuthorizationRequest _authorizationRequest;
 
-  var _onCodeStream;
+  /*late */ Stream<String> _onCodeStream;
 
-  RequestCode(Config config) : _config = config {
-    _authorizationRequest = AuthorizationRequest(config);
+  RequestCode(Config config)
+      : _config = config,
+        _authorizationRequest = AuthorizationRequest(config) {
+    _onCodeStream = _onCodeListener.stream.asBroadcastStream();
   }
-
-  Future<String> requestCode() async {
-    String code;
+  Future<String /*?*/ > requestCode() async {
+    String /*?*/ code;
     final urlParams = _constructUrlParams();
 
     await _webView.launch(
@@ -56,16 +57,15 @@ class RequestCode {
     await _webView.close();
   }
 
-  Stream<String> get _onCode =>
-      _onCodeStream ??= _onCodeListener.stream.asBroadcastStream();
+  Stream<String> get _onCode => _onCodeStream;
 
   String _constructUrlParams() =>
       _mapToQueryParams(_authorizationRequest.parameters);
 
   String _mapToQueryParams(Map<String, String> params) {
     final queryParams = <String>[];
-    params
-        .forEach((String key, String value) => queryParams.add('$key=$value'));
+    params.forEach((String key, String value) =>
+        queryParams.add('$key=${Uri.encodeQueryComponent(value)}'));
     return queryParams.join('&');
   }
 }

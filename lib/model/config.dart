@@ -7,10 +7,10 @@ import 'package:flutter/widgets.dart';
 /// DartDocs of parameters are mostly from those pages.
 class Config {
   /// Azure AD authorization URL.
-  String authorizationUrl;
+  String/*!*/ authorizationUrl;
 
   /// Azure AD token URL.
-  String tokenUrl;
+  String/*!*/ tokenUrl;
 
   /// The tenant value in the path of the request can be used to control who can sign into the application.
   /// The allowed values are common, organizations, consumers, and tenant identifiers. Or Name of your Azure AD B2C tenant.
