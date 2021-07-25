@@ -4,35 +4,35 @@ class Token {
   final expireOffSet = 5;
 
   /// The requested access token. The app can use this token to authenticate to the secured resource, such as a web API.
-  String accessToken;
+  String? accessToken;
 
   /// Indicates the token type value. The only type that Azure AD supports is Bearer.
-  String tokenType;
+  String? tokenType;
 
   /// An OAuth 2.0 refresh token. The app can use this token acquire additional access tokens after the current access token expires. Refresh_tokens are long-lived, and can be used to retain access to resources for extended periods of time. For more detail on refreshing an access token, refer to the section below.
   /// Note: Only provided if offline_access [scope] was requested.
-  String/*!*/ refreshToken;
+  String? refreshToken;
 
   /// A JSON Web Token (JWT). The app can decode the segments of this token to request information about the user who signed in.
   /// The app can cache the values and display them, and confidential clients can use this for authorization.
   /// For more information about id_tokens, see the id_token reference.
   /// Note: Only provided if openid [scope] was requested.
-  String idToken;
+  String? idToken;
 
   /// Current time when token was issued.
-  DateTime issueTimeStamp;
+  late DateTime issueTimeStamp;
 
   /// Predicted token expiration time.
-  DateTime expireTimeStamp;
+  DateTime? expireTimeStamp;
 
   /// How long the access token is valid (in seconds).
-  int expiresIn;
+  int? expiresIn;
 
   /// Access token enabling to securely call protected APIs on behalf of the user.
   Token();
 
   /// JSON map to Token factory.
-  factory Token.fromJson(Map<String, dynamic>/*!*/ json) => Token.fromMap(json);
+  factory Token.fromJson(Map<String, dynamic>? json) => Token.fromMap(json);
 
   /// Convert this Token to JSON map.
   Map toMap() => Token.toJsonMap(this);
@@ -43,31 +43,29 @@ class Token {
   /// Convert Token to JSON map.
   static Map toJsonMap(Token model) {
     var ret = {};
-    if (model != null) {
-      if (model.accessToken != null) {
-        ret['access_token'] = model.accessToken;
-      }
-      if (model.tokenType != null) {
-        ret['token_type'] = model.tokenType;
-      }
-      if (model.refreshToken != null) {
-        ret['refresh_token'] = model.refreshToken;
-      }
-      if (model.expiresIn != null) {
-        ret['expires_in'] = model.expiresIn;
-      }
-      if (model.expireTimeStamp != null) {
-        ret['expire_timestamp'] = model.expireTimeStamp.millisecondsSinceEpoch;
-      }
-      if (model.idToken != null) {
-        ret['id_token'] = model.idToken;
-      }
+    if (model.accessToken != null) {
+      ret['access_token'] = model.accessToken;
+    }
+    if (model.tokenType != null) {
+      ret['token_type'] = model.tokenType;
+    }
+    if (model.refreshToken != null) {
+      ret['refresh_token'] = model.refreshToken;
+    }
+    if (model.expiresIn != null) {
+      ret['expires_in'] = model.expiresIn;
+    }
+    if (model.expireTimeStamp != null) {
+      ret['expire_timestamp'] = model.expireTimeStamp!.millisecondsSinceEpoch;
+    }
+    if (model.idToken != null) {
+      ret['id_token'] = model.idToken;
     }
     return ret;
   }
 
   /// Convert JSON map to Token.
-  static Token fromMap(Map map) {
+  static Token fromMap(Map<String, dynamic>? map) {
     if (map == null) throw Exception('No token from received');
     //error handling as described in https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow#error-response-1
     if (map['error'] != null) {
@@ -89,7 +87,7 @@ class Token {
     model.expireTimeStamp = map.containsKey('expire_timestamp')
         ? DateTime.fromMillisecondsSinceEpoch(map['expire_timestamp'])
         : model.issueTimeStamp
-            .add(Duration(seconds: model.expiresIn - model.expireOffSet));
+            .add(Duration(seconds: model.expiresIn! - model.expireOffSet));
 
     return model;
   }
@@ -97,7 +95,8 @@ class Token {
   /// Check if Access Token is set and not expired.
   bool hasValidAccessToken() {
     return accessToken != null &&
-        expireTimeStamp.isAfter(DateTime.now().toUtc());
+        expireTimeStamp != null &&
+        expireTimeStamp!.isAfter(DateTime.now().toUtc());
   }
 
   /// Check if Refresh Token is set.

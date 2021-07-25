@@ -20,13 +20,13 @@ class AuthStorage {
 
   Future<T> loadTokenFromCache<T extends Token>() async {
     var json = await _secureStorage.read(key: _tokenIdentifier);
-    if (json == null) return emptyToken;
+    if (json == null) return emptyToken as FutureOr<T>;
     try {
       var data = jsonDecode(json);
-      return _getTokenFromMap<T>(data);
+      return _getTokenFromMap<T>(data) as FutureOr<T>;
     } catch (exception) {
       print(exception);
-      return emptyToken;
+      return emptyToken as FutureOr<T>;
     }
   }
 

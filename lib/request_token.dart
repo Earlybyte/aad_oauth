@@ -17,7 +17,7 @@ class RequestToken {
         _tokenRequest.url, _tokenRequest.params, _tokenRequest.headers);
   }
 
-  Future<Token> requestRefreshToken(String/*!*/ refreshToken) async {
+  Future<Token> requestRefreshToken(String refreshToken) async {
     final _tokenRefreshRequest =
         TokenRefreshRequestDetails(config, refreshToken);
     return await _sendTokenRequest(_tokenRefreshRequest.url,

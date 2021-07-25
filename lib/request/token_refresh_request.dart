@@ -2,10 +2,10 @@ import 'package:aad_oauth/model/config.dart';
 
 class TokenRefreshRequestDetails {
   final String url;
-  final Map<String, String /*!*/ > /*!*/ params;
-  final Map<String, String> /*!*/ headers;
+  final Map<String, String > params;
+  final Map<String, String> headers;
 
-  TokenRefreshRequestDetails(Config config, String /*!*/ refreshToken)
+  TokenRefreshRequestDetails(Config config, String refreshToken)
       : url = config.tokenUrl,
         params = {
           'client_id': config.clientId,
@@ -19,7 +19,7 @@ class TokenRefreshRequestDetails {
           'Content-Type': Config.contentType
         } {
     if (config.clientSecret != null) {
-      params.putIfAbsent('client_secret', () => config.clientSecret);
+      params.putIfAbsent('client_secret', () => config.clientSecret!);
     }
   }
 }

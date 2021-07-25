@@ -32,6 +32,16 @@ class AadOAuth {
     }
   }
 
+  void setWebViewScreenSizeFromMedia(MediaQueryData media) {
+    final rect = Rect.fromLTWH(
+      media.padding.left,
+      media.padding.top,
+      media.size.width - media.padding.left - media.padding.right,
+      media.size.height - media.padding.top - media.padding.bottom,
+    );
+    setWebViewScreenSize(rect);
+  }
+
   /// Perform Azure AD login.
   ///
   /// Setting [refreshIfAvailable] to [true] will attempt to re-authenticate
@@ -45,11 +55,11 @@ class AadOAuth {
   }
 
   /// Retrieve cached OAuth Access Token.
-  Future<String> getAccessToken() async =>
+  Future<String?> getAccessToken() async =>
       (await _authStorage.loadTokenFromCache()).accessToken;
 
   /// Retrieve cached OAuth Id Token.
-  Future<String> getIdToken() async =>
+  Future<String?> getIdToken() async =>
       (await _authStorage.loadTokenFromCache()).idToken;
 
   /// Perform Azure AD logout.
@@ -75,7 +85,7 @@ class AadOAuth {
     }
 
     if (token.hasRefreshToken()) {
-      token = await _requestToken.requestRefreshToken(token.refreshToken);
+      token = await _requestToken.requestRefreshToken(token.refreshToken!);
     }
 
     if (!token.hasValidAccessToken()) {
