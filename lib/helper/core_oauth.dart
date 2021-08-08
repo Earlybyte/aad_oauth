@@ -7,20 +7,21 @@ import 'package:aad_oauth/helper/choose_oauth.dart'
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class CoreOAuth {
+class CoreOAuth {
   CoreOAuth();
 
-  void setWebViewScreenSize(Rect screenSize);
+  void setWebViewScreenSize(Rect screenSize) {}
 
-  void setWebViewScreenSizeFromMedia(MediaQueryData media);
+  void setWebViewScreenSizeFromMedia(MediaQueryData media) {}
 
-  Future<void> login({bool refreshIfAvailable = false});
+  Future<void> login({bool refreshIfAvailable = false}) async {}
 
-  Future<void> logout();
+  Future<void> logout() async {}
 
-  Future<String?> getAccessToken();
+  Future<String?> getAccessToken() async => 'ACCESS_TOKEN';
 
-  Future<String?> getIdToken();
+  Future<String?> getIdToken() async => 'ID_TOKEN';
 
-  factory CoreOAuth.fromConfig(Config config) => getOAuthConfig(config);
+  factory CoreOAuth.fromConfig(Config config) =>
+      config.isStub ? CoreOAuth() : getOAuthConfig(config);
 }

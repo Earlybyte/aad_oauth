@@ -104,6 +104,9 @@ class Config {
   /// Azure Active Directory B2C provides business-to-customer identity as a service.
   final bool isB2C;
 
+  /// Flag whether to use a stub implementation for unit testing or not
+  bool isStub;
+
   /// Current screen size.
   Rect? screenSize;
 
@@ -111,28 +114,29 @@ class Config {
   String? userAgent;
 
   /// Azure AD OAuth Configuration. Look at individual fields for description.
-  Config(
-      {required this.tenant,
-      this.policy,
-      required this.clientId,
-      this.responseType = 'code',
-      required this.redirectUri,
-      required this.scope,
-      this.responseMode,
-      this.state,
-      this.prompt,
-      this.codeChallenge,
-      this.codeChallengeMethod,
-      this.nonce = '12345',
-      this.tokenIdentifier = 'Token',
-      this.clientSecret,
-      this.resource,
-      this.isB2C = false,
-      this.loginHint,
-      this.domainHint,
-      this.codeVerifier,
-      this.userAgent})
-      : authorizationUrl = isB2C
+  Config({
+    required this.tenant,
+    this.policy,
+    required this.clientId,
+    this.responseType = 'code',
+    required this.redirectUri,
+    required this.scope,
+    this.responseMode,
+    this.state,
+    this.prompt,
+    this.codeChallenge,
+    this.codeChallengeMethod,
+    this.nonce = '12345',
+    this.tokenIdentifier = 'Token',
+    this.clientSecret,
+    this.resource,
+    this.isB2C = false,
+    this.loginHint,
+    this.domainHint,
+    this.codeVerifier,
+    this.userAgent,
+    this.isStub = false,
+  })  : authorizationUrl = isB2C
             ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize',
         tokenUrl = isB2C

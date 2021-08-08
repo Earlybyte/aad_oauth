@@ -12,9 +12,11 @@ class AadOAuth {
 
   AadOAuth(Config config) : _coreOAuth = CoreOAuth.fromConfig(config);
 
-  void setWebViewScreenSize(Rect screenSize) {}
+  void setWebViewScreenSize(Rect screenSize) =>
+      _coreOAuth.setWebViewScreenSize(screenSize);
 
-  void setWebViewScreenSizeFromMedia(MediaQueryData media) {}
+  void setWebViewScreenSizeFromMedia(MediaQueryData media) =>
+      _coreOAuth.setWebViewScreenSizeFromMedia(media);
 
   /// Perform Azure AD login.
   ///

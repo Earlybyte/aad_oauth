@@ -1,3 +1,7 @@
+## [0.3.1] - 20200808
+
+- Add flutter_web support [#106](https://github.com/Earlybyte/aad_oauth/pull/106)
+
 ## [0.3.0] - 20200725
 
 - Migrate package and examples to sound null safety [#105](https://github.com/Earlybyte/aad_oauth/pull/105)
