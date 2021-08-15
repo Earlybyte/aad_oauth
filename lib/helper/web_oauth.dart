@@ -5,11 +5,12 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
+import 'package:aad_oauth/model/msalconfig.dart';
 import 'package:flutter/src/widgets/media_query.dart';
 import 'package:js/js.dart';
 
 @JS('initialiseMSAL')
-external void initialiseMSAL(Config config);
+external void initialiseMSAL(MsalConfig config);
 
 @JS('signout')
 external void signout();
@@ -48,7 +49,28 @@ Future<MsalTokenResponse> GetBearerToken() {
 
 class WebOAuth extends CoreOAuth {
   WebOAuth(Config config) {
-    initialiseMSAL(config);
+    initialiseMSAL(MsalConfig.construct(
+        tenant: config.tenant,
+        policy: config.policy,
+        clientId: config.clientId,
+        responseType: config.responseType,
+        redirectUri: config.redirectUri,
+        scope: config.scope,
+        responseMode: config.responseMode,
+        state: config.state,
+        prompt: config.prompt,
+        codeChallenge: config.codeChallenge,
+        codeChallengeMethod: config.codeChallengeMethod,
+        nonce: config.nonce,
+        tokenIdentifier: config.tokenIdentifier,
+        clientSecret: config.clientSecret,
+        resource: config.resource,
+        isB2C: config.isB2C,
+        loginHint: config.loginHint,
+        domainHint: config.domainHint,
+        codeVerifier: config.codeVerifier,
+        authorizationUrl: config.authorizationUrl,
+        tokenUrl: config.tokenUrl));
   }
 
   @override
