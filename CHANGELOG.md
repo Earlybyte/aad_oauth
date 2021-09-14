@@ -1,3 +1,7 @@
+## [0.3.0] - 20200725
+
+- Migrate package and examples to sound null safety [#105](https://github.com/Earlybyte/aad_oauth/pull/105)
+
 ## [0.2.2] - 20200702
 
 - Add refreshIfAvailable flag to login() [#94](https://github.com/Earlybyte/aad_oauth/pull/94)

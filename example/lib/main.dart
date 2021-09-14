@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -37,10 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // adjust window size for browser login
-    var screenSize = MediaQuery.of(context).size;
-    var rectSize =
-        Rect.fromLTWH(0.0, 25.0, screenSize.width, screenSize.height - 25);
-    oauth.setWebViewScreenSize(rectSize);
+    oauth.setWebViewScreenSizeFromMedia(MediaQuery.of(context));
 
     return Scaffold(
       appBar: AppBar(
