@@ -1,4 +1,4 @@
-@JS()
+@JS('aadOauth')
 library msauth;
 
 import 'dart:async';
@@ -9,47 +9,31 @@ import 'package:aad_oauth/model/msalconfig.dart';
 import 'package:flutter/src/widgets/media_query.dart';
 import 'package:js/js.dart';
 
-@JS('initialiseMSAL')
-external void initialiseMSAL(MsalConfig config);
+@JS('init')
+external void jsInit(MsalConfig config);
 
-@JS('signout')
-external void signout();
+@JS('login')
+external void jsLogin(
+  bool refreshIfAvailable,
+  void Function() onSuccess,
+  void Function(dynamic) onError,
+);
 
-@JS('GetBearerToken')
-external void _GetBearerToken(void Function(MsalTokenResponse) callback,
-    void Function(MsalTokenError) errorCallback);
+@JS('logout')
+external void jsLogout(
+  void Function() onSuccess,
+  void Function(dynamic) onError,
+);
 
-@JS()
-@anonymous
-class MsalTokenResponse {
-  external factory MsalTokenResponse({accessToken, expiresOn});
-  external String get accessToken;
-  external int get expiresOn;
-}
+@JS('getAccessToken')
+external String? jsGetAccessToken();
 
-@JS()
-@anonymous
-class MsalTokenError {
-  external factory MsalTokenError(
-      {errorCode, errorMessage, name, subError, message, stack});
-  external String get errorCode;
-  external String get errorMessage;
-  external String get name;
-  external String get subError;
-  external String get message;
-  external String get stack;
-}
-
-Future<MsalTokenResponse> GetBearerToken() {
-  final completer = Completer<MsalTokenResponse>();
-  _GetBearerToken(
-      allowInterop(completer.complete), allowInterop(completer.completeError));
-  return completer.future;
-}
+@JS('getIdToken')
+external String? jsGetIdToken();
 
 class WebOAuth extends CoreOAuth {
   WebOAuth(Config config) {
-    initialiseMSAL(MsalConfig.construct(
+    jsInit(MsalConfig.construct(
         tenant: config.tenant,
         policy: config.policy,
         clientId: config.clientId,
@@ -75,41 +59,51 @@ class WebOAuth extends CoreOAuth {
 
   @override
   Future<String?> getAccessToken() async {
-    try {
-      final accessToken = await GetBearerToken();
+    return jsGetAccessToken();
+  }
 
-      return accessToken.accessToken;
-    } catch (e) {
-      final msalError = e as MsalTokenError;
-      print('$msalError');
-      throw Exception('Access denied or authentication canceled.');
-    }
+  @override
+  Future<String?> getIdToken() async {
+    return jsGetIdToken();
   }
 
   @override
   Future<void> login({bool refreshIfAvailable = false}) async {
-    await getAccessToken();
+    final completer = Completer<void>();
+
+    jsLogin(
+      refreshIfAvailable,
+      allowInterop(completer.complete),
+      allowInterop(
+        (_error) => completer.completeError(
+          Exception('Access denied or authentication canceled.'),
+        ),
+      ),
+    );
+
+    return completer.future;
   }
 
   @override
   Future<void> logout() async {
-    signout();
-    return;
-  }
+    final completer = Completer<void>();
 
-  @override
-  Future<String?> getIdToken() {
-    throw UnimplementedError();
+    jsLogout(
+      allowInterop(completer.complete),
+      allowInterop((error) => completer.completeError(error)),
+    );
+
+    return completer.future;
   }
 
   @override
   void setWebViewScreenSize(Rect screenSize) {
-    return;
+    // Noop
   }
 
   @override
   void setWebViewScreenSizeFromMedia(MediaQueryData media) {
-    return;
+    // Noop
   }
 }
 

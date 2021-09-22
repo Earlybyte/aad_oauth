@@ -1,119 +1,122 @@
+// Needs to be a var at the top level to get hoisted to global scope.
+// https://stackoverflow.com/questions/28776079/do-let-statements-create-properties-on-the-global-object/28776236#28776236
+var aadOauth = (function () {
+  let myMSALObj = null;
+  let authResult = null;
 
-let myMSALObj = null;
+  const tokenRequest = {
+    scopes: null,
+    // Hardcoded?
+    prompt: null,
+  };
 
-let username = "";
-
-
-const tokenRequest = {
-    scopes: null
-};
-
-// Initialise the myMSALObj for the given client, authority and scope
-function initialiseMSAL(config) {
+  // Initialise the myMSALObj for the given client, authority and scope
+  function init(config) {
     // TODO: Add support for other MSAL / B2C configuration
     var msalConfig = {
-        auth: {
-            clientId: config.clientId,
-            authority: 'https://login.microsoftonline.com/' + config.tenant,
-            redirectUri: config.redirectUri,
-        },
-        cache: {
-            cacheLocation: "localStorage",
-            storeAuthStateInCookie: false,
-        }
+      auth: {
+        clientId: config.clientId,
+        authority: "https://login.microsoftonline.com/" + config.tenant,
+        redirectUri: config.redirectUri,
+      },
+      cache: {
+        cacheLocation: "localStorage",
+        storeAuthStateInCookie: false,
+      },
     };
 
-    if (typeof(config.scope) === "string") {
-        tokenRequest.scopes = config.scope.split(" ");
+    if (typeof config.scope === "string") {
+      tokenRequest.scopes = config.scope.split(" ");
     } else {
-        tokenRequest.scopes = config.scope;
+      tokenRequest.scopes = config.scope;
     }
+
+    tokenRequest.prompt = config.prompt;
 
     myMSALObj = new msal.PublicClientApplication(msalConfig);
+  }
 
-}
+  async function login(refreshIfAvailable, onSuccess, onError) {
+    // Try to sign in silently
+    if (refreshIfAvailable) {
+      try {
+        // I think we want to skip the prompt option here.
+        const silentAuthResult = await myMSALObj.acquireTokenSilent({
+          scopes: tokenRequest.scopes,
+          prompt: "none",
+        });
 
-function handleResponse(resp) {
-    // This is called after signIn completes
-    if (resp !== null) {
-        username = resp.account.username;
-    } else {
-        console.warn("handleResponse got null resp");
-    }
-}
+        authResult = silentAuthResult;
 
+        // Skip interactive login
+        onSuccess();
 
-function signout() {
-    if (username) {
-        const logoutRequest = {
-            account: myMSALObj.getAccountByUsername(username)
-        };
-
-        myMSALObj.logout(logoutRequest);
-    }
-}
-
-function getTokenPopup(request, errorCallback) {
-    /**
-     * See here for more info on account retrieval:
-     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
-     */
-    request.account = myMSALObj.getAccountByUsername(username);
-    return myMSALObj.acquireTokenSilent(request).catch(error => {
-        console.warn("silent token acquisition fails. acquiring token using popup");
-        if (error instanceof msal.InteractionRequiredAuthError) {
-            // fallback to interaction when silent call fails
-            return myMSALObj.acquireTokenPopup(request).then(tokenResponse => {
-                return tokenResponse;
-            }).catch(error => {
-                errorCallback(error);
-            });
-        } else {
-            errorCallback(error);
-        }
-    });
-}
-
-function getAccount() {
-    if (username !== "") {
-        return username;
-    }
-    const currentAccounts = myMSALObj.getAllAccounts();
-    if (currentAccounts === null) {
         return;
+      } catch {
+        // Swallow errors and continue to interactive login
+      }
+    }
+
+    // Sign in with popup
+    try {
+      const interactiveAuthResult = await myMSALObj.loginPopup({
+        scopes: tokenRequest.scopes,
+        prompt: tokenRequest.prompt,
+      });
+
+      authResult = interactiveAuthResult;
+
+      onSuccess();
+    } catch (error) {
+      // rethrow
+      onError(error);
+    }
+  }
+
+  function getAccount() {
+    const currentAccounts = myMSALObj.getAllAccounts();
+
+    if (currentAccounts === null || currentAccounts.length === 0) {
+      return;
     } else if (currentAccounts.length > 1) {
-        // Multiple users - pick the first one, but this shouldn't happen
-        console.warn("Multiple accounts detected, selecting first.");
-        username = currentAccounts[0].username;
+      // Multiple users - pick the first one, but this shouldn't happen
+      console.warn("Multiple accounts detected, selecting first.");
+
+      return currentAccounts[0];
     } else if (currentAccounts.length === 1) {
-        username = currentAccounts[0].username;
+      return currentAccounts[0];
     }
-    return username;
-}
+  }
 
-function GetBearerToken(tokenCallback, errorCallback) {
+  function logout(onSuccess, onError) {
+    const account = getAccount();
 
-    if (!getAccount()) {
-        myMSALObj.loginPopup(tokenRequest).then(
-            function (loginResponse) {
-                username = loginResponse.account.username;
-                return tokenCallback({
-                    accessToken: loginResponse.accessToken,
-                    expiresOn: loginResponse.expiresOn.getTime()
-                });
-            }
-        ).catch(error => {
-            errorCallback(error);
-        });
-        return
+    if (!account) {
+      onSuccess();
+      return;
     }
 
-    getTokenPopup(tokenRequest, errorCallback).then(response => {
-        return tokenCallback({
-            accessToken: response.accessToken,
-            expiresOn: response.expiresOn.getTime()
-        });
-    }).catch(error => {
-        errorCallback(error);
-    });
-}
+    authResult = null;
+    tokenRequest.scopes = null;
+    myMSALObj
+      .logout({ account: account })
+      .then((_) => onSuccess())
+      .catch(onError);
+  }
+
+  function getAccessToken() {
+    return authResult ? authResult.accessToken : null;
+  }
+
+  function getIdToken() {
+    return authResult ? authResult.idToken : null;
+  }
+
+  return {
+    init: init,
+    login: login,
+    logout: logout,
+    getIdToken: getIdToken,
+    getAccessToken: getAccessToken,
+  };
+})();
