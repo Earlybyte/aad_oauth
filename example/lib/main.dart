@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,6 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'AAD OAuth Home'),
+      navigatorKey: navigatorKey,
     );
   }
 }
@@ -38,13 +41,12 @@ class _MyHomePageState extends State<MyHomePage> {
     redirectUri: kIsWeb
         ? 'http://localhost:8483'
         : 'https://login.live.com/oauth20_desktop.srf',
+    navigatorKey: navigatorKey,
   );
   final AadOAuth oauth = AadOAuth(config);
 
   @override
   Widget build(BuildContext context) {
-    // adjust window size for browser login
-    oauth.setWebViewScreenSizeFromMedia(MediaQuery.of(context));
 
     return Scaffold(
       appBar: AppBar(

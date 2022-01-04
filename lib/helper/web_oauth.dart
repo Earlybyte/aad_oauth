@@ -2,11 +2,9 @@
 library msauth;
 
 import 'dart:async';
-import 'dart:ui';
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/msalconfig.dart';
-import 'package:flutter/src/widgets/media_query.dart';
 import 'package:js/js.dart';
 
 @JS('init')
@@ -96,15 +94,6 @@ class WebOAuth extends CoreOAuth {
     return completer.future;
   }
 
-  @override
-  void setWebViewScreenSize(Rect screenSize) {
-    // Noop
-  }
-
-  @override
-  void setWebViewScreenSizeFromMedia(MediaQueryData media) {
-    // Noop
-  }
 }
 
 CoreOAuth getOAuthConfig(Config config) => WebOAuth(config);

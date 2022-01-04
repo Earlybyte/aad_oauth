@@ -4,13 +4,13 @@ import 'dart:convert' show jsonEncode, jsonDecode;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthStorage {
-  static AuthStorage shared = AuthStorage();
-  final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+  final FlutterSecureStorage _secureStorage;
   final String _tokenIdentifier;
   final Token emptyToken = Token();
 
-  AuthStorage({String tokenIdentifier = 'Token'})
-      : _tokenIdentifier = tokenIdentifier;
+  AuthStorage({String tokenIdentifier = 'Token', required AndroidOptions aOptions})
+      : _tokenIdentifier = tokenIdentifier,
+        _secureStorage = FlutterSecureStorage(aOptions: aOptions);
 
   Future<void> saveTokenToCache(Token token) async {
     var data = Token.toJsonMap(token);

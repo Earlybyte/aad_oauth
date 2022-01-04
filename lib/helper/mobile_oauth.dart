@@ -1,7 +1,6 @@
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/token.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../request_code.dart';
@@ -9,7 +8,6 @@ import '../request_token.dart';
 import 'auth_storage.dart';
 
 class MobileOAuth extends CoreOAuth {
-  final Config _config;
   final AuthStorage _authStorage;
   final RequestCode _requestCode;
   final RequestToken _requestToken;
@@ -17,30 +15,12 @@ class MobileOAuth extends CoreOAuth {
   /// Instantiating MobileAadOAuth authentication.
   /// [config] Parameters according to official Microsoft Documentation.
   MobileOAuth(Config config)
-      : _config = config,
-        _authStorage = AuthStorage(tokenIdentifier: config.tokenIdentifier),
+      : _authStorage = AuthStorage(
+          tokenIdentifier: config.tokenIdentifier,
+          aOptions: config.aOptions,
+        ),
         _requestCode = RequestCode(config),
         _requestToken = RequestToken(config);
-
-  /// Set [screenSize] of webview.
-  @override
-  void setWebViewScreenSize(Rect screenSize) {
-    if (screenSize != _config.screenSize) {
-      _config.screenSize = screenSize;
-      _requestCode.sizeChanged();
-    }
-  }
-
-  @override
-  void setWebViewScreenSizeFromMedia(MediaQueryData media) {
-    final rect = Rect.fromLTWH(
-      media.padding.left,
-      media.padding.top,
-      media.size.width - media.padding.left - media.padding.right,
-      media.size.height - media.padding.top - media.padding.bottom,
-    );
-    setWebViewScreenSize(rect);
-  }
 
   /// Perform Azure AD login.
   ///

@@ -5,14 +5,9 @@ import 'package:aad_oauth/helper/choose_oauth.dart'
     if (dart.library.html) 'package:aad_oauth/helper/web_oauth.dart';
 
 import 'package:aad_oauth/model/config.dart';
-import 'package:flutter/widgets.dart';
 
 class CoreOAuth {
   CoreOAuth();
-
-  void setWebViewScreenSize(Rect screenSize) {}
-
-  void setWebViewScreenSizeFromMedia(MediaQueryData media) {}
 
   Future<void> login({bool refreshIfAvailable = false}) async {}
 
