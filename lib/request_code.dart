@@ -31,7 +31,7 @@ class RequestCode {
     _webView.onUrlChanged.listen((String url) {
       var uri = Uri.parse(url);
 
-      if (_config.otherPolicies.isNotEmpty) {
+      if (_config.otherPolicies.isNotEmpty && _config.isB2C) {
         for (var policy in _config.otherPolicies) {
           if (uri.pathSegments.contains('authorize')) {
             if (uri.pathSegments.contains(policy)) {
