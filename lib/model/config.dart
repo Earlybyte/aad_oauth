@@ -7,10 +7,10 @@ import 'package:flutter/widgets.dart';
 /// DartDocs of parameters are mostly from those pages.
 class Config {
   /// Azure AD authorization URL.
-  final String authorizationUrl;
+  String authorizationUrl;
 
   /// Azure AD token URL.
-  final String tokenUrl;
+  String tokenUrl;
 
   /// The tenant value in the path of the request can be used to control who can sign into the application.
   /// The allowed values are common, organizations, consumers, and tenant identifiers. Or Name of your Azure AD B2C tenant.
@@ -131,11 +131,23 @@ class Config {
       this.loginHint,
       this.domainHint,
       this.codeVerifier,
-      this.userAgent})
-      : authorizationUrl = isB2C
-            ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
-            : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize',
-        tokenUrl = isB2C
-            ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
-            : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token';
+      this.userAgent,
+      this.authorizationUrl = '',
+      this.tokenUrl = ''}) {
+    // If your Azure B2C instance is using custom domain name or it is
+    // behind Azure Front Door the token might contain different
+    // authority from the one you expect in the JWT. If you specify any
+    // of the parameters authenticationUrl and/or tokenUrl they should
+    // be used instead of the default ones.
+    if (authorizationUrl.isEmpty) {
+      authorizationUrl = isB2C
+          ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
+          : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize';
+    }
+    if (tokenUrl.isEmpty) {
+      tokenUrl = isB2C
+          ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
+          : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token';
+    }
+  }
 }
