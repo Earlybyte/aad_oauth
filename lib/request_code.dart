@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'request/authorization_request.dart';
-import 'model/config.dart';
+import 'package:aad_oauth/model/config.dart';
+import 'package:aad_oauth/request/authorization_request.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class RequestCode {

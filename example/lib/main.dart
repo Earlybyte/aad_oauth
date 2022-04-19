@@ -3,9 +3,11 @@ import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,13 +15,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'AAD OAuth Home'),
+      home: const MyHomePage(title: 'AAD OAuth Home'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -59,15 +61,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.launch),
-            title: Text('Login'),
+            leading: const Icon(Icons.launch),
+            title: const Text('Login'),
             onTap: () {
               login();
             },
           ),
           ListTile(
-            leading: Icon(Icons.delete),
-            title: Text('Logout'),
+            leading: const Icon(Icons.delete),
+            title: const Text('Logout'),
             onTap: () {
               logout();
             },

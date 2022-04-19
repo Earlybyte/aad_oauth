@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:aad_oauth/model/config.dart';
+import 'package:aad_oauth/model/token.dart';
+import 'package:aad_oauth/request/token_refresh_request.dart';
+import 'package:aad_oauth/request/token_request.dart';
 import 'package:http/http.dart';
-import 'model/config.dart';
-import 'request/token_refresh_request.dart';
-import 'request/token_request.dart';
-import 'model/token.dart';
 
 class RequestToken {
   final Config config;

@@ -36,4 +36,6 @@ class AadOAuth {
 
   /// Perform Azure AD logout.
   Future<void> logout() async => _coreOAuth.logout();
+
+  Future<bool> isLogged() async => _coreOAuth.isLogged();
 }

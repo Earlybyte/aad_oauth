@@ -2,11 +2,10 @@
 library msauth;
 
 import 'dart:async';
-import 'dart:ui';
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/msalconfig.dart';
-import 'package:flutter/src/widgets/media_query.dart';
+import 'package:flutter/widgets.dart';
 import 'package:js/js.dart';
 
 @JS('init')
@@ -30,6 +29,9 @@ external String? jsGetAccessToken();
 
 @JS('getIdToken')
 external String? jsGetIdToken();
+
+@JS('isLogged')
+external bool jsIsLogged();
 
 class WebOAuth extends CoreOAuth {
   WebOAuth(Config config) {
@@ -65,6 +67,11 @@ class WebOAuth extends CoreOAuth {
   @override
   Future<String?> getIdToken() async {
     return jsGetIdToken();
+  }
+
+  @override
+  Future<bool> isLogged() async {
+    return jsIsLogged();
   }
 
   @override

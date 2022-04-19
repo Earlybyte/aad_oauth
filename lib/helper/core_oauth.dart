@@ -8,7 +8,7 @@ import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/widgets.dart';
 
 class CoreOAuth {
-  CoreOAuth();
+  const CoreOAuth();
 
   void setWebViewScreenSize(Rect screenSize) {}
 
@@ -22,6 +22,8 @@ class CoreOAuth {
 
   Future<String?> getIdToken() async => 'ID_TOKEN';
 
+  Future<bool> isLogged() async => false;
+
   factory CoreOAuth.fromConfig(Config config) =>
-      config.isStub ? CoreOAuth() : getOAuthConfig(config);
+      config.isStub ? const CoreOAuth() : getOAuthConfig(config);
 }

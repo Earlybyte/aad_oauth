@@ -12,11 +12,12 @@ var aadOauth = (function () {
 
   // Initialise the myMSALObj for the given client, authority and scope
   function init(config) {
-    // TODO: Add support for other MSAL / B2C configuration
     var msalConfig = {
       auth: {
         clientId: config.clientId,
-        authority: "https://login.microsoftonline.com/" + config.tenant,
+        authority: config.isB2C
+          ? "https://" + config.tenant + ".b2clogin.com/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/"
+          : "https://login.microsoftonline.com/" + config.tenant,
         redirectUri: config.redirectUri,
       },
       cache: {
@@ -112,11 +113,16 @@ var aadOauth = (function () {
     return authResult ? authResult.idToken : null;
   }
 
+  function isLogged() {
+    return getAccount() !== undefined;
+  }
+
   return {
     init: init,
     login: login,
     logout: logout,
     getIdToken: getIdToken,
     getAccessToken: getAccessToken,
+    isLogged: isLogged,
   };
 })();

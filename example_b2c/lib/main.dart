@@ -3,9 +3,11 @@ import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -23,13 +25,13 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'AAD B2C Home'),
+      home: const MyHomePage(title: 'AAD B2C Home'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -92,20 +94,20 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.launch),
-            title: Text('Login'),
+            leading: const Icon(Icons.launch),
+            title: const Text('Login'),
             onTap: () {
               login(oauthB2Ca);
             },
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
             onTap: () {
               logout(oauthB2Ca);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             title: Text(
               'AzureAD B2C B',
@@ -113,15 +115,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.launch),
-            title: Text('Login'),
+            leading: const Icon(Icons.launch),
+            title: const Text('Login'),
             onTap: () {
               login(oauthB2Cb);
             },
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
             onTap: () {
               logout(oauthB2Cb);
             },

@@ -72,6 +72,11 @@ class MobileOAuth extends CoreOAuth {
     await _requestCode.clearCookies();
   }
 
+  @override
+  Future<bool> isLogged() async {
+    return (await _authStorage.loadTokenFromCache()).accessToken != null;
+  }
+
   /// Authorize user via refresh token or web gui if necessary.
   ///
   /// Setting [refreshIfAvailable] to [true] will attempt to re-authenticate
@@ -111,7 +116,7 @@ class MobileOAuth extends CoreOAuth {
 
   Future<void> _removeOldTokenOnFirstLogin() async {
     var prefs = await SharedPreferences.getInstance();
-    final _keyFreshInstall = 'freshInstall';
+    const _keyFreshInstall = 'freshInstall';
     if (!prefs.getKeys().contains(_keyFreshInstall)) {
       await logout();
       await prefs.setBool(_keyFreshInstall, false);
