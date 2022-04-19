@@ -1,10 +1,8 @@
 library aad_oauth;
 
 import 'package:aad_oauth/helper/core_oauth.dart';
-
-import 'model/config.dart';
-import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:aad_oauth/model/config.dart';
+import 'package:flutter/widgets.dart';
 
 /// Authenticates a user with Azure Active Directory using OAuth2.0.
 class AadOAuth {
@@ -12,9 +10,11 @@ class AadOAuth {
 
   AadOAuth(Config config) : _coreOAuth = CoreOAuth.fromConfig(config);
 
+  /// Set [screenSize] of webview.
   void setWebViewScreenSize(Rect screenSize) =>
       _coreOAuth.setWebViewScreenSize(screenSize);
 
+  /// Set [screenSize] of webview from a given [media].
   void setWebViewScreenSizeFromMedia(MediaQueryData media) =>
       _coreOAuth.setWebViewScreenSizeFromMedia(media);
 
@@ -37,5 +37,6 @@ class AadOAuth {
   /// Perform Azure AD logout.
   Future<void> logout() async => _coreOAuth.logout();
 
+  /// Check if there's a user logged.
   Future<bool> isLogged() async => _coreOAuth.isLogged();
 }
