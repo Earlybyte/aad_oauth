@@ -17,20 +17,45 @@ Supported Flows:
 
 For using this library you have to create an azure app at the [Azure App registration portal](https://apps.dev.microsoft.com/). Use native app as platform type (with callback URL: https://login.live.com/oauth20_desktop.srf).
 
-Afterwards you have to initialize the library as follow:
+Your minSdkVersion must be >= 20 in `android/app/build.gradle` section `android / defaultConfig` to support webview_flutter. Version 19 may build but will likely fail at runtime.
+
+Afterwards you must create a navigatorKey and initialize the library as follow:
 
 ```dart
+  final navigatorKey = GlobalKey<NavigatorState>();
+
+  // ... 
+
   static final Config config = new Config(
     tenant: "YOUR_TENANT_ID",
     clientId: "YOUR_CLIENT_ID",
     scope: "openid profile offline_access",
-    redirectUri: "your redirect url available in azure portal"
+    redirectUri: "your redirect url available in azure portal",
+    navigatorKey: navigatorKey,
   );
 
-final AadOAuth oauth = new AadOAuth(config);
+  final AadOAuth oauth = new AadOAuth(config);
 ```
 
 This allows you to pass in an tenant ID, client ID, scope and redirect url.
+
+The same `navigatorKey` must be provided to the top-level `MaterialApp`.
+
+```dart
+  // ...
+  // Material App must be built with the same navigatorKey
+  // to support navigation to the login route for interactive
+  // authentication.
+  // ...
+
+    Widget build(BuildContext context) {
+    return MaterialApp(
+      // ...
+      navigatorKey: navigatorKey,
+      // ...
+    );
+  }
+```
 
 Then once you have an OAuth instance, you can call `login()` and afterwards `getAccessToken()` to retrieve an access token:
 
@@ -56,14 +81,16 @@ Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secr
 
 ```dart
   static final Config configB2Ca = new Config(
-      tenant: "YOUR_TENANT_NAME",
-      clientId: "YOUR_CLIENT_ID",
-      scope: "YOUR_CLIENT_ID offline_access",
-      redirectUri: "https://login.live.com/oauth20_desktop.srf",
-      clientSecret: "YOUR_CLIENT_SECRET",
-      isB2C: true,
-      policy: "YOUR_USER_FLOW___USER_FLOW_A",
-      tokenIdentifier: "UNIQUE IDENTIFIER A");
+    tenant: "YOUR_TENANT_NAME",
+    clientId: "YOUR_CLIENT_ID",
+    scope: "YOUR_CLIENT_ID offline_access",
+    redirectUri: "https://login.live.com/oauth20_desktop.srf",
+    clientSecret: "YOUR_CLIENT_SECRET",
+    isB2C: true,
+    policy: "YOUR_USER_FLOW___USER_FLOW_A",
+    tokenIdentifier: "UNIQUE IDENTIFIER A",
+    navigatorKey: navigatorKey,
+  );
 ```
 
 Afterwards you can login and get an access token for accessing other resources. You can also use multiple configs at the same time.
@@ -74,7 +101,7 @@ Add the following to your pubspec.yaml dependencies:
 
 ```yaml
 dependencies:
-  aad_oauth: "^0.3.0"
+  aad_oauth: "^0.4.0"
 ```
 
 ## Contribution

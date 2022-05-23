@@ -1,8 +1,12 @@
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
+
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   @override
@@ -23,6 +27,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'AAD B2C Home'),
+      navigatorKey: navigatorKey,
     );
   }
 }
@@ -36,13 +41,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // Must configure flutter to start the web server for the app on
+  // the port listed below. In VSCode, this can be done with
+  // the following run settings in launch.json
+  // "args": ["-d", "chrome","--web-port", "8483"]
+
   static final Config configB2Ca = Config(
       tenant: 'YOUR_TENANT_NAME',
       clientId: 'YOUR_CLIENT_ID',
       scope: 'YOUR_CLIENT_ID offline_access',
-      redirectUri: 'https://login.live.com/oauth20_desktop.srf',
+      redirectUri: kIsWeb
+          ? 'http://localhost:8483'
+          : 'https://login.live.com/oauth20_desktop.srf',
       clientSecret: 'YOUR_CLIENT_SECRET',
       isB2C: true,
+      navigatorKey: navigatorKey,
       policy: 'YOUR_USER_FLOW___USER_FLOW_A',
       tokenIdentifier: 'UNIQUE IDENTIFIER A');
 
@@ -50,7 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
       tenant: 'YOUR_TENANT_NAME',
       clientId: 'YOUR_CLIENT_ID',
       scope: 'YOUR_CLIENT_ID offline_access',
-      redirectUri: 'https://login.live.com/oauth20_desktop.srf',
+      navigatorKey: navigatorKey,
+      redirectUri: kIsWeb
+          ? 'http://localhost:8483'
+          : 'https://login.live.com/oauth20_desktop.srf',
       clientSecret: 'YOUR_CLIENT_SECRET',
       isB2C: true,
       policy: 'YOUR_USER_FLOW___USER_FLOW_B',
@@ -64,10 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // adjust window size for browser login
-
-    var media = MediaQuery.of(context);
-    oauthB2Ca.setWebViewScreenSizeFromMedia(media);
-    oauthB2Cb.setWebViewScreenSizeFromMedia(media);
 
     return Scaffold(
       appBar: AppBar(

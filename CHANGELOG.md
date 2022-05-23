@@ -1,3 +1,17 @@
+## [0.4.0] - 20220104
+
+- Breaking: Use webview_flutter plugin (requires android minSDK >= 20) #121, #124
+    - Requires passing the same navigatorKey to Config() and MaterialApp() to support
+      interactive login.
+    - Removed unnecessary calls to set screen size - calls to these APIs must be
+      removed from apps (setWebViewScreenSize and setWebViewScreenSizeFromMedia).
+      * webview_flutter automatically adjusts the webview size.
+- Update flutter_secure_storage and add android options to config #128, #134
+
+## [0.3.1] - 20200808
+
+- Add flutter_web support [#106](https://github.com/Earlybyte/aad_oauth/pull/106)
+
 ## [0.3.0] - 20200725
 
 - Migrate package and examples to sound null safety [#105](https://github.com/Earlybyte/aad_oauth/pull/105)
