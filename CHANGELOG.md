@@ -1,4 +1,4 @@
-## [0.4.0] - 20220104
+## [0.4.0] - 20220523
 
 - Breaking: Use webview_flutter plugin (requires android minSDK >= 20) #121, #124
     - Requires passing the same navigatorKey to Config() and MaterialApp() to support
