@@ -1,6 +1,7 @@
 .DS_Store
 .dart_tool/
 .idea/
+aad_oauth.iml
 
 .packages
 .pub/
