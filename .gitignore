@@ -12,3 +12,5 @@ ios/Runner/GeneratedPluginRegistrant.*
 example_b2c/ios/Flutter/.last_build_id
 example/ios/Flutter/.last_build_id
 .vscode/launch.json
+.flutter-plugins
+.flutter-plugins-dependencies
