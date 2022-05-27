@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
