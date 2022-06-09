@@ -93,7 +93,6 @@ class WebOAuth extends CoreOAuth {
 
     return completer.future;
   }
-
 }
 
 CoreOAuth getOAuthConfig(Config config) => WebOAuth(config);

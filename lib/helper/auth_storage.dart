@@ -8,7 +8,8 @@ class AuthStorage {
   final String _tokenIdentifier;
   final Token emptyToken = Token();
 
-  AuthStorage({String tokenIdentifier = 'Token', required AndroidOptions aOptions})
+  AuthStorage(
+      {String tokenIdentifier = 'Token', required AndroidOptions aOptions})
       : _tokenIdentifier = tokenIdentifier,
         _secureStorage = FlutterSecureStorage(aOptions: aOptions);
 
