@@ -1,3 +1,4 @@
+/// Microsoft identity platform authentication library.
 @JS()
 library msauth;
 

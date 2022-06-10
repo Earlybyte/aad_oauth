@@ -24,7 +24,7 @@ class MobileOAuth extends CoreOAuth {
 
   /// Perform Azure AD login.
   ///
-  /// Setting [refreshIfAvailable] to [true] will attempt to re-authenticate
+  /// Setting [refreshIfAvailable] to `true` will attempt to re-authenticate
   /// with the existing refresh token, if any, even though the access token may
   /// still be valid. If there's no refresh token the existing access token
   /// will be returned, as long as we deem it still valid. In the event that

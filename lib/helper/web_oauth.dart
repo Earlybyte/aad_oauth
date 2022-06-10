@@ -1,3 +1,5 @@
+/// Microsoft identity platform authentication library.
+/// @nodoc
 @JS('aadOauth')
 library msauth;
 
