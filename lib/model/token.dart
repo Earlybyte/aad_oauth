@@ -10,13 +10,13 @@ class Token {
   String? tokenType;
 
   /// An OAuth 2.0 refresh token. The app can use this token acquire additional access tokens after the current access token expires. Refresh_tokens are long-lived, and can be used to retain access to resources for extended periods of time. For more detail on refreshing an access token, refer to the section below.
-  /// Note: Only provided if offline_access [scope] was requested.
+  /// Note: Only provided if offline_access 'scope' was requested.
   String? refreshToken;
 
   /// A JSON Web Token (JWT). The app can decode the segments of this token to request information about the user who signed in.
   /// The app can cache the values and display them, and confidential clients can use this for authorization.
   /// For more information about id_tokens, see the id_token reference.
-  /// Note: Only provided if openid [scope] was requested.
+  /// Note: Only provided if openid 'scope' was requested.
   String? idToken;
 
   /// Current time when token was issued.
