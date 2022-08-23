@@ -20,7 +20,7 @@ class AuthStorage {
   Future<void> saveTokenToCache(Token token) async {
     var data = Token.toJsonMap(token);
     var json = jsonEncode(data);
-    await .write(key: _tokenIdentifier, value: json);
+    await _secureStorage.write(key: _tokenIdentifier, value: json);
   }
 
   Future<T> loadTokenFromCache<T extends Token>() async {
