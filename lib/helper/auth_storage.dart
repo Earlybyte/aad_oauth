@@ -6,7 +6,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthStorage {
   static AuthStorage shared = AuthStorage();
-  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    ),
+  );
   final String _tokenIdentifier;
   final Token emptyToken = Token();
 
@@ -16,13 +20,13 @@ class AuthStorage {
   Future<void> saveTokenToCache(Token token) async {
     var data = Token.toJsonMap(token);
     var json = jsonEncode(data);
-    await _secureStorage.write(key: _tokenIdentifier, value: json);
+    await .write(key: _tokenIdentifier, value: json);
   }
 
   Future<T> loadTokenFromCache<T extends Token>() async {
-    var json = await _secureStorage.read(key: _tokenIdentifier);
-    if (json == null) return emptyToken as FutureOr<T>;
     try {
+      var json = await _secureStorage.read(key: _tokenIdentifier);
+      if (json == null) return emptyToken as FutureOr<T>;
       var data = jsonDecode(json);
       return _getTokenFromMap<T>(data) as FutureOr<T>;
     } catch (exception) {
