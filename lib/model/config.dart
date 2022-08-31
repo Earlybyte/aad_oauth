@@ -117,6 +117,9 @@ class Config {
   /// android storage options for shared preferences - defaults to encrypting shared prefs
   AndroidOptions aOptions;
 
+  /// Loader Widget (before load web page)
+  Widget loader;
+
   /// Azure AD OAuth Configuration. Look at individual fields for description.
   Config({
     required this.tenant,
@@ -140,6 +143,7 @@ class Config {
     this.codeVerifier,
     this.userAgent,
     this.isStub = false,
+    this.loader = const SizedBox(),
     AndroidOptions? aOptions,
     required this.navigatorKey,
   })  : authorizationUrl = isB2C
