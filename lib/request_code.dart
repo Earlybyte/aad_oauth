@@ -21,11 +21,19 @@ class RequestCode {
       initialUrl: '${_authorizationRequest.url}?$urlParams',
       javascriptMode: JavascriptMode.unrestricted,
       navigationDelegate: _navigationDelegate,
+      backgroundColor: Colors.transparent,
     );
-    await _config.navigatorKey.currentState!.push(MaterialPageRoute(
+
+    await _config.navigatorKey.currentState!.push(
+      MaterialPageRoute(
         builder: (context) => Scaffold(
-              body: SafeArea(child: webView),
-            )));
+            body: SafeArea(
+          child: Stack(
+            children: [_config.loader, webView],
+          ),
+        )),
+      ),
+    );
     return _code;
   }
 

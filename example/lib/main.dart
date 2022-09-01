@@ -35,14 +35,14 @@ class _MyHomePageState extends State<MyHomePage> {
   // the following run settings in launch.json
   // "args": ["-d", "chrome","--web-port", "8483"]
   static final Config config = Config(
-    tenant: 'YOUR_TENANT_ID',
-    clientId: 'YOUR_CLIENT_ID',
-    scope: 'openid profile offline_access',
-    redirectUri: kIsWeb
-        ? 'http://localhost:8483'
-        : 'https://login.live.com/oauth20_desktop.srf',
-    navigatorKey: navigatorKey,
-  );
+      tenant: 'YOUR_TENANT_ID',
+      clientId: 'YOUR_CLIENT_ID',
+      scope: 'openid profile offline_access',
+      redirectUri: kIsWeb
+          ? 'http://localhost:8483'
+          : 'https://login.live.com/oauth20_desktop.srf',
+      navigatorKey: navigatorKey,
+      loader: SizedBox());
   final AadOAuth oauth = AadOAuth(config);
 
   @override

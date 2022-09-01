@@ -32,6 +32,8 @@ Afterwards you must create a navigatorKey and initialize the library as follow:
     scope: "openid profile offline_access",
     redirectUri: "your redirect url available in azure portal",
     navigatorKey: navigatorKey,
+    //Optional parameter: Centered CircularProgressIndicator while rendering web page in WebView
+    loader: Center(child: CircularProgressIndicator()),
   );
 
   final AadOAuth oauth = new AadOAuth(config);
