@@ -69,7 +69,13 @@ class MobileOAuth extends CoreOAuth {
     }
 
     if (token.hasRefreshToken()) {
-      token = await _requestToken.requestRefreshToken(token.refreshToken!);
+      try {
+        token = await _requestToken.requestRefreshToken(token.refreshToken!);
+      } on ArgumentError {
+        //If refresh token request throws an exception, we have to do
+        //a fullAuthFlow.
+        token.accessToken = null;
+      }
     }
 
     if (!token.hasValidAccessToken()) {
