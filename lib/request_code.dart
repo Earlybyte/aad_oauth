@@ -1,15 +1,18 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 
-import 'request/authorization_request.dart';
-import 'model/config.dart';
+import 'package:aad_oauth/model/aad_auth_exception.dart';
+import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'model/config.dart';
+import 'request/authorization_request.dart';
 
 class RequestCode {
   final Config _config;
   final AuthorizationRequest _authorizationRequest;
 
   String? _code;
+  Exception? _exception;
 
   RequestCode(Config config)
       : _config = config,
@@ -34,13 +37,24 @@ class RequestCode {
         )),
       ),
     );
+
+    final exception = _exception;
+    if (exception != null) {
+      throw exception;
+    }
+
     return _code;
   }
 
   FutureOr<NavigationDecision> _navigationDelegate(NavigationRequest request) {
     var uri = Uri.parse(request.url);
 
-    if (uri.queryParameters['error'] != null) {
+    final errorCode = uri.queryParameters['error'];
+    if (errorCode != null) {
+      _exception = AadAuthException(
+        error: errorCode,
+        errorSubcode: uri.queryParameters['error_subcode'],
+      );
       _config.navigatorKey.currentState!.pop();
     }
 
