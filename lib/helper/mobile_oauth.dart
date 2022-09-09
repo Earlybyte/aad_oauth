@@ -1,6 +1,8 @@
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
+import 'package:aad_oauth/model/failure.dart';
 import 'package:aad_oauth/model/token.dart';
+import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../request_code.dart';
@@ -30,9 +32,10 @@ class MobileOAuth extends CoreOAuth {
   /// will be returned, as long as we deem it still valid. In the event that
   /// both access and refresh tokens are invalid, the web gui will be used.
   @override
-  Future<void> login({bool refreshIfAvailable = false}) async {
+  Future<Either<Failure, Token>> login(
+      {bool refreshIfAvailable = false}) async {
     await _removeOldTokenOnFirstLogin();
-    await _authorization(refreshIfAvailable: refreshIfAvailable);
+    return await _authorization(refreshIfAvailable: refreshIfAvailable);
   }
 
   /// Retrieve cached OAuth Access Token.
@@ -59,38 +62,51 @@ class MobileOAuth extends CoreOAuth {
   /// still be valid. If there's no refresh token the existing access token
   /// will be returned, as long as we deem it still valid. In the event that
   /// both access and refresh tokens are invalid, the web gui will be used.
-  Future<Token> _authorization({bool refreshIfAvailable = false}) async {
+  Future<Either<Failure, Token>> _authorization(
+      {bool refreshIfAvailable = false}) async {
     var token = await _authStorage.loadTokenFromCache();
 
     if (!refreshIfAvailable) {
       if (token.hasValidAccessToken()) {
-        return token;
+        return Right(token);
       }
     }
 
     if (token.hasRefreshToken()) {
-      try {
-        token = await _requestToken.requestRefreshToken(token.refreshToken!);
-      } on ArgumentError {
-        //If refresh token request throws an exception, we have to do
-        //a fullAuthFlow.
-        token.accessToken = null;
-      }
+      final result =
+          await _requestToken.requestRefreshToken(token.refreshToken!);
+      //If refresh token request throws an exception, we have to do
+      //a fullAuthFlow.
+      result.fold(
+        (l) => token.accessToken = null,
+        (r) => token = r,
+      );
     }
 
     if (!token.hasValidAccessToken()) {
-      token = await _performFullAuthFlow();
+      final result = await _performFullAuthFlow();
+      var failure;
+      result.fold(
+        (l) => failure = l,
+        (r) => token = r,
+      );
+      if (failure != null) {
+        return Left(failure);
+      }
     }
 
     await _authStorage.saveTokenToCache(token);
-    return token;
+    return Right(token);
   }
 
   /// Authorize user via refresh token or web gui if necessary.
-  Future<Token> _performFullAuthFlow() async {
+  Future<Either<Failure, Token>> _performFullAuthFlow() async {
     var code = await _requestCode.requestCode();
     if (code == null) {
-      throw Exception('Access denied or authentication canceled.');
+      return Left(AadOauthFailure(
+        ErrorType.AccessDeniedOrAuthenticationCanceled,
+        'Access denied or authentication canceled.',
+      ));
     }
     return await _requestToken.requestToken(code);
   }

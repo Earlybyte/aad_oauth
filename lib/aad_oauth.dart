@@ -2,6 +2,9 @@
 library aad_oauth;
 
 import 'package:aad_oauth/helper/core_oauth.dart';
+import 'package:aad_oauth/model/failure.dart';
+import 'package:aad_oauth/model/token.dart';
+import 'package:dartz/dartz.dart';
 
 import 'model/config.dart';
 import 'dart:async';
@@ -19,7 +22,7 @@ class AadOAuth {
   /// still be valid. If there's no refresh token the existing access token
   /// will be returned, as long as we deem it still valid. In the event that
   /// both access and refresh tokens are invalid, the web gui will be used.
-  Future<void> login({bool refreshIfAvailable = false}) =>
+  Future<Either<Failure, Token>> login({bool refreshIfAvailable = false}) =>
       _coreOAuth.login(refreshIfAvailable: refreshIfAvailable);
 
   /// Retrieve cached OAuth Access Token.
