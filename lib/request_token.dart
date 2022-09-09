@@ -29,12 +29,18 @@ class RequestToken {
 
   Future<Either<Failure, Token>> _sendTokenRequest(String url,
       Map<String, String> params, Map<String, String> headers) async {
-    var response = await post(Uri.parse(url), body: params, headers: headers);
-    final tokenJson = json.decode(response.body);
-    if (tokenJson is Map<String, dynamic>) {
-      var token = Token.fromJson(tokenJson);
-      return Right(token);
+    try {
+      var response = await post(Uri.parse(url), body: params, headers: headers);
+      final tokenJson = json.decode(response.body);
+      if (tokenJson is Map<String, dynamic>) {
+        var token = Token.fromJson(tokenJson);
+        return Right(token);
+      }
+      return Left(
+          RequestFailure(ErrorType.InvalidJson, 'Token json is invalid'));
+    } catch (e) {
+      return Left(RequestFailure(
+          ErrorType.InvalidJson, 'Token json is invalid: ${e.toString()}'));
     }
-    return Left(RequestFailure(ErrorType.InvalidJson, 'Token json is invalid'));
   }
 }
