@@ -35,6 +35,6 @@ class RequestToken {
       var token = Token.fromJson(tokenJson);
       return Right(token);
     }
-    throw Left(RequestFailure(ErrorType.InvalidJson, 'Token json is invalid'));
+    return Left(RequestFailure(ErrorType.InvalidJson, 'Token json is invalid'));
   }
 }
