@@ -16,3 +16,4 @@ example/ios/Flutter/.last_build_id
 .flutter-plugins
 .flutter-plugins-dependencies
 example_b2c/pubspec.lock
+pubspec.lock
