@@ -64,7 +64,7 @@ var aadOauth = (function () {
         authResult = silentAuthResult;
 
         // Skip interactive login
-        onSuccess();
+        onSuccess(authResult.accessToken ?? null);
 
         return;
       } catch (error) {
@@ -82,7 +82,7 @@ var aadOauth = (function () {
 
       authResult = interactiveAuthResult;
 
-      onSuccess();
+      onSuccess(authResult.accessToken ?? null);
     } catch (error) {
       // rethrow
       console.warn(error.message);
