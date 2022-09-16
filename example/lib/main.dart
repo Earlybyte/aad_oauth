@@ -94,12 +94,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void login() async {
-    try {
-      await oauth.login();
-      var accessToken = await oauth.getAccessToken();
-      showMessage('Logged in successfully, your access token: $accessToken');
-    } catch (e) {
-      showError(e);
+    final result = await oauth.login();
+    result.fold(
+      (l) => showError(l.toString()),
+      (r) => showMessage('Logged in successfully, your access token: $r'),
+    );
+    var accessToken = await oauth.getAccessToken();
+    if(accessToken != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(accessToken)));
     }
   }
 

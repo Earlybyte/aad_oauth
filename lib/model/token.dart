@@ -29,7 +29,7 @@ class Token {
   int? expiresIn;
 
   /// Access token enabling to securely call protected APIs on behalf of the user.
-  Token();
+  Token({this.accessToken});
 
   /// JSON map to Token factory.
   factory Token.fromJson(Map<String, dynamic>? json) => Token.fromMap(json);

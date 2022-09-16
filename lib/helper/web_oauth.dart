@@ -6,7 +6,10 @@ library msauth;
 import 'dart:async';
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
+import 'package:aad_oauth/model/failure.dart';
 import 'package:aad_oauth/model/msalconfig.dart';
+import 'package:aad_oauth/model/token.dart';
+import 'package:dartz/dartz.dart';
 import 'package:js/js.dart';
 
 @JS('init')
@@ -15,7 +18,7 @@ external void jsInit(MsalConfig config);
 @JS('login')
 external void jsLogin(
   bool refreshIfAvailable,
-  void Function() onSuccess,
+  void Function(dynamic) onSuccess,
   void Function(dynamic) onError,
 );
 
@@ -68,17 +71,18 @@ class WebOAuth extends CoreOAuth {
   }
 
   @override
-  Future<void> login({bool refreshIfAvailable = false}) async {
-    final completer = Completer<void>();
+  Future<Either<Failure, Token>> login(
+      {bool refreshIfAvailable = false}) async {
+    final completer = Completer<Either<Failure, Token>>();
 
     jsLogin(
       refreshIfAvailable,
-      allowInterop(completer.complete),
       allowInterop(
-        (_error) => completer.completeError(
-          Exception('Access denied or authentication canceled.'),
-        ),
-      ),
+          (_value) => completer.complete(Right(Token(accessToken: _value)))),
+      allowInterop((_error) => completer.completeError(Left(AadOauthFailure(
+            ErrorType.AccessDeniedOrAuthenticationCanceled,
+            'Access denied or authentication canceled. Error: ${_error.toString()}',
+          )))),
     );
 
     return completer.future;

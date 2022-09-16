@@ -15,3 +15,8 @@ example/ios/Flutter/.last_build_id
 .vscode/launch.json
 .flutter-plugins
 .flutter-plugins-dependencies
+example_b2c/pubspec.lock
+example/pubspec.lock
+pubspec.lock
+example/ios/Podfile.lock
+example_b2c/ios/Podfile.lock
