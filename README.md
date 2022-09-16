@@ -62,7 +62,11 @@ The same `navigatorKey` must be provided to the top-level `MaterialApp`.
 Then once you have an OAuth instance, you can call `login()` and afterwards `getAccessToken()` to retrieve an access token:
 
 ```dart
-await oauth.login();
+final result = await oauth.login();
+result.fold(
+  (failure) => showError(failure.toString()),
+  (token) => showMessage('Logged in successfully, your access token: $token'),
+);
 String accessToken = await oauth.getAccessToken();
 ```
 
