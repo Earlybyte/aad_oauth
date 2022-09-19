@@ -2,21 +2,25 @@
 
 ## [Unreleased]
 
-## [0.4.1.beta] - 20220916
+## [0.4.1-beta.2] - 20220919
 
-- Breaking: Improve exceptions handling  [#168].
-- Fix login error when changing user password  [#164].
-- Add loader while render web page in WebView  [#162].
+- Fix exception behavior for the web version [#170].
+
+## [0.4.1-beta.1] - 20220916
+
+- Breaking: Improve exceptions handling [#168].
+- Fix login error when changing user password [#164].
+- Add loader while render web page in WebView [#162].
 
 ## [0.4.0] - 20220523
 
-- Breaking: Use webview_flutter plugin (requires android minSDK >= 20)  [#121],  [#124]
+- Breaking: Use webview_flutter plugin (requires android minSDK >= 20) [#121], [#124]
 - Requires passing the same navigatorKey to Config() and MaterialApp() to support
   interactive login.
 - Removed unnecessary calls to set screen size - calls to these APIs must be
   removed from apps (setWebViewScreenSize and setWebViewScreenSizeFromMedia).
   - webview_flutter automatically adjusts the webview size.
-- Update flutter_secure_storage and add android options to config  [#128],  [#134]
+- Update flutter_secure_storage and add android options to config [#128], [#134]
 
 ## [0.3.1] - 20200808
 
