@@ -79,7 +79,7 @@ class WebOAuth extends CoreOAuth {
       refreshIfAvailable,
       allowInterop(
           (_value) => completer.complete(Right(Token(accessToken: _value)))),
-      allowInterop((_error) => completer.completeError(Left(AadOauthFailure(
+      allowInterop((_error) => completer.complete(Left(AadOauthFailure(
             ErrorType.AccessDeniedOrAuthenticationCanceled,
             'Access denied or authentication canceled. Error: ${_error.toString()}',
           )))),
