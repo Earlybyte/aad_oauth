@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
 import 'request/authorization_request.dart';
@@ -10,12 +11,15 @@ class RequestCode {
   final AuthorizationRequest _authorizationRequest;
 
   String? _code;
+  String? _errorSubcode;
 
   RequestCode(Config config)
       : _config = config,
         _authorizationRequest = AuthorizationRequest(config);
-  Future<String?> requestCode() async {
+
+  Future<Either<String?, String?>> requestCode() async {
     _code = null;
+    _errorSubcode = null;
     final urlParams = _constructUrlParams();
     var webView = WebView(
       initialUrl: '${_authorizationRequest.url}?$urlParams',
@@ -34,13 +38,14 @@ class RequestCode {
         )),
       ),
     );
-    return _code;
+    return _code == null ? Left(_errorSubcode) : Right(_code);
   }
 
   FutureOr<NavigationDecision> _navigationDelegate(NavigationRequest request) {
     var uri = Uri.parse(request.url);
 
     if (uri.queryParameters['error'] != null) {
+      _errorSubcode = uri.queryParameters['error_subcode'];
       _config.navigatorKey.currentState!.pop();
     }
 

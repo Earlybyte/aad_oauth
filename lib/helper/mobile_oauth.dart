@@ -101,14 +101,32 @@ class MobileOAuth extends CoreOAuth {
 
   /// Authorize user via refresh token or web gui if necessary.
   Future<Either<Failure, Token>> _performFullAuthFlow() async {
-    var code = await _requestCode.requestCode();
-    if (code == null) {
+    var result = await _requestCode.requestCode();
+    String? codeResult;
+    result.fold(
+      (errorSubcode) {
+        if (cancelSubcode == errorSubcode) {
+          return Left(AadOauthFailure(
+            ErrorType.AuthenticationCanceled,
+            'Authentication canceled.',
+          ));
+        } else {
+          return Left(AadOauthFailure(
+            ErrorType.AccessDenied,
+            'Access denied.',
+          ));
+        }
+      },
+      (code) => codeResult = code,
+    );
+    if (codeResult == null) {
       return Left(AadOauthFailure(
-        ErrorType.AccessDeniedOrAuthenticationCanceled,
-        'Access denied or authentication canceled.',
+        ErrorType.UnexpectedError,
+        'Unexpected error performing full authentication flow.',
       ));
+    } else {
+      return await _requestToken.requestToken(codeResult!);
     }
-    return await _requestToken.requestToken(code);
   }
 
   Future<void> _removeOldTokenOnFirstLogin() async {
