@@ -30,8 +30,10 @@ Afterwards you must create a navigatorKey and initialize the library as follow:
     tenant: "YOUR_TENANT_ID",
     clientId: "YOUR_CLIENT_ID",
     scope: "openid profile offline_access",
+    // redirectUri is Optional as a default is calculated based on app type/web location
     redirectUri: "your redirect url available in azure portal",
     navigatorKey: navigatorKey,
+    webUseRedirect: true, // default is false - on web only, forces a redirect flow instead of popup auth
     //Optional parameter: Centered CircularProgressIndicator while rendering web page in WebView
     loader: Center(child: CircularProgressIndicator()),
   );
@@ -78,15 +80,23 @@ await oauth.logout();
 
 ### Web Usage
 
-For web you also have to add some lines to your `index.html`:
+For web you also have to add some lines to your `index.html` (see the `index.html` in the example applications):
 ```html
 <head>
-  <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.3.0/js/msal-browser.min.js"
-      integrity="sha384-o+Sncs5XJ3NEAeriM/FV8YGZrh7mZk4GfNutRTbYjsDNJxb7caCLeqiDabistgwW"
-      crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.min.js"
+    integrity="sha384-2Vr9MyareT7qv+wLp1zBt78ZWB4aljfCTMUrml3/cxm0W81ahmDOC6uyNmmn0Vrc"
+    crossorigin="anonymous"></script>
   <script src="assets/packages/aad_oauth/assets/msalv2.js"></script>
 </head>
 ```
+
+Note that when using redirect flow on web, the `login()` call will not return if the user has not logged in yet because
+the page is redirected and the app is destroyed until login is complete. Your application must take care of calling
+`login()` again once reloaded to complete the login process within the flutter application - if login was successful,
+this second call will be fast, and will not cause another redirection.
+
+When using redirecting logins with the example application, you will need to click on the login button again following 
+a successful login to see the token details. 
 
 ### B2C Usage
 
@@ -105,7 +115,7 @@ Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secr
     tenant: "YOUR_TENANT_NAME",
     clientId: "YOUR_CLIENT_ID",
     scope: "YOUR_CLIENT_ID offline_access",
-    redirectUri: "https://login.live.com/oauth20_desktop.srf",
+    // redirectUri: "https://login.live.com/oauth20_desktop.srf", // Note: this is the default for Mobile
     clientSecret: "YOUR_CLIENT_SECRET",
     isB2C: true,
     policy: "YOUR_USER_FLOW___USER_FLOW_A",

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -12,6 +13,11 @@ class Config {
 
   /// Azure AD token URL.
   final String tokenUrl;
+
+  /// On Web only, use http redirect instead of popups to acquire an access token. This may be
+  /// useful to avoid popup warnings and on iOS devices that prevent sharing of information
+  /// between the popup and a Progressive web application (PWA) installed on the home screen.
+  bool webUseRedirect;
 
   /// The tenant value in the path of the request can be used to control who can sign into the application.
   /// The allowed values are common, organizations, consumers, and tenant identifiers. Or Name of your Azure AD B2C tenant.
@@ -120,14 +126,34 @@ class Config {
   /// Loader Widget (before load web page)
   Widget loader;
 
+  /// Determine an appropriate redirect URI for AAD authentication.
+  /// On web, it is the location that the application is being served from.
+  /// On mobile, it is https://login.live.com/oauth20_desktop.srf
+  static String getDefaultRedirectUri() {
+    if (kIsWeb) {
+      var base = Uri.base.toString();
+      final idx = base.indexOf('#');
+      if (idx != -1) {
+        base = base.substring(0, idx);
+      }
+      if (!base.endsWith('/')) {
+        base = base + '/';
+      }
+      return base;
+    } else {
+      return 'https://login.live.com/oauth20_desktop.srf';
+    }
+  }
+
   /// Azure AD OAuth Configuration. Look at individual fields for description.
   Config({
     required this.tenant,
     this.policy,
     required this.clientId,
     this.responseType = 'code',
-    required this.redirectUri,
+    String? redirectUri,
     required this.scope,
+    this.webUseRedirect = false,
     this.responseMode,
     this.state,
     this.prompt,
@@ -152,5 +178,6 @@ class Config {
         tokenUrl = isB2C
             ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token',
-        aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true);
+        aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
+        redirectUri = redirectUri ?? getDefaultRedirectUri();
 }

@@ -3,6 +3,7 @@
 var aadOauth = (function () {
   let myMSALObj = null;
   let authResult = null;
+  let redirectHandlerTask = null;
 
   const tokenRequest = {
     scopes: null,
@@ -34,6 +35,10 @@ var aadOauth = (function () {
     tokenRequest.prompt = config.prompt;
 
     myMSALObj = new msal.PublicClientApplication(msalConfig);
+    // Register Callbacks for Redirect flow and record the task so we
+    // can await its completion in the login API
+
+    redirectHandlerTask = myMSALObj.handleRedirectPromise();
   }
 
   /// Authorize user via refresh token or web gui if necessary.
@@ -42,12 +47,37 @@ var aadOauth = (function () {
   /// with the existing refresh token, if any, even though the access token may
   /// still be valid; however MSAL doesn't support this. Therefore it will have
   /// the same impact as when it is set to [false]. 
+  /// [useRedirect] uses the MSAL redirection based token acquisition instead of
+  /// a popup window. This is the only way that iOS based devices will acquire
+  /// a token using MSAL when the application is installed to the home screen.
+  /// This is because the popup window operates outside the sandbox of the PWA and
+  /// won't share cookies or local storage with the PWA sandbox. Redirect flow works
+  /// around this issue by having the MSAL authentication take place directly within
+  /// the PWA sandbox browser.
   /// The token is requested using acquireTokenSilent, which will refresh the token
   /// if it has nearly expired. If this fails for any reason, it will then move on
   /// to attempt to refresh the token using an interactive login.
 
-  async function login(refreshIfAvailable, onSuccess, onError) {
-    // Try to sign in silently
+  async function login(refreshIfAvailable, useRedirect, onSuccess, onError) {
+    try {
+      // The redirect handler task will complete with auth results if we
+      // were redirected from AAD. If not, it will complete with null
+      // We must wait for it to complete before we allow the login to
+      // attempt to acquire a token silently, and then progress to interactive
+      // login (if silent acquisition fails).
+      let result = await redirectHandlerTask;
+      if (result !== null) {
+        authResult = result;
+      }
+    }
+    catch (error) {
+      authResultError = error;
+      onError(authResultError);
+      return;
+    }
+
+    // Try to sign in silently, assuming we have already signed in and have
+    // a cached access token
     const account = getAccount();
     if (account !== null) {
       try {
@@ -72,21 +102,29 @@ var aadOauth = (function () {
       }
     }
 
-    // Sign in with popup
-    try {
-      const interactiveAuthResult = await myMSALObj.loginPopup({
+    if (useRedirect) {
+      myMSALObj.acquireTokenRedirect({
         scopes: tokenRequest.scopes,
         prompt: tokenRequest.prompt,
         account: account
       });
+    } else {
+      // Sign in with popup
+      try {
+        const interactiveAuthResult = await myMSALObj.loginPopup({
+          scopes: tokenRequest.scopes,
+          prompt: tokenRequest.prompt,
+          account: account
+        });
 
-      authResult = interactiveAuthResult;
+        authResult = interactiveAuthResult;
 
-      onSuccess(authResult.accessToken ?? null);
-    } catch (error) {
-      // rethrow
-      console.warn(error.message);
-      onError(error);
+        onSuccess(authResult.accessToken ?? null);
+      } catch (error) {
+        // rethrow
+        console.warn(error.message);
+        onError(error);
+      }
     }
   }
 
@@ -121,6 +159,7 @@ var aadOauth = (function () {
     }
 
     authResult = null;
+    authResultError = null;
     tokenRequest.scopes = null;
     myMSALObj
       .logout({ account: account })
