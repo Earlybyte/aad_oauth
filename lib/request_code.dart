@@ -17,7 +17,6 @@ class RequestCode {
   Future<String?> requestCode() async {
     _code = null;
     final urlParams = _constructUrlParams();
-    print(_config.userAgent);
     var webView = WebView(
       initialUrl: '${_authorizationRequest.url}?$urlParams',
       javascriptMode: JavascriptMode.unrestricted,
