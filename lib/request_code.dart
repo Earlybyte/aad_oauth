@@ -17,11 +17,13 @@ class RequestCode {
   Future<String?> requestCode() async {
     _code = null;
     final urlParams = _constructUrlParams();
+    print(_config.userAgent);
     var webView = WebView(
       initialUrl: '${_authorizationRequest.url}?$urlParams',
       javascriptMode: JavascriptMode.unrestricted,
       navigationDelegate: _navigationDelegate,
       backgroundColor: Colors.transparent,
+      userAgent: _config.userAgent,
     );
 
     await _config.navigatorKey.currentState!.push(
