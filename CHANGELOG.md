@@ -1,58 +1,55 @@
 # Changelog
 
 ## [Unreleased]
-- Added web redirect authentication flow option [#173]
-  - Must use at least version 2.13.1 of MSAL library from MS in index.html
-  - Calculates an appropriate default redirect URI on mobile and web if not provided
 
-## [0.4.1-beta.2] - 20220919
-
-- Fix exception behavior for the web version [#170].
-
-## [0.4.1-beta.1] - 20220916
-
-- Breaking: Improve exceptions handling [#168].
-- Fix login error when changing user password [#164].
-- Add loader while render web page in WebView [#162].
+## [0.4.1] - 20221124
+- Added web redirect authentication flow option https://github.com/Earlybyte/aad_oauth/pull/174.
+  - Must use at least version 2.13.1 of MSAL library from MS in index.html.
+  - Calculates an appropriate default redirect URI on mobile and web if not provided.
+- Add userAgent parameter to WebView https://github.com/Earlybyte/aad_oauth/pull/181
+- Fix exception behavior for the web version https://github.com/Earlybyte/aad_oauth/pull/170.
+- Breaking: Improve exceptions handling https://github.com/Earlybyte/aad_oauth/pull/168.
+- Fix login error when changing user password https://github.com/Earlybyte/aad_oauth/pull/164.
+- Add loader while render web page in WebView https://github.com/Earlybyte/aad_oauth/pull/162.
 
 ## [0.4.0] - 20220523
 
-- Breaking: Use webview_flutter plugin (requires android minSDK >= 20) [#121], [#124]
+- Breaking: Use webview_flutter plugin (requires android minSDK >= 20) https://github.com/Earlybyte/aad_oauth/pull/121, https://github.com/Earlybyte/aad_oauth/pull/124
 - Requires passing the same navigatorKey to Config() and MaterialApp() to support
   interactive login.
 - Removed unnecessary calls to set screen size - calls to these APIs must be
   removed from apps (setWebViewScreenSize and setWebViewScreenSizeFromMedia).
   - webview_flutter automatically adjusts the webview size.
-- Update flutter_secure_storage and add android options to config [#128], [#134]
+- Update flutter_secure_storage and add android options to config https://github.com/Earlybyte/aad_oauth/pull/128, https://github.com/Earlybyte/aad_oauth/pull/134
 
 ## [0.3.1] - 20200808
 
-- Add flutter_web support [#106](https://github.com/Earlybyte/aad_oauth/pull/106)
+- Add flutter_web support https://github.com/Earlybyte/aad_oauth/pull/106
 
 ## [0.3.0] - 20200725
 
-- Migrate package and examples to sound null safety [#105](https://github.com/Earlybyte/aad_oauth/pull/105)
+- Migrate package and examples to sound null safety https://github.com/Earlybyte/aad_oauth/pull/105
 
 ## [0.2.2] - 20200702
 
-- Add refreshIfAvailable flag to login() [#94](https://github.com/Earlybyte/aad_oauth/pull/94)
-- Update Flutter Webview Plugin [#112](https://github.com/Earlybyte/aad_oauth/pull/112)
-- Bumped to version 0.2.1 with latest http support [#113](https://github.com/Earlybyte/aad_oauth/pull/113)
-- Upgrade packages and fix problems [#114](https://github.com/Earlybyte/aad_oauth/pull/114)
+- Add refreshIfAvailable flag to login() https://github.com/Earlybyte/aad_oauth/pull/94
+- Update Flutter Webview Plugin https://github.com/Earlybyte/aad_oauth/pull/112
+- Bumped to version 0.2.1 with latest http support https://github.com/Earlybyte/aad_oauth/pull/113
+- Upgrade packages and fix problems https://github.com/Earlybyte/aad_oauth/pull/114
 
 ## [0.2.1] - 20210119
 
-- Enable to resize webview after init #68
-- Add dartdoc to most important elements #75
-- Fix token init #89
-- Upgrade plugins #88
+- Enable to resize webview after init https://github.com/Earlybyte/aad_oauth/pull/68
+- Add dartdoc to most important elements https://github.com/Earlybyte/aad_oauth/pull/75
+- Fix token init https://github.com/Earlybyte/aad_oauth/pull/89
+- Upgrade plugins https://github.com/Earlybyte/aad_oauth/pull/88
 
 ## [0.2.0] - 20201007
 
-- Add additional config options #66
-- Throw Exception on return #55
-- Fix Example App #65
-- Comply Pub Dev Requirements #67
+- Add additional config options https://github.com/Earlybyte/aad_oauth/pull/66
+- Throw Exception on return https://github.com/Earlybyte/aad_oauth/pull/55
+- Fix Example App https://github.com/Earlybyte/aad_oauth/pull/65
+- Comply Pub Dev Requirements https://github.com/Earlybyte/aad_oauth/pull/67
 
 ## [0.1.9] - 20200529
 
