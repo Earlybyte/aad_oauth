@@ -22,6 +22,7 @@ class RequestCode {
       javascriptMode: JavascriptMode.unrestricted,
       navigationDelegate: _navigationDelegate,
       backgroundColor: Colors.transparent,
+      userAgent: _config.userAgent,
     );
 
     await _config.navigatorKey.currentState!.push(
