@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+- Added web redirect authentication flow option [#173]
+  - Must use at least version 2.13.1 of MSAL library from MS in index.html
+  - Calculates an appropriate default redirect URI on mobile and web if not provided
 
 ## [0.4.1-beta.2] - 20220919
 

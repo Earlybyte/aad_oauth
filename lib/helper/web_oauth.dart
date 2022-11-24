@@ -18,6 +18,7 @@ external void jsInit(MsalConfig config);
 @JS('login')
 external void jsLogin(
   bool refreshIfAvailable,
+  bool useRedirect,
   void Function(dynamic) onSuccess,
   void Function(dynamic) onError,
 );
@@ -35,7 +36,8 @@ external String? jsGetAccessToken();
 external String? jsGetIdToken();
 
 class WebOAuth extends CoreOAuth {
-  WebOAuth(Config config) {
+  final Config config;
+  WebOAuth(this.config) {
     jsInit(MsalConfig.construct(
         tenant: config.tenant,
         policy: config.policy,
@@ -77,6 +79,7 @@ class WebOAuth extends CoreOAuth {
 
     jsLogin(
       refreshIfAvailable,
+      config.webUseRedirect,
       allowInterop(
           (_value) => completer.complete(Right(Token(accessToken: _value)))),
       allowInterop((_error) => completer.complete(Left(AadOauthFailure(

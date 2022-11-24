@@ -1,6 +1,5 @@
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -40,18 +39,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // Must configure flutter to start the web server for the app on
-  // the port listed below. In VSCode, this can be done with
-  // the following run settings in launch.json
-  // "args": ["-d", "chrome","--web-port", "8483"]
-
   static final Config configB2Ca = Config(
       tenant: 'YOUR_TENANT_NAME',
       clientId: 'YOUR_CLIENT_ID',
       scope: 'YOUR_CLIENT_ID offline_access',
-      redirectUri: kIsWeb
-          ? 'http://localhost:8483'
-          : 'https://login.live.com/oauth20_desktop.srf',
       clientSecret: 'YOUR_CLIENT_SECRET',
       isB2C: true,
       navigatorKey: navigatorKey,
@@ -64,9 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
       clientId: 'YOUR_CLIENT_ID',
       scope: 'YOUR_CLIENT_ID offline_access',
       navigatorKey: navigatorKey,
-      redirectUri: kIsWeb
-          ? 'http://localhost:8483'
-          : 'https://login.live.com/oauth20_desktop.srf',
       clientSecret: 'YOUR_CLIENT_SECRET',
       isB2C: true,
       policy: 'YOUR_USER_FLOW___USER_FLOW_B',
@@ -150,12 +138,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void login(AadOAuth oAuth) async {
-    try {
-      await oAuth.login();
-      final accessToken = await oAuth.getAccessToken();
-      showMessage('Logged in successfully, your access token: $accessToken');
-    } catch (e) {
-      showError(e);
+    final result = await oAuth.login();
+    result.fold(
+      (l) => showError(l.toString()),
+      (r) => showMessage('Logged in successfully, your access token: $r'),
+    );
+    var accessToken = await oAuth.getAccessToken();
+    if (accessToken != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(accessToken)));
     }
   }
 

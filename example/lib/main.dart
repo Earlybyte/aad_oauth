@@ -30,17 +30,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // Must configure flutter to start the web server for the app on
-  // the port listed below. In VSCode, this can be done with
-  // the following run settings in launch.json
-  // "args": ["-d", "chrome","--web-port", "8483"]
   static final Config config = Config(
       tenant: 'YOUR_TENANT_ID',
       clientId: 'YOUR_CLIENT_ID',
       scope: 'openid profile offline_access',
-      redirectUri: kIsWeb
-          ? 'http://localhost:8483'
-          : 'https://login.live.com/oauth20_desktop.srf',
       navigatorKey: navigatorKey,
       loader: SizedBox());
   final AadOAuth oauth = AadOAuth(config);
@@ -61,11 +54,19 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ListTile(
             leading: Icon(Icons.launch),
-            title: Text('Login'),
+            title: Text('Login${kIsWeb ? ' (web popup)' : ''}'),
             onTap: () {
-              login();
+              login(false);
             },
           ),
+          if (kIsWeb)
+            ListTile(
+              leading: Icon(Icons.launch),
+              title: Text('Login (web redirect)'),
+              onTap: () {
+                login(true);
+              },
+            ),
           ListTile(
             leading: Icon(Icons.delete),
             title: Text('Logout'),
@@ -93,16 +94,17 @@ class _MyHomePageState extends State<MyHomePage> {
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
 
-  void login() async {
+  void login(bool redirect) async {
+    config.webUseRedirect = redirect;
     final result = await oauth.login();
     result.fold(
       (l) => showError(l.toString()),
       (r) => showMessage('Logged in successfully, your access token: $r'),
     );
     var accessToken = await oauth.getAccessToken();
-    if(accessToken != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(accessToken)));
+    if (accessToken != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(accessToken)));
     }
   }
 
