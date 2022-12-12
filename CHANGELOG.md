@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 
+- Add MockCoreOAuth for testing. https://github.com/Earlybyte/aad_oauth/pull/185.
+
 ## [0.4.1] - 20221124
+
 - Added web redirect authentication flow option https://github.com/Earlybyte/aad_oauth/pull/174.
   - Must use at least version 2.13.1 of MSAL library from MS in index.html.
   - Calculates an appropriate default redirect URI on mobile and web if not provided.
