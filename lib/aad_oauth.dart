@@ -1,13 +1,16 @@
 /// Authenticates a user with Azure Active Directory using OAuth2.0.
 library aad_oauth;
 
-import 'package:aad_oauth/helper/core_oauth.dart';
-import 'package:aad_oauth/model/failure.dart';
-import 'package:aad_oauth/model/token.dart';
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 
+import 'helper/core_oauth.dart';
 import 'model/config.dart';
-import 'dart:async';
+import 'model/failure.dart';
+import 'model/token.dart';
+
+export 'model/config.dart';
 
 /// Authenticates a user with Azure Active Directory using OAuth2.0.
 class AadOAuth {

@@ -1,13 +1,13 @@
-import 'package:aad_oauth/helper/core_oauth.dart';
-import 'package:aad_oauth/model/config.dart';
-import 'package:aad_oauth/model/failure.dart';
-import 'package:aad_oauth/model/token.dart';
 import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/config.dart';
+import '../model/failure.dart';
+import '../model/token.dart';
 import '../request_code.dart';
 import '../request_token.dart';
 import 'auth_storage.dart';
+import 'core_oauth.dart';
 
 class MobileOAuth extends CoreOAuth {
   final AuthStorage _authStorage;
@@ -104,7 +104,7 @@ class MobileOAuth extends CoreOAuth {
     var code = await _requestCode.requestCode();
     if (code == null) {
       return Left(AadOauthFailure(
-        ErrorType.AccessDeniedOrAuthenticationCanceled,
+        ErrorType.accessDeniedOrAuthenticationCanceled,
         'Access denied or authentication canceled.',
       ));
     }

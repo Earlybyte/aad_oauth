@@ -1,29 +1,27 @@
-import 'package:aad_oauth/helper/choose_oauth.dart'
-    // ignore: uri_does_not_exist
-    if (dart.library.io) 'package:aad_oauth/helper/mobile_oauth.dart'
-    // ignore: uri_does_not_exist
-    if (dart.library.html) 'package:aad_oauth/helper/web_oauth.dart';
-
-import 'package:aad_oauth/model/config.dart';
-import 'package:aad_oauth/model/failure.dart';
-import 'package:aad_oauth/model/token.dart';
 import 'package:dartz/dartz.dart';
+
+import 'choose_oauth.dart'
+    if (dart.library.io) 'mobile_oauth.dart'
+    if (dart.library.html) 'web_oauth.dart';
+import '../model/config.dart';
+import '../model/failure.dart';
+import '../model/token.dart';
 
 class CoreOAuth {
   CoreOAuth();
 
   Future<Either<Failure, Token>> login(
           {bool refreshIfAvailable = false}) async =>
-      throw UnsupportedFailure(ErrorType.Unsupported, 'Unsupported login');
+      throw UnsupportedFailure(ErrorType.unsupported, 'Unsupported login');
 
   Future<void> logout() async =>
-      throw UnsupportedFailure(ErrorType.Unsupported, 'Unsupported logout');
+      throw UnsupportedFailure(ErrorType.unsupported, 'Unsupported logout');
 
   Future<String?> getAccessToken() async => throw UnsupportedFailure(
-      ErrorType.Unsupported, 'Unsupported getAccessToken');
+      ErrorType.unsupported, 'Unsupported getAccessToken');
 
   Future<String?> getIdToken() async => throw UnsupportedFailure(
-      ErrorType.Unsupported, 'Unsupported getAccessToken');
+      ErrorType.unsupported, 'Unsupported getAccessToken');
 
   factory CoreOAuth.fromConfig(Config config) =>
       config.isStub ? CoreOAuth() : getOAuthConfig(config);

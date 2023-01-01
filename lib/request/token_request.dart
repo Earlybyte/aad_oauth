@@ -1,4 +1,4 @@
-import 'package:aad_oauth/model/config.dart';
+import '../model/config.dart';
 
 class TokenRequestDetails {
   final String url;

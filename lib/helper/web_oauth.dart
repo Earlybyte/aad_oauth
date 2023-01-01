@@ -4,13 +4,15 @@
 library msauth;
 
 import 'dart:async';
-import 'package:aad_oauth/helper/core_oauth.dart';
-import 'package:aad_oauth/model/config.dart';
-import 'package:aad_oauth/model/failure.dart';
-import 'package:aad_oauth/model/msalconfig.dart';
-import 'package:aad_oauth/model/token.dart';
 import 'package:dartz/dartz.dart';
 import 'package:js/js.dart';
+
+import '../model/config.dart';
+import '../model/failure.dart';
+import '../model/msalconfig.dart';
+import '../model/token.dart';
+import 'auth_storage.dart';
+import 'core_oauth.dart';
 
 @JS('init')
 external void jsInit(MsalConfig config);
@@ -36,8 +38,14 @@ external String? jsGetAccessToken();
 external String? jsGetIdToken();
 
 class WebOAuth extends CoreOAuth {
+  final AuthStorage _authStorage;
+
   final Config config;
-  WebOAuth(this.config) {
+  WebOAuth(this.config)
+      : _authStorage = AuthStorage(
+          tokenIdentifier: config.tokenIdentifier,
+          aOptions: config.aOptions,
+        ) {
     jsInit(MsalConfig.construct(
         tenant: config.tenant,
         policy: config.policy,
@@ -64,29 +72,51 @@ class WebOAuth extends CoreOAuth {
 
   @override
   Future<String?> getAccessToken() async {
-    return jsGetAccessToken();
+    return (await _authStorage.loadTokenFromCache()).accessToken ??
+        jsGetAccessToken();
   }
 
   @override
   Future<String?> getIdToken() async {
-    return jsGetIdToken();
+    return (await _authStorage.loadTokenFromCache()).idToken ?? jsGetIdToken();
   }
 
   @override
   Future<Either<Failure, Token>> login(
       {bool refreshIfAvailable = false}) async {
+    var token = await _authStorage.loadTokenFromCache();
     final completer = Completer<Either<Failure, Token>>();
+    if (!refreshIfAvailable) {
+      if (token.hasValidAccessToken()) {
+        return Right(token);
+      }
+    }
 
     jsLogin(
       refreshIfAvailable,
       config.webUseRedirect,
       allowInterop(
-          (_value) => completer.complete(Right(Token(accessToken: _value)))),
-      allowInterop((_error) => completer.complete(Left(AadOauthFailure(
-            ErrorType.AccessDeniedOrAuthenticationCanceled,
-            'Access denied or authentication canceled. Error: ${_error.toString()}',
-          )))),
+        (_value) => completer.complete(Right(Token(accessToken: _value))),
+      ),
+      allowInterop(
+        (_error) => completer.complete(Left(AadOauthFailure(
+          ErrorType.accessDeniedOrAuthenticationCanceled,
+          'Access denied or authentication canceled. Error: ${_error.toString()}',
+        ))),
+      ),
     );
+
+    var failure;
+    final result = await completer.future;
+    result.fold(
+      (l) => failure = l,
+      (r) => token = r,
+    );
+    if (failure != null) {
+      return Left(failure);
+    }
+
+    await _authStorage.saveTokenToCache(token);
 
     return completer.future;
   }
@@ -99,6 +129,8 @@ class WebOAuth extends CoreOAuth {
       allowInterop(completer.complete),
       allowInterop((error) => completer.completeError(error)),
     );
+
+    await _authStorage.clear();
 
     return completer.future;
   }

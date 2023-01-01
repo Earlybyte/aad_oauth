@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:aad_oauth/model/failure.dart';
+
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
+
 import 'model/config.dart';
+import 'model/failure.dart';
+import 'model/token.dart';
 import 'request/token_refresh_request.dart';
 import 'request/token_request.dart';
-import 'model/token.dart';
 
 class RequestToken {
   final Config config;
@@ -37,10 +39,10 @@ class RequestToken {
         return Right(token);
       }
       return Left(
-          RequestFailure(ErrorType.InvalidJson, 'Token json is invalid'));
+          RequestFailure(ErrorType.invalidJson, 'Token json is invalid'));
     } catch (e) {
       return Left(RequestFailure(
-          ErrorType.InvalidJson, 'Token json is invalid: ${e.toString()}'));
+          ErrorType.invalidJson, 'Token json is invalid: ${e.toString()}'));
     }
   }
 }

@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 enum ErrorType {
-  AccessDeniedOrAuthenticationCanceled,
-  InvalidJson,
-  Unsupported,
-  UnexpectedError,
+  accessDeniedOrAuthenticationCanceled,
+  invalidJson,
+  unsupported,
+  unexpectedError,
 }
 
 abstract class Failure extends Equatable {

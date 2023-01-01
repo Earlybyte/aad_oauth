@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.1+1]
+- Updated code
+- Added storage cache for the web
+
 ## [Unreleased]
 
 ## [0.4.1] - 20221124

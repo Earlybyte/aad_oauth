@@ -178,6 +178,7 @@ class Config {
         tokenUrl = isB2C
             ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token',
-        aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
+        aOptions =
+            aOptions ?? const AndroidOptions(encryptedSharedPreferences: true),
         redirectUri = redirectUri ?? getDefaultRedirectUri();
 }
