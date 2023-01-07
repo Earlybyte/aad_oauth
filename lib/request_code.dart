@@ -45,7 +45,10 @@ class RequestCode {
       _config.navigatorKey.currentState!.pop();
     }
 
-    if (uri.queryParameters['code'] != null) {
+    var redirectUri = Uri.parse(_config.redirectUri);
+    var checkHost = uri.host == redirectUri.host;
+
+    if (uri.queryParameters['code'] != null && checkHost) {
       _code = uri.queryParameters['code'];
       _config.navigatorKey.currentState!.pop();
     }
