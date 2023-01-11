@@ -16,7 +16,8 @@ class TokenRequestDetails {
         },
         headers = {
           'Accept': 'application/json',
-          'Content-Type': Config.contentType
+          'Content-Type': Config.contentType,
+          'Origin': '',
         } {
     if (config.resource != null) {
       params.putIfAbsent('resource', () => config.resource!);
