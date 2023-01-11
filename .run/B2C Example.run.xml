@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="B2C Example" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/example_b2c/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
