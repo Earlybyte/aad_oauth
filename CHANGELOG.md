@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 
-- Add MockCoreOAuth for testing. https://github.com/Earlybyte/aad_oauth/pull/185.
+- Add MockCoreOAuth for testing https://github.com/Earlybyte/aad_oauth/pull/185.
+- Update flutter_secure_storage to ^7.0.1, bump minor dependency versions https://github.com/Earlybyte/aad_oauth/pull/192
+- Fix request code issue in google signIn https://github.com/Earlybyte/aad_oauth/pull/193
+- Add optional parameter origin header for mobile token request https://github.com/Earlybyte/aad_oauth/pull/177
 
 ## [0.4.1] - 20221124
 

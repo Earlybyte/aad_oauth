@@ -17,7 +17,7 @@ class TokenRefreshRequestDetails {
         headers = {
           'Accept': 'application/json',
           'Content-Type': Config.contentType,
-          'Origin': '',
+          if (config.origin != null) 'Origin': config.origin!,
         } {
     if (config.clientSecret != null) {
       params.putIfAbsent('client_secret', () => config.clientSecret!);

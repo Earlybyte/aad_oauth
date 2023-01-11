@@ -126,6 +126,9 @@ class Config {
   /// Loader Widget (before load web page)
   Widget loader;
 
+  /// Origin header parameter for [TokenRequestDetails] and [TokenRefreshRequestDetails]
+  String? origin;
+
   /// Determine an appropriate redirect URI for AAD authentication.
   /// On web, it is the location that the application is being served from.
   /// On mobile, it is https://login.live.com/oauth20_desktop.srf
@@ -172,6 +175,7 @@ class Config {
     this.loader = const SizedBox(),
     AndroidOptions? aOptions,
     required this.navigatorKey,
+    this.origin,
   })  : authorizationUrl = isB2C
             ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize',
