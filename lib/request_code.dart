@@ -9,21 +9,25 @@ class RequestCode {
   final Config _config;
   final AuthorizationRequest _authorizationRequest;
   final _redirectUriHost;
-  late WebViewController controller;
+  late NavigationDelegate _navigationDelegate;
   String? _code;
 
   RequestCode(Config config)
       : _config = config,
         _authorizationRequest = AuthorizationRequest(config),
-        _redirectUriHost = Uri.parse(config.redirectUri).host;
+        _redirectUriHost = Uri.parse(config.redirectUri).host {
+    _navigationDelegate = NavigationDelegate(
+      onNavigationRequest: _onNavigationRequest,
+    );
+  }
+
   Future<String?> requestCode() async {
     _code = null;
+
     final urlParams = _constructUrlParams();
     final launchUri = Uri.parse('${_authorizationRequest.url}?$urlParams');
-    controller = WebViewController();
-    await controller.setNavigationDelegate(NavigationDelegate(
-      onNavigationRequest: _onNavigationRequest,
-    ));
+    final controller = WebViewController();
+    await controller.setNavigationDelegate(_navigationDelegate);
     await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
 
     await controller.setBackgroundColor(Colors.transparent);
