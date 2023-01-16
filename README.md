@@ -19,6 +19,9 @@ For using this library you have to create an azure app at the [Azure App registr
 
 Your minSdkVersion must be >= 20 in `android/app/build.gradle` section `android / defaultConfig` to support webview_flutter. Version 19 may build but will likely fail at runtime.
 
+If your app does not have the `android.permission.INTERNET` permission you must add it to the AndroidManifest
+`<uses-permission android:name="android.permission.INTERNET"/>`
+
 Afterwards you must create a navigatorKey and initialize the library as follow:
 
 ```dart
