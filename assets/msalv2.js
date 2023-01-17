@@ -17,7 +17,7 @@ var aadOauth = (function () {
     var msalConfig = {
       auth: {
         clientId: config.clientId,
-        authority: "https://login.microsoftonline.com/" + config.tenant,
+        authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
         redirectUri: config.redirectUri,
       },
       cache: {
