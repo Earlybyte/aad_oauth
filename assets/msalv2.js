@@ -13,7 +13,7 @@ var aadOauth = (function () {
 
   // Initialise the myMSALObj for the given client, authority and scope
   function init(config) {
-    // TODO: Add support for other MSAL / B2C configuration
+    // TODO: Add support for other MSAL configuration
     var msalConfig = {
       auth: {
         clientId: config.clientId,
