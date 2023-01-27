@@ -61,10 +61,23 @@ class _MyHomePageState extends State<MyHomePage> {
       tokenIdentifier: 'UNIQUE IDENTIFIER B',
       loader: SizedBox());
 
+  static final Config configB2Cc = Config(
+      tenant: 'YOUR_TENANT_NAME',
+      clientId: 'YOUR_CLIENT_ID',
+      scope: 'YOUR_CLIENT_ID offline_access',
+      navigatorKey: navigatorKey,
+      redirectUri: 'YOUR_REDIRECT_URL',
+      isB2C: true,
+      policy: 'YOUR_CUSTOM_POLICY',
+      tokenIdentifier: 'UNIQUE IDENTIFIER C',
+      customParameters: {'YOUR_CUSTOM_PARAMETER': 'CUSTOM_VALUE'},
+      loader: SizedBox());
+
   //You can have as many B2C flows as you want
 
   final AadOAuth oauthB2Ca = AadOAuth(configB2Ca);
   final AadOAuth oauthB2Cb = AadOAuth(configB2Cb);
+  final AadOAuth oauthB2Cc = AadOAuth(configB2Cc);
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +130,27 @@ class _MyHomePageState extends State<MyHomePage> {
               logout(oauthB2Cb);
             },
           ),
+          Divider(),
+          ListTile(
+            title: Text(
+              'AzureAD B2C C',
+              style: Theme.of(context).textTheme.headline5,
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.launch),
+            title: Text('Login'),
+            onTap: () {
+              login(oauthB2Cc);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Logout'),
+            onTap: () {
+              logout(oauthB2Cc);
+            },
+          ),
         ],
       ),
     );
@@ -143,6 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
       (l) => showError(l.toString()),
       (r) => showMessage('Logged in successfully, your access token: $r'),
     );
+
     var accessToken = await oAuth.getAccessToken();
     if (accessToken != null) {
       ScaffoldMessenger.of(context)

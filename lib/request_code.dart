@@ -25,7 +25,9 @@ class RequestCode {
     _code = null;
 
     final urlParams = _constructUrlParams();
-    final launchUri = Uri.parse('${_authorizationRequest.url}?$urlParams');
+    final urlCustomParams = _constructCustomUrlParams();
+    final launchUri =
+        Uri.parse('${_authorizationRequest.url}?$urlParams&$urlCustomParams');
     final controller = WebViewController();
     await controller.setNavigationDelegate(_navigationDelegate);
     await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
@@ -74,6 +76,9 @@ class RequestCode {
 
   String _constructUrlParams() =>
       _mapToQueryParams(_authorizationRequest.parameters);
+
+  String _constructCustomUrlParams() =>
+      _mapToQueryParams(_config.customParameters);
 
   String _mapToQueryParams(Map<String, String> params) {
     final queryParams = <String>[];
