@@ -1,8 +1,11 @@
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   @override
@@ -13,6 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'AAD OAuth Home'),
+      navigatorKey: navigatorKey,
     );
   }
 }
@@ -27,18 +31,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static final Config config = Config(
-    tenant: 'YOUR_TENANT_ID',
-    clientId: 'YOUR_CLIENT_ID',
-    scope: 'openid profile offline_access',
-    redirectUri: 'https://login.live.com/oauth20_desktop.srf',
-  );
+      tenant: 'YOUR_TENANT_ID',
+      clientId: 'YOUR_CLIENT_ID',
+      scope: 'openid profile offline_access',
+      navigatorKey: navigatorKey,
+      loader: SizedBox());
   final AadOAuth oauth = AadOAuth(config);
 
   @override
   Widget build(BuildContext context) {
-    // adjust window size for browser login
-    oauth.setWebViewScreenSizeFromMedia(MediaQuery.of(context));
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -53,11 +54,19 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ListTile(
             leading: Icon(Icons.launch),
-            title: Text('Login'),
+            title: Text('Login${kIsWeb ? ' (web popup)' : ''}'),
             onTap: () {
-              login();
+              login(false);
             },
           ),
+          if (kIsWeb)
+            ListTile(
+              leading: Icon(Icons.launch),
+              title: Text('Login (web redirect)'),
+              onTap: () {
+                login(true);
+              },
+            ),
           ListTile(
             leading: Icon(Icons.delete),
             title: Text('Logout'),
@@ -85,13 +94,17 @@ class _MyHomePageState extends State<MyHomePage> {
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
 
-  void login() async {
-    try {
-      await oauth.login();
-      var accessToken = await oauth.getAccessToken();
-      showMessage('Logged in successfully, your access token: $accessToken');
-    } catch (e) {
-      showError(e);
+  void login(bool redirect) async {
+    config.webUseRedirect = redirect;
+    final result = await oauth.login();
+    result.fold(
+      (l) => showError(l.toString()),
+      (r) => showMessage('Logged in successfully, your access token: $r'),
+    );
+    var accessToken = await oauth.getAccessToken();
+    if (accessToken != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(accessToken)));
     }
   }
 

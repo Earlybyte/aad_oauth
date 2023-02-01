@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -23,6 +25,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'AAD B2C Home'),
+      navigatorKey: navigatorKey,
     );
   }
 }
@@ -40,21 +43,23 @@ class _MyHomePageState extends State<MyHomePage> {
       tenant: 'YOUR_TENANT_NAME',
       clientId: 'YOUR_CLIENT_ID',
       scope: 'YOUR_CLIENT_ID offline_access',
-      redirectUri: 'https://login.live.com/oauth20_desktop.srf',
       clientSecret: 'YOUR_CLIENT_SECRET',
       isB2C: true,
+      navigatorKey: navigatorKey,
       policy: 'YOUR_USER_FLOW___USER_FLOW_A',
-      tokenIdentifier: 'UNIQUE IDENTIFIER A');
+      tokenIdentifier: 'UNIQUE IDENTIFIER A',
+      loader: SizedBox());
 
   static final Config configB2Cb = Config(
       tenant: 'YOUR_TENANT_NAME',
       clientId: 'YOUR_CLIENT_ID',
       scope: 'YOUR_CLIENT_ID offline_access',
-      redirectUri: 'https://login.live.com/oauth20_desktop.srf',
+      navigatorKey: navigatorKey,
       clientSecret: 'YOUR_CLIENT_SECRET',
       isB2C: true,
       policy: 'YOUR_USER_FLOW___USER_FLOW_B',
-      tokenIdentifier: 'UNIQUE IDENTIFIER B');
+      tokenIdentifier: 'UNIQUE IDENTIFIER B',
+      loader: SizedBox());
 
   //You can have as many B2C flows as you want
 
@@ -64,10 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // adjust window size for browser login
-
-    var media = MediaQuery.of(context);
-    oauthB2Ca.setWebViewScreenSizeFromMedia(media);
-    oauthB2Cb.setWebViewScreenSizeFromMedia(media);
 
     return Scaffold(
       appBar: AppBar(
@@ -137,12 +138,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void login(AadOAuth oAuth) async {
-    try {
-      await oAuth.login();
-      final accessToken = await oAuth.getAccessToken();
-      showMessage('Logged in successfully, your access token: $accessToken');
-    } catch (e) {
-      showError(e);
+    final result = await oAuth.login();
+    result.fold(
+      (l) => showError(l.toString()),
+      (r) => showMessage('Logged in successfully, your access token: $r'),
+    );
+    var accessToken = await oAuth.getAccessToken();
+    if (accessToken != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(accessToken)));
     }
   }
 

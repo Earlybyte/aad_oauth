@@ -1,63 +1,76 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
+
 import 'request/authorization_request.dart';
 import 'model/config.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class RequestCode {
-  final StreamController<String?> _onCodeListener = StreamController();
-  final FlutterWebviewPlugin _webView = FlutterWebviewPlugin();
   final Config _config;
   final AuthorizationRequest _authorizationRequest;
-
-  late Stream<String?> _onCodeStream;
+  final _redirectUriHost;
+  late NavigationDelegate _navigationDelegate;
+  String? _code;
 
   RequestCode(Config config)
       : _config = config,
-        _authorizationRequest = AuthorizationRequest(config) {
-    _onCodeStream = _onCodeListener.stream.asBroadcastStream();
-  }
-  Future<String?> requestCode() async {
-    String? code;
-    final urlParams = _constructUrlParams();
-
-    await _webView.launch(
-      '${_authorizationRequest.url}?$urlParams',
-      clearCookies: _authorizationRequest.clearCookies,
-      hidden: false,
-      rect: _config.screenSize,
-      userAgent: _config.userAgent,
+        _authorizationRequest = AuthorizationRequest(config),
+        _redirectUriHost = Uri.parse(config.redirectUri).host {
+    _navigationDelegate = NavigationDelegate(
+      onNavigationRequest: _onNavigationRequest,
     );
+  }
 
-    _webView.onUrlChanged.listen((String url) {
-      var uri = Uri.parse(url);
+  Future<String?> requestCode() async {
+    _code = null;
+
+    final urlParams = _constructUrlParams();
+    final launchUri = Uri.parse('${_authorizationRequest.url}?$urlParams');
+    final controller = WebViewController();
+    await controller.setNavigationDelegate(_navigationDelegate);
+    await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+
+    await controller.setBackgroundColor(Colors.transparent);
+    await controller.setUserAgent(_config.userAgent);
+    await controller.loadRequest(launchUri);
+
+    final webView = WebViewWidget(controller: controller);
+
+    await _config.navigatorKey.currentState!.push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+            body: SafeArea(
+          child: Stack(
+            children: [_config.loader, webView],
+          ),
+        )),
+      ),
+    );
+    return _code;
+  }
+
+  Future<NavigationDecision> _onNavigationRequest(
+      NavigationRequest request) async {
+    try {
+      var uri = Uri.parse(request.url);
 
       if (uri.queryParameters['error'] != null) {
-        _webView.close();
-        _onCodeListener.add(null);
+        _config.navigatorKey.currentState!.pop();
       }
 
-      if (uri.queryParameters['code'] != null) {
-        _webView.close();
-        _onCodeListener.add(uri.queryParameters['code']);
+      var checkHost = uri.host == _redirectUriHost;
+
+      if (uri.queryParameters['code'] != null && checkHost) {
+        _code = uri.queryParameters['code'];
+        _config.navigatorKey.currentState!.pop();
       }
-    });
-
-    code = await _onCode.first;
-    return code;
-  }
-
-  void sizeChanged() {
-    _webView.resize(_config.screenSize!);
+    } catch (_) {}
+    return NavigationDecision.navigate;
   }
 
   Future<void> clearCookies() async {
-    await _webView.launch('', hidden: true);
-    await _webView.cleanCookies();
-    await _webView.clearCache();
-    await _webView.close();
+    await WebViewCookieManager().clearCookies();
   }
-
-  Stream<String?> get _onCode => _onCodeStream;
 
   String _constructUrlParams() =>
       _mapToQueryParams(_authorizationRequest.parameters);

@@ -2,7 +2,7 @@ import 'package:aad_oauth/model/config.dart';
 
 class TokenRefreshRequestDetails {
   final String url;
-  final Map<String, String > params;
+  final Map<String, String> params;
   final Map<String, String> headers;
 
   TokenRefreshRequestDetails(Config config, String refreshToken)
@@ -16,7 +16,8 @@ class TokenRefreshRequestDetails {
         },
         headers = {
           'Accept': 'application/json',
-          'Content-Type': Config.contentType
+          'Content-Type': Config.contentType,
+          if (config.origin != null) 'Origin': config.origin!,
         } {
     if (config.clientSecret != null) {
       params.putIfAbsent('client_secret', () => config.clientSecret!);

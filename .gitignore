@@ -1,6 +1,7 @@
 .DS_Store
 .dart_tool/
 .idea/
+aad_oauth.iml
 
 .packages
 .pub/
@@ -11,3 +12,11 @@ ios/Flutter/Generated.xcconfig
 ios/Runner/GeneratedPluginRegistrant.*
 example_b2c/ios/Flutter/.last_build_id
 example/ios/Flutter/.last_build_id
+.vscode/launch.json
+.flutter-plugins
+.flutter-plugins-dependencies
+example_b2c/pubspec.lock
+example/pubspec.lock
+pubspec.lock
+example/ios/Podfile.lock
+example_b2c/ios/Podfile.lock
