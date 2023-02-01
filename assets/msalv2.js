@@ -175,11 +175,16 @@ var aadOauth = (function () {
     return authResult ? authResult.idToken : null;
   }
 
+  function isLogged() {
+    return getAccount() !== undefined;
+  }
+
   return {
     init: init,
     login: login,
     logout: logout,
     getIdToken: getIdToken,
     getAccessToken: getAccessToken,
+    isLogged: isLogged,
   };
 })();
