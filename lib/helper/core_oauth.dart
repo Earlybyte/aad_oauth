@@ -45,6 +45,9 @@ class MockCoreOAuth extends CoreOAuth {
   Future<void> logout() async {}
 
   @override
+  Future<bool> get isLogged async => true;
+
+  @override
   Future<String?> getAccessToken() async => mockAccessToken;
 
   @override
