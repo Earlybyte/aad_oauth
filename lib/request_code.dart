@@ -25,9 +25,7 @@ class RequestCode {
     _code = null;
 
     final urlParams = _constructUrlParams();
-    final urlCustomParams = _constructCustomUrlParams();
-    final launchUri =
-        Uri.parse('${_authorizationRequest.url}?$urlParams&$urlCustomParams');
+    final launchUri = Uri.parse('${_authorizationRequest.url}?$urlParams');
     final controller = WebViewController();
     await controller.setNavigationDelegate(_navigationDelegate);
     await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
@@ -74,15 +72,17 @@ class RequestCode {
     await WebViewCookieManager().clearCookies();
   }
 
-  String _constructUrlParams() =>
-      _mapToQueryParams(_authorizationRequest.parameters);
+  String _constructUrlParams() => _mapToQueryParams(
+      _authorizationRequest.parameters, _config.customParameters);
 
-  String _constructCustomUrlParams() =>
-      _mapToQueryParams(_config.customParameters);
-
-  String _mapToQueryParams(Map<String, String> params) {
+  String _mapToQueryParams(
+      Map<String, String> params, Map<String, String> customParams) {
     final queryParams = <String>[];
+
     params.forEach((String key, String value) =>
+        queryParams.add('$key=${Uri.encodeQueryComponent(value)}'));
+
+    customParams.forEach((String key, String value) =>
         queryParams.add('$key=${Uri.encodeQueryComponent(value)}'));
     return queryParams.join('&');
   }

@@ -4,6 +4,7 @@
 library msauth;
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/failure.dart';
@@ -59,7 +60,8 @@ class WebOAuth extends CoreOAuth {
         domainHint: config.domainHint,
         codeVerifier: config.codeVerifier,
         authorizationUrl: config.authorizationUrl,
-        tokenUrl: config.tokenUrl));
+        tokenUrl: config.tokenUrl,
+        customParameters: jsonEncode(config.customParameters)));
   }
 
   @override

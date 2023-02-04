@@ -129,9 +129,9 @@ class Config {
   /// Origin header parameter for [TokenRequestDetails] and [TokenRefreshRequestDetails]
   String? origin;
 
-  // Support for custom url parameters for dynamic UI support
-  // View docs on Azure B2C:
-  // https://learn.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview#dynamic-ui-customization
+  /// Support for custom url parameters for dynamic UI support
+  /// View docs on Azure B2C:
+  /// https://learn.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview#dynamic-ui-customization
   final Map<String, String> customParameters;
 
   /// Determine an appropriate redirect URI for AAD authentication.
