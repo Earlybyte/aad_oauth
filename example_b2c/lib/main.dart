@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             title: Text(
               'AzureAD B2C A',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           ListTile(
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             title: Text(
               'AzureAD B2C B',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           ListTile(
@@ -134,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             title: Text(
               'AzureAD B2C C',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           ListTile(
