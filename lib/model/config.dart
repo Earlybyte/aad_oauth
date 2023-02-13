@@ -129,6 +129,11 @@ class Config {
   /// Origin header parameter for [TokenRequestDetails] and [TokenRefreshRequestDetails]
   String? origin;
 
+  /// Support for custom url parameters for dynamic UI support
+  /// View docs on Azure B2C:
+  /// https://learn.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview#dynamic-ui-customization
+  final Map<String, String> customParameters;
+
   /// Determine an appropriate redirect URI for AAD authentication.
   /// On web, it is the location that the application is being served from.
   /// On mobile, it is https://login.live.com/oauth20_desktop.srf
@@ -176,6 +181,7 @@ class Config {
     AndroidOptions? aOptions,
     required this.navigatorKey,
     this.origin,
+    this.customParameters = const {},
   })  : authorizationUrl = isB2C
             ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize',

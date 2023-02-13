@@ -7,8 +7,8 @@ var aadOauth = (function () {
 
   const tokenRequest = {
     scopes: null,
-    // Hardcoded?
     prompt: null,
+    extraQueryParameters: {}
   };
 
   // Initialise the myMSALObj for the given client, authority and scope
@@ -32,6 +32,7 @@ var aadOauth = (function () {
       tokenRequest.scopes = config.scope;
     }
 
+    tokenRequest.extraQueryParameters = JSON.parse(config.customParameters);
     tokenRequest.prompt = config.prompt;
 
     myMSALObj = new msal.PublicClientApplication(msalConfig);
@@ -88,7 +89,8 @@ var aadOauth = (function () {
         const silentAuthResult = await myMSALObj.acquireTokenSilent({
           scopes: tokenRequest.scopes,
           prompt: "none",
-          account: account
+          account: account,
+          extraQueryParameters: tokenRequest.extraQueryParameters
         });
 
         authResult = silentAuthResult;
@@ -106,15 +108,19 @@ var aadOauth = (function () {
       myMSALObj.acquireTokenRedirect({
         scopes: tokenRequest.scopes,
         prompt: tokenRequest.prompt,
-        account: account
+        account: account,
+        extraQueryParameters: tokenRequest.extraQueryParameters
       });
     } else {
       // Sign in with popup
       try {
+
+        
         const interactiveAuthResult = await myMSALObj.loginPopup({
           scopes: tokenRequest.scopes,
           prompt: tokenRequest.prompt,
-          account: account
+          account: account,
+          extraQueryParameters: tokenRequest.extraQueryParameters
         });
 
         authResult = interactiveAuthResult;
