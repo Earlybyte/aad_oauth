@@ -173,11 +173,51 @@ var aadOauth = (function () {
       .catch(onError);
   }
 
-  function getAccessToken() {
+  async function getAccessToken() {
+    const account = getAccount();
+
+    if (account !== null && authResult === null) {
+      try {
+        // Silent acquisition only works if we the access token is either
+        // within its lifetime, or the refresh token can successfully be
+        // used to refresh it. This will throw if the access token can't
+        // be acquired.
+        const silentAuthResult = await myMSALObj.acquireTokenSilent({
+          scopes: tokenRequest.scopes,
+          prompt: "none",
+          account: account,
+          extraQueryParameters: tokenRequest.extraQueryParameters
+        });
+
+        authResult = silentAuthResult
+      } catch (_) {
+      }
+    }
+
     return authResult ? authResult.accessToken : null;
   }
 
-  function getIdToken() {
+  async function getIdToken() {
+    const account = getAccount();
+
+    if (account !== null && authResult === null) {
+      try {
+        // Silent acquisition only works if we the access token is either
+        // within its lifetime, or the refresh token can successfully be
+        // used to refresh it. This will throw if the access token can't
+        // be acquired.
+        const silentAuthResult = await myMSALObj.acquireTokenSilent({
+          scopes: tokenRequest.scopes,
+          prompt: "none",
+          account: account,
+          extraQueryParameters: tokenRequest.extraQueryParameters
+        });
+
+        authResult = silentAuthResult
+      } catch (_) {
+      }
+    }
+
     return authResult ? authResult.idToken : null;
   }
 
