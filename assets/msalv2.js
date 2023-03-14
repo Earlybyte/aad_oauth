@@ -42,6 +42,35 @@ var aadOauth = (function () {
     redirectHandlerTask = myMSALObj.handleRedirectPromise();
   }
 
+  // Tries to silently acquire a token. Will return null if a token
+  // could not be acquired or if no cached account credentials exist.
+  // Will return the authentication result on success and update the
+  // global authResult variable.
+  async function silentlyAcquireToken() {
+    const account = getAccount();
+
+    if (account !== null && authResult === null) {
+      try {
+        // Silent acquisition only works if the access token is either
+        // within its lifetime, or the refresh token can successfully be
+        // used to refresh it. This will throw if the access token can't
+        // be acquired.
+        const silentAuthResult = await myMSALObj.acquireTokenSilent({
+          scopes: tokenRequest.scopes,
+          prompt: "none",
+          account: account,
+          extraQueryParameters: tokenRequest.extraQueryParameters
+        });
+
+        authResult = silentAuthResult
+      } catch (error) {
+        console.log('Unable to silently acquire a new token: ' + error.message)
+      }
+    }
+
+    return authResult
+  }
+
   /// Authorize user via refresh token or web gui if necessary.
   ///
   /// Setting [refreshIfAvailable] to [true] should attempt to re-authenticate
@@ -79,29 +108,12 @@ var aadOauth = (function () {
 
     // Try to sign in silently, assuming we have already signed in and have
     // a cached access token
-    const account = getAccount();
-    if (account !== null) {
-      try {
-        // Silent acquisition only works if we the access token is either
-        // within its lifetime, or the refresh token can successfully be
-        // used to refresh it. This will throw if the access token can't
-        // be acquired.
-        const silentAuthResult = await myMSALObj.acquireTokenSilent({
-          scopes: tokenRequest.scopes,
-          prompt: "none",
-          account: account,
-          extraQueryParameters: tokenRequest.extraQueryParameters
-        });
+    await silentlyAcquireToken()
 
-        authResult = silentAuthResult;
-
-        // Skip interactive login
-        onSuccess(authResult.accessToken ?? null);
-
-        return;
-      } catch (error) {
-        console.log(error.message)
-      }
+    if(authResult != null) {
+      // Skip interactive login
+      onSuccess(authResult.accessToken ?? null);
+      return
     }
 
     if (useRedirect) {
@@ -113,9 +125,9 @@ var aadOauth = (function () {
       });
     } else {
       // Sign in with popup
-      try {
-
-        
+      const account = getAccount()
+      
+      try {        
         const interactiveAuthResult = await myMSALObj.loginPopup({
           scopes: tokenRequest.scopes,
           prompt: tokenRequest.prompt,
@@ -174,50 +186,12 @@ var aadOauth = (function () {
   }
 
   async function getAccessToken() {
-    const account = getAccount();
-
-    if (account !== null && authResult === null) {
-      try {
-        // Silent acquisition only works if we the access token is either
-        // within its lifetime, or the refresh token can successfully be
-        // used to refresh it. This will throw if the access token can't
-        // be acquired.
-        const silentAuthResult = await myMSALObj.acquireTokenSilent({
-          scopes: tokenRequest.scopes,
-          prompt: "none",
-          account: account,
-          extraQueryParameters: tokenRequest.extraQueryParameters
-        });
-
-        authResult = silentAuthResult
-      } catch (_) {
-      }
-    }
-
+    await silentlyAcquireToken()
     return authResult ? authResult.accessToken : null;
   }
 
   async function getIdToken() {
-    const account = getAccount();
-
-    if (account !== null && authResult === null) {
-      try {
-        // Silent acquisition only works if we the access token is either
-        // within its lifetime, or the refresh token can successfully be
-        // used to refresh it. This will throw if the access token can't
-        // be acquired.
-        const silentAuthResult = await myMSALObj.acquireTokenSilent({
-          scopes: tokenRequest.scopes,
-          prompt: "none",
-          account: account,
-          extraQueryParameters: tokenRequest.extraQueryParameters
-        });
-
-        authResult = silentAuthResult
-      } catch (_) {
-      }
-    }
-
+    await silentlyAcquireToken()
     return authResult ? authResult.idToken : null;
   }
 
