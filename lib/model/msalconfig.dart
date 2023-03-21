@@ -138,5 +138,6 @@ class MsalConfig {
       String? codeVerifier,
       String? authorizationUrl,
       String? tokenUrl,
-      String? customParameters});
+      String? customParameters,
+      String? postLogoutRedirectUri});
 }
