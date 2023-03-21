@@ -116,6 +116,8 @@ var aadOauth = (function () {
       return
     }
 
+    const account = getAccount()
+      
     if (useRedirect) {
       myMSALObj.acquireTokenRedirect({
         scopes: tokenRequest.scopes,
@@ -125,8 +127,6 @@ var aadOauth = (function () {
       });
     } else {
       // Sign in with popup
-      const account = getAccount()
-      
       try {        
         const interactiveAuthResult = await myMSALObj.loginPopup({
           scopes: tokenRequest.scopes,
