@@ -19,15 +19,15 @@ var aadOauth = (function () {
          authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
          redirectUri: config.redirectUri,
      };
-     var postLog = {
-         postLogoutRedirectUri: config?.postLogoutRedirectUri,
+     var postLogoutRedirectUri = {
+         postLogoutRedirectUri: config.postLogoutRedirectUri,
      };
      var msalConfig = {
          auth: config?.postLogoutRedirectUri == null ? {
              ...authData,
          } : {
              ...authData,
-             ...postLog,
+             ...postLogoutRedirectUri,
          },
          cache: {
              cacheLocation: "localStorage",
