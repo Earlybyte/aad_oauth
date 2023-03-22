@@ -12,36 +12,44 @@ var aadOauth = (function () {
   };
 
   // Initialise the myMSALObj for the given client, authority and scope
-  function init(config) {
-    // TODO: Add support for other MSAL configuration
-    var msalConfig = {
-      auth: {
-        clientId: config.clientId,
-        authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
-        redirectUri: config.redirectUri,
-        postLogoutRedirectUri: config.postLogoutRedirectUri
-      },
-      cache: {
-        cacheLocation: "localStorage",
-        storeAuthStateInCookie: false,
-      },
-    };
+ function init(config) {
+     // TODO: Add support for other MSAL configuration
+     var authData = {
+         clientId: config.clientId,
+         authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
+         redirectUri: config.redirectUri,
+     };
+     var postLog = {
+         postLogoutRedirectUri: config?.postLogoutRedirectUri,
+     };
+     var msalConfig = {
+         auth: config?.postLogoutRedirectUri == null ? {
+             ...authData,
+         } : {
+             ...authData,
+             ...postLog,
+         },
+         cache: {
+             cacheLocation: "localStorage",
+             storeAuthStateInCookie: false,
+         },
+     };
 
-    if (typeof config.scope === "string") {
-      tokenRequest.scopes = config.scope.split(" ");
-    } else {
-      tokenRequest.scopes = config.scope;
-    }
+     if (typeof config.scope === "string") {
+         tokenRequest.scopes = config.scope.split(" ");
+     } else {
+         tokenRequest.scopes = config.scope;
+     }
 
-    tokenRequest.extraQueryParameters = JSON.parse(config.customParameters);
-    tokenRequest.prompt = config.prompt;
+     tokenRequest.extraQueryParameters = JSON.parse(config.customParameters);
+     tokenRequest.prompt = config.prompt;
 
-    myMSALObj = new msal.PublicClientApplication(msalConfig);
-    // Register Callbacks for Redirect flow and record the task so we
-    // can await its completion in the login API
+     myMSALObj = new msal.PublicClientApplication(msalConfig);
+     // Register Callbacks for Redirect flow and record the task so we
+     // can await its completion in the login API
 
-    redirectHandlerTask = myMSALObj.handleRedirectPromise();
-  }
+     redirectHandlerTask = myMSALObj.handleRedirectPromise();
+ }
 
   /// Authorize user via refresh token or web gui if necessary.
   ///

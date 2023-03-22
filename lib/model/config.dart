@@ -139,7 +139,7 @@ class Config {
   /// By this we can verify the user is logged out successfully
   /// View docs:
   /// https://learn.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-sign-in?tabs=javascript2#tabpanel_4_javascript2
-  String postLogoutRedirectUri;
+  String? postLogoutRedirectUri;
 
   /// Determine an appropriate redirect URI for AAD authentication.
   /// On web, it is the location that the application is being served from.
@@ -189,7 +189,7 @@ class Config {
     required this.navigatorKey,
     this.origin,
     this.customParameters = const {},
-    required String postLogoutRedirectUri,
+    String? postLogoutRedirectUri,
   })  : authorizationUrl = isB2C
             ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize',
