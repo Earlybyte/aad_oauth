@@ -39,6 +39,7 @@ Afterwards you must create a navigatorKey and initialize the library as follow:
     webUseRedirect: true, // default is false - on web only, forces a redirect flow instead of popup auth
     //Optional parameter: Centered CircularProgressIndicator while rendering web page in WebView
     loader: Center(child: CircularProgressIndicator()),
+    postLogoutRedirectUri: 'http://your_base_url/logout', //optional
   );
 
   final AadOAuth oauth = new AadOAuth(config);
