@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             title: Text(
               'AzureAD OAuth',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           ListTile(

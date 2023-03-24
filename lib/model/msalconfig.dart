@@ -110,6 +110,11 @@ class MsalConfig {
   /// Azure Active Directory B2C provides business-to-customer identity as a service.
   bool? isB2C;
 
+  /// Support for custom url parameters for dynamic UI support
+  /// View docs on Azure B2C:
+  /// https://learn.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview#dynamic-ui-customization
+  String? customParameters;
+
   /// Azure AD OAuth Configuration. Look at individual fields for description.
   external factory MsalConfig.construct(
       {String? tenant,
@@ -132,5 +137,7 @@ class MsalConfig {
       String? domainHint,
       String? codeVerifier,
       String? authorizationUrl,
-      String? tokenUrl});
+      String? tokenUrl,
+      String? customParameters,
+      String? postLogoutRedirectUri});
 }

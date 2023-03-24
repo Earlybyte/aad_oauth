@@ -4,6 +4,7 @@
 library msauth;
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/failure.dart';
@@ -11,6 +12,7 @@ import 'package:aad_oauth/model/msalconfig.dart';
 import 'package:aad_oauth/model/token.dart';
 import 'package:dartz/dartz.dart';
 import 'package:js/js.dart';
+import 'package:js/js_util.dart';
 
 @JS('init')
 external void jsInit(MsalConfig config);
@@ -30,10 +32,10 @@ external void jsLogout(
 );
 
 @JS('getAccessToken')
-external String? jsGetAccessToken();
+external Object jsGetAccessToken();
 
 @JS('getIdToken')
-external String? jsGetIdToken();
+external Object jsGetIdToken();
 
 @JS('isLogged')
 external bool jsIsLogged();
@@ -62,17 +64,20 @@ class WebOAuth extends CoreOAuth {
         domainHint: config.domainHint,
         codeVerifier: config.codeVerifier,
         authorizationUrl: config.authorizationUrl,
-        tokenUrl: config.tokenUrl));
+        tokenUrl: config.tokenUrl,
+        customParameters: jsonEncode(config.customParameters),
+        postLogoutRedirectUri: config.postLogoutRedirectUri
+    ));
   }
 
   @override
   Future<String?> getAccessToken() async {
-    return jsGetAccessToken();
+    return promiseToFuture(jsGetAccessToken());
   }
 
   @override
   Future<String?> getIdToken() async {
-    return jsGetIdToken();
+    return promiseToFuture(jsGetIdToken());
   }
 
   @override

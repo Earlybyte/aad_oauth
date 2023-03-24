@@ -7,38 +7,77 @@ var aadOauth = (function () {
 
   const tokenRequest = {
     scopes: null,
-    // Hardcoded?
     prompt: null,
+    extraQueryParameters: {}
   };
 
   // Initialise the myMSALObj for the given client, authority and scope
-  function init(config) {
-    // TODO: Add support for other MSAL configuration
-    var msalConfig = {
-      auth: {
-        clientId: config.clientId,
-        authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
-        redirectUri: config.redirectUri,
-      },
-      cache: {
-        cacheLocation: "localStorage",
-        storeAuthStateInCookie: false,
-      },
-    };
+ function init(config) {
+     // TODO: Add support for other MSAL configuration
+     var authData = {
+         clientId: config.clientId,
+         authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
+         redirectUri: config.redirectUri,
+     };
+     var postLogoutRedirectUri = {
+         postLogoutRedirectUri: config.postLogoutRedirectUri,
+     };
+     var msalConfig = {
+         auth: config?.postLogoutRedirectUri == null ? {
+             ...authData,
+         } : {
+             ...authData,
+             ...postLogoutRedirectUri,
+         },
+         cache: {
+             cacheLocation: "localStorage",
+             storeAuthStateInCookie: false,
+         },
+     };
 
-    if (typeof config.scope === "string") {
-      tokenRequest.scopes = config.scope.split(" ");
-    } else {
-      tokenRequest.scopes = config.scope;
+     if (typeof config.scope === "string") {
+         tokenRequest.scopes = config.scope.split(" ");
+     } else {
+         tokenRequest.scopes = config.scope;
+     }
+
+     tokenRequest.extraQueryParameters = JSON.parse(config.customParameters);
+     tokenRequest.prompt = config.prompt;
+
+     myMSALObj = new msal.PublicClientApplication(msalConfig);
+     // Register Callbacks for Redirect flow and record the task so we
+     // can await its completion in the login API
+
+     redirectHandlerTask = myMSALObj.handleRedirectPromise();
+ }
+
+  // Tries to silently acquire a token. Will return null if a token
+  // could not be acquired or if no cached account credentials exist.
+  // Will return the authentication result on success and update the
+  // global authResult variable.
+  async function silentlyAcquireToken() {
+    const account = getAccount();
+
+    if (account !== null && authResult === null) {
+      try {
+        // Silent acquisition only works if the access token is either
+        // within its lifetime, or the refresh token can successfully be
+        // used to refresh it. This will throw if the access token can't
+        // be acquired.
+        const silentAuthResult = await myMSALObj.acquireTokenSilent({
+          scopes: tokenRequest.scopes,
+          prompt: "none",
+          account: account,
+          extraQueryParameters: tokenRequest.extraQueryParameters
+        });
+
+        authResult = silentAuthResult
+      } catch (error) {
+        console.log('Unable to silently acquire a new token: ' + error.message)
+      }
     }
 
-    tokenRequest.prompt = config.prompt;
-
-    myMSALObj = new msal.PublicClientApplication(msalConfig);
-    // Register Callbacks for Redirect flow and record the task so we
-    // can await its completion in the login API
-
-    redirectHandlerTask = myMSALObj.handleRedirectPromise();
+    return authResult
   }
 
   /// Authorize user via refresh token or web gui if necessary.
@@ -78,43 +117,31 @@ var aadOauth = (function () {
 
     // Try to sign in silently, assuming we have already signed in and have
     // a cached access token
-    const account = getAccount();
-    if (account !== null) {
-      try {
-        // Silent acquisition only works if we the access token is either
-        // within its lifetime, or the refresh token can successfully be
-        // used to refresh it. This will throw if the access token can't
-        // be acquired.
-        const silentAuthResult = await myMSALObj.acquireTokenSilent({
-          scopes: tokenRequest.scopes,
-          prompt: "none",
-          account: account
-        });
+    await silentlyAcquireToken()
 
-        authResult = silentAuthResult;
-
-        // Skip interactive login
-        onSuccess(authResult.accessToken ?? null);
-
-        return;
-      } catch (error) {
-        console.log(error.message)
-      }
+    if(authResult != null) {
+      // Skip interactive login
+      onSuccess(authResult.accessToken ?? null);
+      return
     }
 
+    const account = getAccount()
+      
     if (useRedirect) {
       myMSALObj.acquireTokenRedirect({
         scopes: tokenRequest.scopes,
         prompt: tokenRequest.prompt,
-        account: account
+        account: account,
+        extraQueryParameters: tokenRequest.extraQueryParameters
       });
     } else {
       // Sign in with popup
-      try {
+      try {        
         const interactiveAuthResult = await myMSALObj.loginPopup({
           scopes: tokenRequest.scopes,
           prompt: tokenRequest.prompt,
-          account: account
+          account: account,
+          extraQueryParameters: tokenRequest.extraQueryParameters
         });
 
         authResult = interactiveAuthResult;
@@ -167,11 +194,13 @@ var aadOauth = (function () {
       .catch(onError);
   }
 
-  function getAccessToken() {
+  async function getAccessToken() {
+    await silentlyAcquireToken()
     return authResult ? authResult.accessToken : null;
   }
 
-  function getIdToken() {
+  async function getIdToken() {
+    await silentlyAcquireToken()
     return authResult ? authResult.idToken : null;
   }
 

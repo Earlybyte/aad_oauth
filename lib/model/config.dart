@@ -129,6 +129,18 @@ class Config {
   /// Origin header parameter for [TokenRequestDetails] and [TokenRefreshRequestDetails]
   String? origin;
 
+  /// Support for custom url parameters for dynamic UI support
+  /// View docs on Azure B2C:
+  /// https://learn.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview#dynamic-ui-customization
+  final Map<String, String> customParameters;
+
+  /// Sign-out with a redirect
+  /// On Azure logout process, it'll redirect the user to this url
+  /// By this we can verify the user is logged out successfully
+  /// View docs:
+  /// https://learn.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-sign-in?tabs=javascript2#tabpanel_4_javascript2
+  String? postLogoutRedirectUri;
+
   /// Determine an appropriate redirect URI for AAD authentication.
   /// On web, it is the location that the application is being served from.
   /// On mobile, it is https://login.live.com/oauth20_desktop.srf
@@ -176,12 +188,15 @@ class Config {
     AndroidOptions? aOptions,
     required this.navigatorKey,
     this.origin,
+    this.customParameters = const {},
+    String? postLogoutRedirectUri,
   })  : authorizationUrl = isB2C
             ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize',
         tokenUrl = isB2C
             ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token',
+        postLogoutRedirectUri = postLogoutRedirectUri,
         aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
         redirectUri = redirectUri ?? getDefaultRedirectUri();
 }
