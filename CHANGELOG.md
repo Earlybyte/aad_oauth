@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-- Add `isLogged` getter support.
+## [0.4.3] - 20230327
+
+- Adding postLogoutRedirectUri - Sign-out with a redirect https://github.com/Earlybyte/aad_oauth/pull/217
+- Update flutter_secure_storage to 8.0.0 https://github.com/Earlybyte/aad_oauth/pull/216
+- Refresh authResult from cache in getAccessToken and getIdToken https://github.com/Earlybyte/aad_oauth/pull/215
+- Add `hasCachedAccountInformation` getter support https://github.com/Earlybyte/aad_oauth/pull/210
+- Custom parameters to support dynamic UI customization for B2C custom policies https://github.com/Earlybyte/aad_oauth/pull/207
 
 ## [0.4.2] - 20230124
 

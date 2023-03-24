@@ -56,7 +56,7 @@ class MobileOAuth extends CoreOAuth {
   }
 
   @override
-  Future<bool> get isLogged async =>
+  Future<bool> get hasCachedAccountInformation async =>
       (await _authStorage.loadTokenFromCache()).accessToken != null;
 
   /// Authorize user via refresh token or web gui if necessary.
