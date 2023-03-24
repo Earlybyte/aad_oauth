@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add `isLogged` getter support.
+
 ## [0.4.2] - 20230124
 
 - Add MockCoreOAuth for testing https://github.com/Earlybyte/aad_oauth/pull/185.

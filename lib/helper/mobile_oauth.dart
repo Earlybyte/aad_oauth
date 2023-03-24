@@ -55,6 +55,10 @@ class MobileOAuth extends CoreOAuth {
     await _requestCode.clearCookies();
   }
 
+  @override
+  Future<bool> get isLogged async =>
+      (await _authStorage.loadTokenFromCache()).accessToken != null;
+
   /// Authorize user via refresh token or web gui if necessary.
   ///
   /// Setting [refreshIfAvailable] to [true] will attempt to re-authenticate

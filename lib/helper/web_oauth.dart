@@ -37,6 +37,9 @@ external Object jsGetAccessToken();
 @JS('getIdToken')
 external Object jsGetIdToken();
 
+@JS('isLogged')
+external bool jsIsLogged();
+
 class WebOAuth extends CoreOAuth {
   final Config config;
   WebOAuth(this.config) {
@@ -76,6 +79,9 @@ class WebOAuth extends CoreOAuth {
   Future<String?> getIdToken() async {
     return promiseToFuture(jsGetIdToken());
   }
+
+  @override
+  Future<bool> get isLogged => Future<bool>.value(jsIsLogged());
 
   @override
   Future<Either<Failure, Token>> login(

@@ -19,6 +19,8 @@ class CoreOAuth {
   Future<void> logout() async =>
       throw UnsupportedFailure(ErrorType.Unsupported, 'Unsupported logout');
 
+  Future<bool> get isLogged async => false;
+
   Future<String?> getAccessToken() async => throw UnsupportedFailure(
       ErrorType.Unsupported, 'Unsupported getAccessToken');
 
@@ -41,6 +43,9 @@ class MockCoreOAuth extends CoreOAuth {
 
   @override
   Future<void> logout() async {}
+
+  @override
+  Future<bool> get isLogged async => true;
 
   @override
   Future<String?> getAccessToken() async => mockAccessToken;
