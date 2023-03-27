@@ -5,6 +5,7 @@ library msauth;
 
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/failure.dart';
@@ -37,8 +38,8 @@ external Object jsGetAccessToken();
 @JS('getIdToken')
 external Object jsGetIdToken();
 
-@JS('isLogged')
-external bool jsIsLogged();
+@JS('hasCachedAccountInformation')
+external bool jsHasCachedAccountInformation();
 
 class WebOAuth extends CoreOAuth {
   final Config config;
@@ -66,8 +67,7 @@ class WebOAuth extends CoreOAuth {
         authorizationUrl: config.authorizationUrl,
         tokenUrl: config.tokenUrl,
         customParameters: jsonEncode(config.customParameters),
-        postLogoutRedirectUri: config.postLogoutRedirectUri
-    ));
+        postLogoutRedirectUri: config.postLogoutRedirectUri));
   }
 
   @override
@@ -81,7 +81,8 @@ class WebOAuth extends CoreOAuth {
   }
 
   @override
-  Future<bool> get isLogged => Future<bool>.value(jsIsLogged());
+  Future<bool> get hasCachedAccountInformation =>
+      Future<bool>.value(jsHasCachedAccountInformation());
 
   @override
   Future<Either<Failure, Token>> login(

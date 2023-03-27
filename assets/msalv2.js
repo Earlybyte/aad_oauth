@@ -204,8 +204,8 @@ var aadOauth = (function () {
     return authResult ? authResult.idToken : null;
   }
 
-  function isLogged() {
-    return getAccount() !== undefined;
+  function hasCachedAccountInformation() {
+    return getAccount() != null;
   }
 
   return {
@@ -214,6 +214,6 @@ var aadOauth = (function () {
     logout: logout,
     getIdToken: getIdToken,
     getAccessToken: getAccessToken,
-    isLogged: isLogged,
+    hasCachedAccountInformation: hasCachedAccountInformation,
   };
 })();
