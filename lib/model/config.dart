@@ -123,6 +123,12 @@ class Config {
   /// android storage options for shared preferences - defaults to encrypting shared prefs
   AndroidOptions aOptions;
 
+  /// Cache location used when authenticating with a web client.
+  /// "localStorage" - Local browser storage (default)
+  /// "sessionStorage" - Session context
+  /// "memoryStorage" - Memory only
+  String? cacheLocation;
+
   /// Loader Widget (before load web page)
   Widget loader;
 
@@ -186,6 +192,7 @@ class Config {
     this.isStub = false,
     this.loader = const SizedBox(),
     AndroidOptions? aOptions,
+    this.cacheLocation,
     required this.navigatorKey,
     this.origin,
     this.customParameters = const {},
