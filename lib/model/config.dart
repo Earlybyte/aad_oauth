@@ -1,3 +1,4 @@
+import 'package:aad_oauth/model/cache_location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -124,10 +125,10 @@ class Config {
   AndroidOptions aOptions;
 
   /// Cache location used when authenticating with a web client.
-  /// "localStorage" - Local browser storage (default)
-  /// "sessionStorage" - Session context
-  /// "memoryStorage" - Memory only
-  String? cacheLocation;
+  /// "CacheLocation.localStorage" - Local browser storage (default)
+  /// "CacheLocation.sessionStorage" - Session context
+  /// "CacheLocation.memoryStorage" - Memory only
+  CacheLocation cacheLocation;
 
   /// Loader Widget (before load web page)
   Widget loader;
@@ -192,7 +193,7 @@ class Config {
     this.isStub = false,
     this.loader = const SizedBox(),
     AndroidOptions? aOptions,
-    this.cacheLocation,
+    CacheLocation? cacheLocation,
     required this.navigatorKey,
     this.origin,
     this.customParameters = const {},
@@ -205,5 +206,6 @@ class Config {
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token',
         postLogoutRedirectUri = postLogoutRedirectUri,
         aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
+        cacheLocation = cacheLocation ?? CacheLocation.localStorage,
         redirectUri = redirectUri ?? getDefaultRedirectUri();
 }
