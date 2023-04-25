@@ -66,6 +66,7 @@ class WebOAuth extends CoreOAuth {
         codeVerifier: config.codeVerifier,
         authorizationUrl: config.authorizationUrl,
         tokenUrl: config.tokenUrl,
+        cacheLocation: config.cacheLocation.value,
         customParameters: jsonEncode(config.customParameters),
         postLogoutRedirectUri: config.postLogoutRedirectUri));
   }

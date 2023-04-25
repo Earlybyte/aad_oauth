@@ -30,7 +30,7 @@ var aadOauth = (function () {
              ...postLogoutRedirectUri,
          },
          cache: {
-             cacheLocation: "localStorage",
+             cacheLocation: config.cacheLocation,
              storeAuthStateInCookie: false,
          },
      };
