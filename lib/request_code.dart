@@ -58,7 +58,8 @@ class RequestCode {
     return _code;
   }
 
-  Future<NavigationDecision> _onNavigationRequest(NavigationRequest request) async {
+  Future<NavigationDecision> _onNavigationRequest(
+      NavigationRequest request) async {
     try {
       var uri = Uri.parse(request.url);
 
@@ -80,14 +81,18 @@ class RequestCode {
     await WebViewCookieManager().clearCookies();
   }
 
-  String _constructUrlParams() => _mapToQueryParams(_authorizationRequest.parameters, _config.customParameters);
+  String _constructUrlParams() => _mapToQueryParams(
+      _authorizationRequest.parameters, _config.customParameters);
 
-  String _mapToQueryParams(Map<String, String> params, Map<String, String> customParams) {
+  String _mapToQueryParams(
+      Map<String, String> params, Map<String, String> customParams) {
     final queryParams = <String>[];
 
-    params.forEach((String key, String value) => queryParams.add('$key=${Uri.encodeQueryComponent(value)}'));
+    params.forEach((String key, String value) =>
+        queryParams.add('$key=${Uri.encodeQueryComponent(value)}'));
 
-    customParams.forEach((String key, String value) => queryParams.add('$key=${Uri.encodeQueryComponent(value)}'));
+    customParams.forEach((String key, String value) =>
+        queryParams.add('$key=${Uri.encodeQueryComponent(value)}'));
     return queryParams.join('&');
   }
 }
