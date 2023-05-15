@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- Add cacheLocation configuration https://github.com/Earlybyte/aad_oauth/pull/220 (by @tigloo)
+- Always use myMSALObj.acquireTokenSilent to get fresh token https://github.com/Earlybyte/aad_oauth/pull/226 (by @ruicraveiro)
+- Added custom domain url with tenant Id for B2C with Azure Front Door https://github.com/Earlybyte/aad_oauth/pull/227 (by @jochemvanweelde)
+- Check navigator state https://github.com/Earlybyte/aad_oauth/pull/229 (by @easazade)
+
 ## [0.4.3] - 20230327
 
 - Adding postLogoutRedirectUri - Sign-out with a redirect https://github.com/Earlybyte/aad_oauth/pull/217
