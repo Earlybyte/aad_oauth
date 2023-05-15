@@ -57,27 +57,28 @@ var aadOauth = (function () {
   // global authResult variable.
   async function silentlyAcquireToken() {
     const account = getAccount();
-
-    if (account !== null && authResult === null) {
-      try {
-        // Silent acquisition only works if the access token is either
-        // within its lifetime, or the refresh token can successfully be
-        // used to refresh it. This will throw if the access token can't
-        // be acquired.
-        const silentAuthResult = await myMSALObj.acquireTokenSilent({
-          scopes: tokenRequest.scopes,
-          prompt: "none",
-          account: account,
-          extraQueryParameters: tokenRequest.extraQueryParameters
-        });
-
-        authResult = silentAuthResult
-      } catch (error) {
-        console.log('Unable to silently acquire a new token: ' + error.message)
-      }
+    if (account == null) {
+      return null;
     }
 
-    return authResult
+    try {
+      // Silent acquisition only works if the access token is either
+      // within its lifetime, or the refresh token can successfully be
+      // used to refresh it. This will throw if the access token can't
+      // be acquired.
+      const silentAuthResult = await myMSALObj.acquireTokenSilent({
+        scopes: tokenRequest.scopes,
+        prompt: "none",
+        account: account,
+        extraQueryParameters: tokenRequest.extraQueryParameters
+      });
+
+      return  authResult = silentAuthResult;
+    } catch (error) {
+      console.log('Unable to silently acquire a new token: ' + error.message)
+      return null;
+    }
+
   }
 
   /// Authorize user via refresh token or web gui if necessary.
@@ -195,13 +196,13 @@ var aadOauth = (function () {
   }
 
   async function getAccessToken() {
-    await silentlyAcquireToken()
-    return authResult ? authResult.accessToken : null;
+    var result = await silentlyAcquireToken()
+    return result ? result.accessToken : null;
   }
 
   async function getIdToken() {
-    await silentlyAcquireToken()
-    return authResult ? authResult.idToken : null;
+    var result = await silentlyAcquireToken()
+    return result ? result.idToken : null;
   }
 
   function hasCachedAccountInformation() {
