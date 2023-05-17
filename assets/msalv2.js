@@ -16,7 +16,7 @@ var aadOauth = (function () {
      // TODO: Add support for other MSAL configuration
      var authData = {
          clientId: config.clientId,
-         authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
+         authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/tfp/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
          redirectUri: config.redirectUri,
      };
      var postLogoutRedirectUri = {
@@ -86,7 +86,7 @@ var aadOauth = (function () {
   /// Setting [refreshIfAvailable] to [true] should attempt to re-authenticate
   /// with the existing refresh token, if any, even though the access token may
   /// still be valid; however MSAL doesn't support this. Therefore it will have
-  /// the same impact as when it is set to [false]. 
+  /// the same impact as when it is set to [false].
   /// [useRedirect] uses the MSAL redirection based token acquisition instead of
   /// a popup window. This is the only way that iOS based devices will acquire
   /// a token using MSAL when the application is installed to the home screen.
@@ -127,7 +127,7 @@ var aadOauth = (function () {
     }
 
     const account = getAccount()
-      
+
     if (useRedirect) {
       myMSALObj.acquireTokenRedirect({
         scopes: tokenRequest.scopes,
@@ -137,7 +137,7 @@ var aadOauth = (function () {
       });
     } else {
       // Sign in with popup
-      try {        
+      try {
         const interactiveAuthResult = await myMSALObj.loginPopup({
           scopes: tokenRequest.scopes,
           prompt: tokenRequest.prompt,
