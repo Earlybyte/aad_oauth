@@ -68,7 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
           ListTile(
-            leading: Icon(Icons.delete),
+            leading: Icon(Icons.data_array),
+            title: Text('HasCachedAccountInformation'),
+            onTap: () => hasCachedAccountInformation(),
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
             title: Text('Logout'),
             onTap: () {
               logout();
@@ -103,9 +108,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     var accessToken = await oauth.getAccessToken();
     if (accessToken != null) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(accessToken)));
     }
+  }
+
+  void hasCachedAccountInformation() async {
+    var hasCachedAccountInformation = await oauth.hasCachedAccountInformation;
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content:
+            Text('HasCachedAccountInformation: $hasCachedAccountInformation'),
+      ),
+    );
   }
 
   void logout() async {

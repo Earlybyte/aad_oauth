@@ -1,3 +1,4 @@
+import 'package:aad_oauth/model/cache_location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -111,6 +112,13 @@ class Config {
   /// Azure Active Directory B2C provides business-to-customer identity as a service.
   final bool isB2C;
 
+  /// When using Azure AD B2C with a custom domain or Azure Front Door, 
+  /// the custom domain URL must be used instead of the default login.microsoftonline.com URL.
+  /// This will change the issuer of the token to the custom domain URL.
+  /// Example: https://account.examplecompany.com/01234567-89ab-cdef-0123-456789abcdef.
+  /// More information can be found here: https://learn.microsoft.com/en-us/azure/active-directory-b2c/custom-domain.
+  final String? customDomainUrlWithTenantId;
+
   /// Flag whether to use a stub implementation for unit testing or not
   bool isStub;
 
@@ -122,6 +130,12 @@ class Config {
 
   /// android storage options for shared preferences - defaults to encrypting shared prefs
   AndroidOptions aOptions;
+
+  /// Cache location used when authenticating with a web client.
+  /// "CacheLocation.localStorage" - Local browser storage (default)
+  /// "CacheLocation.sessionStorage" - Session context
+  /// "CacheLocation.memoryStorage" - Memory only
+  CacheLocation cacheLocation;
 
   /// Loader Widget (before load web page)
   Widget loader;
@@ -179,6 +193,7 @@ class Config {
     this.clientSecret,
     this.resource,
     this.isB2C = false,
+    this.customDomainUrlWithTenantId,
     this.loginHint,
     this.domainHint,
     this.codeVerifier,
@@ -186,17 +201,23 @@ class Config {
     this.isStub = false,
     this.loader = const SizedBox(),
     AndroidOptions? aOptions,
+    CacheLocation? cacheLocation,
     required this.navigatorKey,
     this.origin,
     this.customParameters = const {},
     String? postLogoutRedirectUri,
   })  : authorizationUrl = isB2C
-            ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
+            ? (customDomainUrlWithTenantId == null 
+              ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
+              : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/authorize')
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize',
         tokenUrl = isB2C
-            ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
+            ? (customDomainUrlWithTenantId == null
+              ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
+              : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/token')
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token',
         postLogoutRedirectUri = postLogoutRedirectUri,
         aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
+        cacheLocation = cacheLocation ?? CacheLocation.localStorage,
         redirectUri = redirectUri ?? getDefaultRedirectUri();
 }

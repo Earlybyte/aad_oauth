@@ -2,7 +2,20 @@
 
 ## [Unreleased]
 
-- Add `isLogged` getter support.
+## [0.4.4] - 20230516
+
+- Add cacheLocation configuration https://github.com/Earlybyte/aad_oauth/pull/220 (by @tigloo)
+- Always use myMSALObj.acquireTokenSilent to get fresh token https://github.com/Earlybyte/aad_oauth/pull/226 (by @ruicraveiro)
+- Added custom domain url with tenant Id for B2C with Azure Front Door https://github.com/Earlybyte/aad_oauth/pull/227 (by @jochemvanweelde)
+- Check navigator state https://github.com/Earlybyte/aad_oauth/pull/229 (by @easazade)
+
+## [0.4.3] - 20230327
+
+- Adding postLogoutRedirectUri - Sign-out with a redirect https://github.com/Earlybyte/aad_oauth/pull/217
+- Update flutter_secure_storage to 8.0.0 https://github.com/Earlybyte/aad_oauth/pull/216
+- Refresh authResult from cache in getAccessToken and getIdToken https://github.com/Earlybyte/aad_oauth/pull/215
+- Add `hasCachedAccountInformation` getter support https://github.com/Earlybyte/aad_oauth/pull/210
+- Custom parameters to support dynamic UI customization for B2C custom policies https://github.com/Earlybyte/aad_oauth/pull/207
 
 ## [0.4.2] - 20230124
 
