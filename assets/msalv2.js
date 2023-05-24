@@ -17,6 +17,7 @@ var aadOauth = (function () {
      var authData = {
          clientId: config.clientId,
          authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
+         knownAuthorities: [ config.tenant + ".b2clogin.com", "login.microsoftonline.com"],
          redirectUri: config.redirectUri,
      };
      var postLogoutRedirectUri = {
@@ -78,7 +79,6 @@ var aadOauth = (function () {
       console.log('Unable to silently acquire a new token: ' + error.message)
       return null;
     }
-
   }
 
   /// Authorize user via refresh token or web gui if necessary.
@@ -97,7 +97,6 @@ var aadOauth = (function () {
   /// The token is requested using acquireTokenSilent, which will refresh the token
   /// if it has nearly expired. If this fails for any reason, it will then move on
   /// to attempt to refresh the token using an interactive login.
-
   async function login(refreshIfAvailable, useRedirect, onSuccess, onError) {
     try {
       // The redirect handler task will complete with auth results if we
@@ -154,6 +153,17 @@ var aadOauth = (function () {
         onError(error);
       }
     }
+  }
+
+  function ssoSilent(hint, onSuccess, onError) {
+    const silentRequest = {
+      scopes: tokenRequest.scopes,
+      loginHint: hint
+    };
+    myMSALObj
+      .ssoSilent(silentRequest)
+      .then((_) => onSuccess())
+      .catch(onError);
   }
 
   function getAccount() {
@@ -216,5 +226,6 @@ var aadOauth = (function () {
     getIdToken: getIdToken,
     getAccessToken: getAccessToken,
     hasCachedAccountInformation: hasCachedAccountInformation,
+    ssoSilent: ssoSilent,
   };
 })();

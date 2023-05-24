@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_secure_storage: ^8.0.0
-  http: ^1.0.0
+  http: ^0.13.5
   js: ^0.6.7
   shared_preferences: ^2.1.1
   webview_flutter: ^4.2.1

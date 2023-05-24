@@ -18,7 +18,12 @@ class CoreOAuth {
   Future<void> logout() async =>
       throw UnsupportedFailure(ErrorType.unsupported, 'Unsupported logout');
 
-  Future<bool> get hasCachedAccountInformation async => false;
+  Future<bool> get hasCachedAccountInformation async =>
+      throw UnsupportedFailure(
+          ErrorType.unsupported, 'Unsupported hasCachedAccountInformation');
+
+  Future<void> ssoSilent(String? hint) async =>
+      throw UnsupportedFailure(ErrorType.unsupported, 'Unsupported ssoSilent');
 
   Future<String?> getAccessToken() async => throw UnsupportedFailure(
       ErrorType.unsupported, 'Unsupported getAccessToken');
@@ -45,6 +50,9 @@ class MockCoreOAuth extends CoreOAuth {
 
   @override
   Future<bool> get hasCachedAccountInformation async => true;
+
+  @override
+  Future<void> ssoSilent(String? hint) async {}
 
   @override
   Future<String?> getAccessToken() async => mockAccessToken;

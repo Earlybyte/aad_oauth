@@ -41,6 +41,13 @@ external Object jsGetIdToken();
 @JS('hasCachedAccountInformation')
 external bool jsHasCachedAccountInformation();
 
+@JS('ssoSilent')
+external void jsSsoSilent(
+  String? hint,
+  void Function() onSuccess,
+  void Function(dynamic) onError,
+);
+
 class WebOAuth extends CoreOAuth {
   final Config config;
   WebOAuth(this.config) {
@@ -84,6 +91,17 @@ class WebOAuth extends CoreOAuth {
   @override
   Future<bool> get hasCachedAccountInformation =>
       Future<bool>.value(jsHasCachedAccountInformation());
+
+  @override
+  Future<void> ssoSilent(String? hint) async {
+    final completer = Completer<void>();
+    jsSsoSilent(
+      hint,
+      allowInterop(completer.complete),
+      allowInterop((error) => completer.completeError(error)),
+    );
+    return completer.future;
+  }
 
   @override
   Future<Either<Failure, Token>> login(

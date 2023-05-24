@@ -38,4 +38,8 @@ class AadOAuth {
   /// Checks if MSAL has cached information
   Future<bool> get hasCachedAccountInformation async =>
       _coreOAuth.hasCachedAccountInformation;
+
+  /// Tries to perform a silent login with the provided [hint].
+  /// Only works on web.
+  Future<void> ssoSilent(String? hint) async => _coreOAuth.ssoSilent(hint);
 }
