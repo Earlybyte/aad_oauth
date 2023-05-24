@@ -8,7 +8,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class RequestCode {
   final Config _config;
   final AuthorizationRequest _authorizationRequest;
-  final _redirectUriHost;
+  final String _redirectUriHost;
   late NavigationDelegate _navigationDelegate;
   String? _code;
 

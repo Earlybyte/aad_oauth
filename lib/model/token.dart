@@ -69,10 +69,7 @@ class Token {
     if (map == null) throw Exception('No token from received');
     //error handling as described in https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow#error-response-1
     if (map['error'] != null) {
-      throw Exception('Error during token request: ' +
-          map['error'] +
-          ': ' +
-          map['error_description']);
+      throw Exception('Error during token request: ${map['error']}: ${map['error_description']}');
     }
 
     var model = Token();

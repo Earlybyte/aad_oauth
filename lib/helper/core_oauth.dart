@@ -13,18 +13,18 @@ class CoreOAuth {
 
   Future<Either<Failure, Token>> login(
           {bool refreshIfAvailable = false}) async =>
-      throw UnsupportedFailure(ErrorType.Unsupported, 'Unsupported login');
+      throw UnsupportedFailure(ErrorType.unsupported, 'Unsupported login');
 
   Future<void> logout() async =>
-      throw UnsupportedFailure(ErrorType.Unsupported, 'Unsupported logout');
+      throw UnsupportedFailure(ErrorType.unsupported, 'Unsupported logout');
 
   Future<bool> get hasCachedAccountInformation async => false;
 
   Future<String?> getAccessToken() async => throw UnsupportedFailure(
-      ErrorType.Unsupported, 'Unsupported getAccessToken');
+      ErrorType.unsupported, 'Unsupported getAccessToken');
 
   Future<String?> getIdToken() async => throw UnsupportedFailure(
-      ErrorType.Unsupported, 'Unsupported getAccessToken');
+      ErrorType.unsupported, 'Unsupported getAccessToken');
 
   factory CoreOAuth.fromConfig(Config config) =>
       config.isStub ? MockCoreOAuth() : getOAuthConfig(config);
