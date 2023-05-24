@@ -25,6 +25,10 @@ class CoreOAuth {
   Future<void> ssoSilent(String? hint) async =>
       throw UnsupportedFailure(ErrorType.unsupported, 'Unsupported ssoSilent');
 
+  
+  Future<void> ssoSilent(String? hint) async =>
+      throw UnsupportedFailure(ErrorType.unsupported, 'Unsupported ssoSilent');
+
   Future<String?> getAccessToken() async => throw UnsupportedFailure(
       ErrorType.unsupported, 'Unsupported getAccessToken');
 
