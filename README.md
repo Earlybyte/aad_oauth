@@ -112,7 +112,7 @@ Use native app as plattform type (with callback URL: <https://login.live.com/oau
 
 Create your user flows - [Azure AD B2C User Flows](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-user-flows)
 
-Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secret of App) and redirectUrl in the main.dart source-code:
+Add your Azure tenant ID, tenantName, client ID (ID of App) and redirectUrl in the main.dart source-code:
 
 ```dart
   static final Config configB2Ca = new Config(
@@ -120,7 +120,6 @@ Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secr
     clientId: "YOUR_CLIENT_ID",
     scope: "YOUR_CLIENT_ID offline_access",
     // redirectUri: "https://login.live.com/oauth20_desktop.srf", // Note: this is the default for Mobile
-    clientSecret: "YOUR_CLIENT_SECRET",
     isB2C: true,
     policy: "YOUR_USER_FLOW___USER_FLOW_A",
     tokenIdentifier: "UNIQUE IDENTIFIER A",
