@@ -11,11 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_secure_storage: ^8.0.0
-  webview_flutter: ^4.2.0
+  webview_flutter: ^4.2.2
   js: any
-  http: ^0.13.6
+  http: ^1.1.0
   pedantic: ^1.11.1
-  shared_preferences: ^2.1.1
+  shared_preferences: ^2.2.0
   dartz: ^0.10.1
   equatable: ^2.0.5
 

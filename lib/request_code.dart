@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 
-import 'request/authorization_request.dart';
-import 'model/config.dart';
+import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'model/config.dart';
+import 'request/authorization_request.dart';
 
 class RequestCode {
   final Config _config;
@@ -48,6 +49,7 @@ class RequestCode {
     await _config.navigatorKey.currentState!.push(
       MaterialPageRoute(
         builder: (context) => Scaffold(
+          appBar: _config.appBar,
           body: WillPopScope(
             onWillPop: () async {
               if (await controller.canGoBack()) {

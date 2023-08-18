@@ -112,7 +112,7 @@ class Config {
   /// Azure Active Directory B2C provides business-to-customer identity as a service.
   final bool isB2C;
 
-  /// When using Azure AD B2C with a custom domain or Azure Front Door, 
+  /// When using Azure AD B2C with a custom domain or Azure Front Door,
   /// the custom domain URL must be used instead of the default login.microsoftonline.com URL.
   /// This will change the issuer of the token to the custom domain URL.
   /// Example: https://account.examplecompany.com/01234567-89ab-cdef-0123-456789abcdef.
@@ -154,6 +154,9 @@ class Config {
   /// View docs:
   /// https://learn.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-sign-in?tabs=javascript2#tabpanel_4_javascript2
   String? postLogoutRedirectUri;
+
+  /// add an app bar to the login page
+  PreferredSizeWidget? appBar;
 
   /// Determine an appropriate redirect URI for AAD authentication.
   /// On web, it is the location that the application is being served from.
@@ -206,15 +209,16 @@ class Config {
     this.origin,
     this.customParameters = const {},
     String? postLogoutRedirectUri,
+    this.appBar,
   })  : authorizationUrl = isB2C
-            ? (customDomainUrlWithTenantId == null 
-              ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
-              : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/authorize')
+            ? (customDomainUrlWithTenantId == null
+                ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
+                : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/authorize')
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize',
         tokenUrl = isB2C
             ? (customDomainUrlWithTenantId == null
-              ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
-              : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/token')
+                ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
+                : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/token')
             : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token',
         postLogoutRedirectUri = postLogoutRedirectUri,
         aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
