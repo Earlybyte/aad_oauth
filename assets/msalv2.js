@@ -157,6 +157,37 @@ var aadOauth = (function () {
     }
   }
 
+  // Tries to silently login. Will call [onError] if a token
+  // could not be acquired or if no cached account credentials exist.
+  // Will call [onSuccess] on success and update the global authResult variable.
+  async function refreshToken(onSuccess, onError) {
+    try {
+      // The redirect handler task will complete with auth results if we
+      // were redirected from AAD. If not, it will complete with null
+      // We must wait for it to complete before we allow the login to
+      // attempt to acquire a token silently, and then progress to interactive
+      // login (if silent acquisition fails).
+      let result = await redirectHandlerTask;
+      if (result !== null) {
+        authResult = result;
+      }
+    }
+    catch (error) {
+      authResultError = error;
+      onError(authResultError);
+      return;
+    }
+
+    // Try to sign in silently, assuming we have already signed in and have
+    // a cached access token
+    await silentlyAcquireToken()
+
+    if(authResult != null) {
+      onSuccess(authResult.accessToken ?? null);
+      return
+    }
+  }
+
   function getAccount() {
     // If we have recently authenticated, we use the auth'd account;
     // otherwise we fallback to using MSAL APIs to find cached auth
@@ -213,6 +244,7 @@ var aadOauth = (function () {
   return {
     init: init,
     login: login,
+    refreshToken: refreshToken,
     logout: logout,
     getIdToken: getIdToken,
     getAccessToken: getAccessToken,

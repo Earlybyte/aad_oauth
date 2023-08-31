@@ -38,6 +38,31 @@ class MobileOAuth extends CoreOAuth {
     return await _authorization(refreshIfAvailable: refreshIfAvailable);
   }
 
+  /// Tries to silently login. will try to use the existing refresh token to get
+  /// a new token.
+  @override
+  Future<Either<Failure, Token>> refreshToken() async {
+    var token = await _authStorage.loadTokenFromCache();
+
+    if (!token.hasValidAccessToken()) {
+      token.accessToken = null;
+    }
+
+    if (token.hasRefreshToken()) {
+      final result =
+          await _requestToken.requestRefreshToken(token.refreshToken!);
+      //If refresh token request throws an exception, we have to do
+      //a fullAuthFlow.
+      result.fold(
+        (l) => token.accessToken = null,
+        (r) => token = r,
+      );
+    }
+
+    await _authStorage.saveTokenToCache(token);
+    return Right(token);
+  }
+
   /// Retrieve cached OAuth Access Token.
   @override
   Future<String?> getAccessToken() async =>

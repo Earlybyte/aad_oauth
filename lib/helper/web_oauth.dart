@@ -41,6 +41,12 @@ external Object jsGetIdToken();
 @JS('hasCachedAccountInformation')
 external bool jsHasCachedAccountInformation();
 
+@JS('refreshToken')
+external void jsRefreshToken(
+  void Function(dynamic) onSuccess,
+  void Function(dynamic) onError,
+);
+
 class WebOAuth extends CoreOAuth {
   final Config config;
   WebOAuth(this.config) {
@@ -93,6 +99,22 @@ class WebOAuth extends CoreOAuth {
     jsLogin(
       refreshIfAvailable,
       config.webUseRedirect,
+      allowInterop(
+          (_value) => completer.complete(Right(Token(accessToken: _value)))),
+      allowInterop((_error) => completer.complete(Left(AadOauthFailure(
+            ErrorType.AccessDeniedOrAuthenticationCanceled,
+            'Access denied or authentication canceled. Error: ${_error.toString()}',
+          )))),
+    );
+
+    return completer.future;
+  }
+
+  @override
+  Future<Either<Failure, Token>> refreshToken() {
+    final completer = Completer<Either<Failure, Token>>();
+
+    jsRefreshToken(
       allowInterop(
           (_value) => completer.complete(Right(Token(accessToken: _value)))),
       allowInterop((_error) => completer.complete(Left(AadOauthFailure(
