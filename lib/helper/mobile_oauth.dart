@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/failure.dart';
@@ -13,6 +15,8 @@ class MobileOAuth extends CoreOAuth {
   final AuthStorage _authStorage;
   final RequestCode _requestCode;
   final RequestToken _requestToken;
+
+  Completer<String?>? _accessTokenCompleter;
 
   /// Instantiating MobileAadOAuth authentication.
   /// [config] Parameters according to official Microsoft Documentation.
@@ -64,16 +68,29 @@ class MobileOAuth extends CoreOAuth {
   }
 
   /// Retrieve cached OAuth Access Token.
+  /// If access token is not valid it tries to refresh the token
   @override
   Future<String?> getAccessToken() async {
+    if (_accessTokenCompleter != null) {
+      return _accessTokenCompleter?.future;
+    } else {
+      _accessTokenCompleter = Completer();
+    }
+
     var token = await _authStorage.loadTokenFromCache();
+    String? accessToken;
+
     if (token.hasValidAccessToken()) {
-      return token.accessToken;
+      accessToken = token.accessToken;
     } else {
       await refreshToken();
       token = await _authStorage.loadTokenFromCache();
-      return token.accessToken;
+      accessToken = token.accessToken;
     }
+
+    _accessTokenCompleter?.complete(accessToken);
+    _accessTokenCompleter = null;
+    return accessToken;
   }
 
   /// Retrieve cached OAuth Id Token.
