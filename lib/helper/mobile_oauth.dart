@@ -68,7 +68,9 @@ class MobileOAuth extends CoreOAuth {
   }
 
   /// Retrieve cached OAuth Access Token.
-  /// If access token is not valid it tries to refresh the token
+  /// If access token is not valid it tries to refresh the token.
+  /// parallel can be made [getAccessToken] will make sure only one request
+  /// for refreshing token is made.
   @override
   Future<String?> getAccessToken() async {
     if (_accessTokenCompleter != null) {
