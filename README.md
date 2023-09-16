@@ -12,6 +12,7 @@ Supported Flows:
 
 - [Authorization code flow (including refresh token flow)](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)
 - [Authorization code flow B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/authorization-code-flow)
+- [Authorization code flow ADFS](https://learn.microsoft.com/windows-server/identity/ad-fs/development/msal/adfs-msal-native-app-web-api)
 
 ## Usage
 
@@ -129,6 +130,30 @@ Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secr
 ```
 
 Afterwards you can login and get an access token for accessing other resources. You can also use multiple configs at the same time.
+
+### ADFS Usage
+
+> This library only suports ADFS authentication for Flutter mobile applications, not web builds.
+
+Register an ADFS app = [Windows Server ADFS Application Setup](https://learn.microsoft.com/windows-server/identity/ad-fs/development/msal/adfs-msal-native-app-web-api#app-registration-in-ad-fs).
+
+Use redirect URI: <https://login.live.com/oauth20_desktop.srf>.
+
+Use a configuration like:
+
+```dart
+static final Config adfsAuthConfig = Config(
+  customAuthorizationUrl:
+      'https://adfs.your-domain.com/adfs/oauth2/authorize',
+  customTokenUrl:
+      'https://adfs.your-domain.com/adfs/oauth2/token',
+  clientId: 'YOUR_CLIENT_ID',
+  scope:
+      'openid OTHER_SCOPES_YOU_NEED',
+  navigatorKey: navigatorKey,
+  loader: const SizedBox(),
+);
+```
 
 ## Installation
 
