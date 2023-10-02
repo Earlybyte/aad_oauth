@@ -120,7 +120,7 @@ Add your Azure tenant ID, tenantName, client ID (ID of App), client Secret (Secr
     clientId: "YOUR_CLIENT_ID",
     scope: "YOUR_CLIENT_ID offline_access",
     // redirectUri: "https://login.live.com/oauth20_desktop.srf", // Note: this is the default for Mobile
-    clientSecret: "YOUR_CLIENT_SECRET",
+    // clientSecret: "YOUR_CLIENT_SECRET", // Note: do not include secret in publicly available applications
     isB2C: true,
     policy: "YOUR_USER_FLOW___USER_FLOW_A",
     tokenIdentifier: "UNIQUE IDENTIFIER A",
