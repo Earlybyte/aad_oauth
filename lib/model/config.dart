@@ -161,6 +161,9 @@ class Config {
   /// https://learn.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-sign-in?tabs=javascript2#tabpanel_4_javascript2
   String? postLogoutRedirectUri;
 
+  /// add an app bar to the login page
+  PreferredSizeWidget? appBar;
+
   /// Determine an appropriate redirect URI for AAD authentication.
   /// On web, it is the location that the application is being served from.
   /// On mobile, it is https://login.live.com/oauth20_desktop.srf
@@ -214,6 +217,7 @@ class Config {
     this.origin,
     this.customParameters = const {},
     String? postLogoutRedirectUri,
+    this.appBar,
   })  : authorizationUrl = customAuthorizationUrl ??
             (isB2C
                 ? (customDomainUrlWithTenantId == null

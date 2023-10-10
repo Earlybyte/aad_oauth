@@ -31,11 +31,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static final Config config = Config(
-      tenant: 'YOUR_TENANT_ID',
-      clientId: 'YOUR_CLIENT_ID',
-      scope: 'openid profile offline_access',
-      navigatorKey: navigatorKey,
-      loader: SizedBox());
+    tenant: 'YOUR_TENANT_ID',
+    clientId: 'YOUR_CLIENT_ID',
+    scope: 'openid profile offline_access',
+    navigatorKey: navigatorKey,
+    loader: SizedBox(),
+    appBar: AppBar(
+      title: Text('AAD OAuth Demo'),
+    ),
+  );
   final AadOAuth oauth = AadOAuth(config);
 
   @override
