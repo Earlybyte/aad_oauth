@@ -110,6 +110,12 @@ class MsalConfig {
   /// Azure Active Directory B2C provides business-to-customer identity as a service.
   bool? isB2C;
 
+  /// Override of the authorization URL, can be used to enable ADFS authentication.
+  String? customAuthorizationUrl;
+
+  /// Override of the token URL, can be used to enable ADFS authentication.
+  String? customTokenUrl;
+
   /// Cache location used when authenticating with a web client.
   /// "localStorage" - Local browser storage (default)
   /// "sessionStorage" - Session context
@@ -139,6 +145,8 @@ class MsalConfig {
       String? clientSecret,
       String? resource,
       bool? isB2C,
+      String? customAuthorizationUrl,
+      String? customTokenUrl,
       String? loginHint,
       String? domainHint,
       String? codeVerifier,

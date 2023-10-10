@@ -67,6 +67,8 @@ class WebOAuth extends CoreOAuth {
         clientSecret: config.clientSecret,
         resource: config.resource,
         isB2C: config.isB2C,
+        customAuthorizationUrl: config.customAuthorizationUrl,
+        customTokenUrl: config.customTokenUrl,
         loginHint: config.loginHint,
         domainHint: config.domainHint,
         codeVerifier: config.codeVerifier,
