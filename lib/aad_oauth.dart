@@ -26,6 +26,10 @@ class AadOAuth {
   Future<Either<Failure, Token>> login({bool refreshIfAvailable = false}) =>
       _coreOAuth.login(refreshIfAvailable: refreshIfAvailable);
 
+  /// Tries to silently login. will try to use the existing refresh token to get
+  /// a new token.
+  Future<Either<Failure, Token>> refreshToken() => _coreOAuth.refreshToken();
+
   /// Retrieve cached OAuth Access Token.
   Future<String?> getAccessToken() async => _coreOAuth.getAccessToken();
 
