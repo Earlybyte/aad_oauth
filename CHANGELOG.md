@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 20231010
+
+- Add ADFS support for mobile applications https://github.com/Earlybyte/aad_oauth/pull/270 (by @AndreasHassing)
+- Add explicit and implicit refresh token https://github.com/Earlybyte/aad_oauth/pull/260 (by @easazade)
+- Plugins: update multiple plugins and ui https://github.com/Earlybyte/aad_oauth/pull/257 (by @tajjacob)
+- Remove client secret from Azure AD B2C config instructions in README https://github.com/Earlybyte/aad_oauth/pull/252 (by @OssiPesonen)
+- Update deps https://github.com/Earlybyte/aad_oauth/pull/245 (by @Zazo032)
+- Authority improvements https://github.com/Earlybyte/aad_oauth/pull/236 (by @Zazo032)
+- Handle pop in the webview https://github.com/Earlybyte/aad_oauth/pull/233 (by @xhoi-xhafaj)
+
 ## [0.4.4] - 20230516
 
 - Add cacheLocation configuration https://github.com/Earlybyte/aad_oauth/pull/220 (by @tigloo)
