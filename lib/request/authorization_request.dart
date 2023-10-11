@@ -8,7 +8,7 @@ class AuthorizationRequest {
   final bool clearCookies;
 
   AuthorizationRequest(Config config,
-      {bool fullScreen = true, bool clearCookies = false})
+      {this.fullScreen = true, this.clearCookies = false})
       : url = config.authorizationUrl,
         redirectUrl = config.redirectUri,
         parameters = {
@@ -16,9 +16,7 @@ class AuthorizationRequest {
           'response_type': config.responseType,
           'redirect_uri': config.redirectUri,
           'scope': config.scope,
-        },
-        fullScreen = fullScreen,
-        clearCookies = clearCookies {
+        } {
     if (config.state != null) {
       parameters.putIfAbsent('state', () => config.state!);
     }

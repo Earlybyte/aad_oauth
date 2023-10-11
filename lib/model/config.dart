@@ -175,7 +175,7 @@ class Config {
         base = base.substring(0, idx);
       }
       if (!base.endsWith('/')) {
-        base = base + '/';
+        base = '$base/';
       }
       return base;
     } else {
@@ -216,7 +216,7 @@ class Config {
     required this.navigatorKey,
     this.origin,
     this.customParameters = const {},
-    String? postLogoutRedirectUri,
+    this.postLogoutRedirectUri,
     this.appBar,
   })  : authorizationUrl = customAuthorizationUrl ??
             (isB2C
@@ -230,7 +230,6 @@ class Config {
                     ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
                     : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/token')
                 : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token'),
-        postLogoutRedirectUri = postLogoutRedirectUri,
         aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
         cacheLocation = cacheLocation ?? CacheLocation.localStorage,
         redirectUri = redirectUri ?? getDefaultRedirectUri();

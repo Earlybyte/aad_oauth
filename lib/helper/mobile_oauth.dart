@@ -141,13 +141,13 @@ class MobileOAuth extends CoreOAuth {
 
     if (!token.hasValidAccessToken()) {
       final result = await _performFullAuthFlow();
-      var failure;
+      Failure? failure;
       result.fold(
         (l) => failure = l,
         (r) => token = r,
       );
       if (failure != null) {
-        return Left(failure);
+        return Left(failure!);
       }
     }
 
@@ -160,7 +160,7 @@ class MobileOAuth extends CoreOAuth {
     var code = await _requestCode.requestCode();
     if (code == null) {
       return Left(AadOauthFailure(
-        ErrorType.AccessDeniedOrAuthenticationCanceled,
+        ErrorType.accessDeniedOrAuthenticationCanceled,
         'Access denied or authentication canceled.',
       ));
     }
@@ -169,10 +169,10 @@ class MobileOAuth extends CoreOAuth {
 
   Future<void> _removeOldTokenOnFirstLogin() async {
     var prefs = await SharedPreferences.getInstance();
-    final _keyFreshInstall = 'freshInstall';
-    if (!prefs.getKeys().contains(_keyFreshInstall)) {
+    final keyFreshInstall = 'freshInstall';
+    if (!prefs.getKeys().contains(keyFreshInstall)) {
       await logout();
-      await prefs.setBool(_keyFreshInstall, false);
+      await prefs.setBool(keyFreshInstall, false);
     }
   }
 }
