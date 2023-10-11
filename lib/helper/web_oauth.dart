@@ -102,10 +102,10 @@ class WebOAuth extends CoreOAuth {
       refreshIfAvailable,
       config.webUseRedirect,
       allowInterop(
-          (_value) => completer.complete(Right(Token(accessToken: _value)))),
-      allowInterop((_error) => completer.complete(Left(AadOauthFailure(
-            ErrorType.AccessDeniedOrAuthenticationCanceled,
-            'Access denied or authentication canceled. Error: ${_error.toString()}',
+          (value) => completer.complete(Right(Token(accessToken: value)))),
+      allowInterop((error) => completer.complete(Left(AadOauthFailure(
+            ErrorType.accessDeniedOrAuthenticationCanceled,
+            'Access denied or authentication canceled. Error: ${error.toString()}',
           )))),
     );
 
@@ -118,10 +118,10 @@ class WebOAuth extends CoreOAuth {
 
     jsRefreshToken(
       allowInterop(
-          (_value) => completer.complete(Right(Token(accessToken: _value)))),
-      allowInterop((_error) => completer.complete(Left(AadOauthFailure(
-            ErrorType.AccessDeniedOrAuthenticationCanceled,
-            'Access denied or authentication canceled. Error: ${_error.toString()}',
+          (value) => completer.complete(Right(Token(accessToken: value)))),
+      allowInterop((error) => completer.complete(Left(AadOauthFailure(
+            ErrorType.accessDeniedOrAuthenticationCanceled,
+            'Access denied or authentication canceled. Error: ${error.toString()}',
           )))),
     );
 
