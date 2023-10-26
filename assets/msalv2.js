@@ -210,7 +210,7 @@ var aadOauth = (function () {
     }
   }
 
-  function logout(onSuccess, onError) {
+  function logout(onSuccess, onError, showPopup) {
     const account = getAccount();
 
     if (!account) {
@@ -221,10 +221,25 @@ var aadOauth = (function () {
     authResult = null;
     authResultError = null;
     tokenRequest.scopes = null;
-    myMSALObj
-      .logout({ account: account })
-      .then((_) => onSuccess())
-      .catch(onError);
+
+    if (showPopup) {
+      myMSALObj
+        .logout({ account: account })
+        .then((_) => onSuccess())
+        .catch(onError);
+    } else {
+      myMSALObj
+        .logoutRedirect({
+          account: account,
+          onRedirectNavigate: (url) => {
+            return false;
+          }
+        })
+        .then((_) => onSuccess())
+        .catch(onError);
+    }
+
+
   }
 
   async function getAccessToken() {
