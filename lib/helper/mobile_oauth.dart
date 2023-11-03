@@ -160,8 +160,8 @@ class MobileOAuth extends CoreOAuth {
     var code = await _requestCode.requestCode();
     if (code == null) {
       return Left(AadOauthFailure(
-        ErrorType.accessDeniedOrAuthenticationCanceled,
-        'Access denied or authentication canceled.',
+        errorType: ErrorType.accessDeniedOrAuthenticationCanceled,
+        message: 'Access denied or authentication canceled.',
       ));
     }
     return await _requestToken.requestToken(code);

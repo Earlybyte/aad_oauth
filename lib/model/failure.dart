@@ -11,7 +11,7 @@ abstract class Failure extends Equatable {
   final ErrorType errorType;
   final String message;
 
-  Failure(this.errorType, this.message);
+  Failure({required this.errorType, required this.message});
 
   @override
   List<Object> get props => [errorType, message];
@@ -21,13 +21,13 @@ abstract class Failure extends Equatable {
 }
 
 class RequestFailure extends Failure {
-  RequestFailure(errorType, message) : super(errorType, message);
+  RequestFailure({required super.errorType, required super.message});
 }
 
 class AadOauthFailure extends Failure {
-  AadOauthFailure(errorType, message) : super(errorType, message);
+  AadOauthFailure({required super.errorType, required super.message});
 }
 
 class UnsupportedFailure extends Failure {
-  UnsupportedFailure(errorType, message) : super(errorType, message);
+  UnsupportedFailure({required super.errorType, required super.message});
 }

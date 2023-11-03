@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({super.key, required this.title});
   final String title;
 
   @override
@@ -113,8 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var accessToken = await oauth.getAccessToken();
     if (accessToken != null) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(accessToken)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(accessToken)));
     }
   }
 
@@ -123,8 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content:
-            Text('HasCachedAccountInformation: $hasCachedAccountInformation'),
+        content: Text('HasCachedAccountInformation: $hasCachedAccountInformation'),
       ),
     );
   }
