@@ -164,6 +164,9 @@ class Config {
   /// add an app bar to the login page
   PreferredSizeWidget? appBar;
 
+  /// add onPageFinished callback
+  Function(String url)? onPageFinished;
+
   /// Determine an appropriate redirect URI for AAD authentication.
   /// On web, it is the location that the application is being served from.
   /// On mobile, it is https://login.live.com/oauth20_desktop.srf
@@ -218,6 +221,7 @@ class Config {
     this.customParameters = const {},
     this.postLogoutRedirectUri,
     this.appBar,
+    this.onPageFinished,
   })  : authorizationUrl = customAuthorizationUrl ??
             (isB2C
                 ? (customDomainUrlWithTenantId == null

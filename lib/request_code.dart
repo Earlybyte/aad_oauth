@@ -34,6 +34,9 @@ class RequestCode {
     await controller.setBackgroundColor(Colors.transparent);
     await controller.setUserAgent(_config.userAgent);
     await controller.loadRequest(launchUri);
+    await controller.setNavigationDelegate(NavigationDelegate(
+      onPageFinished: _config.onPageFinished,
+    ));
 
     final webView = WebViewWidget(controller: controller);
 

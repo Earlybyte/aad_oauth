@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
     appBar: AppBar(
       title: Text('AAD OAuth Demo'),
     ),
+    onPageFinished: (String url) {
+      log('Page finished url: $url');
+    },
   );
 
   static final Config configB2Cc = Config(
