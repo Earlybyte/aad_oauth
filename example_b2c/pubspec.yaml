@@ -19,7 +19,6 @@ environment:
 dependencies:
   aad_oauth:
     path: ../
-  webview_flutter: ^4.4.2
   flutter:
     sdk: flutter
 
