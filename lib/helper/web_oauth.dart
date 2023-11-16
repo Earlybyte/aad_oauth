@@ -30,6 +30,7 @@ external void jsLogin(
 external void jsLogout(
   void Function() onSuccess,
   void Function(dynamic) onError,
+  bool showPopup,
 );
 
 @JS('getAccessToken')
@@ -129,12 +130,13 @@ class WebOAuth extends CoreOAuth {
   }
 
   @override
-  Future<void> logout() async {
+  Future<void> logout({bool showPopup = true}) async {
     final completer = Completer<void>();
 
     jsLogout(
       allowInterop(completer.complete),
       allowInterop((error) => completer.completeError(error)),
+      showPopup,
     );
 
     return completer.future;
