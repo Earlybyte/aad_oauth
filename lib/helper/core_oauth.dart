@@ -48,7 +48,7 @@ class MockCoreOAuth extends CoreOAuth {
       Right(Token(accessToken: mockAccessToken));
 
   @override
-  Future<void> logout() async {}
+  Future<void> logout({bool showPopup = true}) async {}
 
   @override
   Future<bool> get hasCachedAccountInformation async => true;
