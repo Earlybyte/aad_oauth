@@ -38,11 +38,12 @@ class RequestToken {
         var token = Token.fromJson(tokenJson);
         return Right(token);
       }
-      return Left(
-          RequestFailure(ErrorType.invalidJson, 'Token json is invalid'));
+      return Left(RequestFailure(
+          errorType: ErrorType.invalidJson, message: 'Token json is invalid'));
     } catch (e) {
       return Left(RequestFailure(
-          ErrorType.invalidJson, 'Token json is invalid: ${e.toString()}'));
+          errorType: ErrorType.invalidJson,
+          message: 'Token json is invalid: ${e.toString()}'));
     }
   }
 }
