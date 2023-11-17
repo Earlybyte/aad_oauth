@@ -21,8 +21,9 @@ class CoreOAuth {
           errorType: ErrorType.unsupported,
           message: 'Unsupported silentlyLogin');
 
-  Future<void> logout() async => throw UnsupportedFailure(
-      errorType: ErrorType.unsupported, message: 'Unsupported logout');
+  Future<void> logout({bool showPopup = true}) async =>
+      throw UnsupportedFailure(
+          errorType: ErrorType.unsupported, message: 'Unsupported logout');
 
   Future<bool> get hasCachedAccountInformation async => false;
 
