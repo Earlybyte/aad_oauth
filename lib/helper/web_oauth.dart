@@ -30,6 +30,7 @@ external void jsLogin(
 external void jsLogout(
   void Function() onSuccess,
   void Function(dynamic) onError,
+  bool showPopup,
 );
 
 @JS('getAccessToken')
@@ -104,8 +105,9 @@ class WebOAuth extends CoreOAuth {
       allowInterop(
           (value) => completer.complete(Right(Token(accessToken: value)))),
       allowInterop((error) => completer.complete(Left(AadOauthFailure(
-            ErrorType.accessDeniedOrAuthenticationCanceled,
-            'Access denied or authentication canceled. Error: ${error.toString()}',
+            errorType: ErrorType.accessDeniedOrAuthenticationCanceled,
+            message:
+                'Access denied or authentication canceled. Error: ${error.toString()}',
           )))),
     );
 
@@ -120,8 +122,9 @@ class WebOAuth extends CoreOAuth {
       allowInterop(
           (value) => completer.complete(Right(Token(accessToken: value)))),
       allowInterop((error) => completer.complete(Left(AadOauthFailure(
-            ErrorType.accessDeniedOrAuthenticationCanceled,
-            'Access denied or authentication canceled. Error: ${error.toString()}',
+            errorType: ErrorType.accessDeniedOrAuthenticationCanceled,
+            message:
+                'Access denied or authentication canceled. Error: ${error.toString()}',
           )))),
     );
 
@@ -129,12 +132,13 @@ class WebOAuth extends CoreOAuth {
   }
 
   @override
-  Future<void> logout() async {
+  Future<void> logout({bool showPopup = true}) async {
     final completer = Completer<void>();
 
     jsLogout(
       allowInterop(completer.complete),
       allowInterop((error) => completer.completeError(error)),
+      showPopup,
     );
 
     return completer.future;
