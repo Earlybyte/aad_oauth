@@ -50,13 +50,16 @@ class RequestCode {
       MaterialPageRoute(
         builder: (context) => Scaffold(
           appBar: _config.appBar,
-          body: WillPopScope(
-            onWillPop: () async {
+          body: PopScope(
+            canPop: false,
+            onPopInvoked: (bool didPop) async {
+              if (didPop) return;
               if (await controller.canGoBack()) {
                 await controller.goBack();
-                return false;
+                return;
               }
-              return true;
+              final NavigatorState navigator = Navigator.of(context);
+              navigator.pop();
             },
             child: SafeArea(
               child: Stack(
