@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [1.0.1] - 20230215
+
+- Optionally avoid prompting popup on web logout https://github.com/Earlybyte/aad_oauth/pull/277 (by @phildupuis)
+- Fix/inline linter rules to prevent conflict https://github.com/Earlybyte/aad_oauth/pull/279 (by @mikedigit)
+- Update willpopscope to popscope https://github.com/Earlybyte/aad_oauth/pull/291 (by @elijahjohnston)
+- Add login hint for web https://github.com/Earlybyte/aad_oauth/pull/292 (by @elijahjohnston)
+- ✨ feat: add onPageFinished function in Config https://github.com/Earlybyte/aad_oauth/pull/280 (by @tajjacob)
+
 ## [1.0.0] - 20231010
 
 - Add ADFS support for mobile applications https://github.com/Earlybyte/aad_oauth/pull/270 (by @AndreasHassing)
