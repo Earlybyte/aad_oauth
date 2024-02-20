@@ -5,18 +5,18 @@ version: 1.0.1
 homepage: https://github.com/Earlybyte/aad_oauth
 
 environment:
-  sdk: '>=3.0.0 <4.0.0' 
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_secure_storage: ^9.0.0
-  webview_flutter: ^4.4.1 
-  js: ^0.6.7 
-  http: ^1.1.0 
-  shared_preferences: ^2.2.1
-  dartz: ^0.10.1
-  equatable: ^2.0.5
+  flutter_secure_storage:
+  webview_flutter:
+  js: ^0.7.1
+  http: ^1.2.1
+  shared_preferences:
+  dartz:
+  equatable:
 
 dev_dependencies:
   flutter_test:
@@ -24,4 +24,4 @@ dev_dependencies:
 
 flutter:
   assets:
-  - assets/msalv2.js
+    - assets/msalv2.js

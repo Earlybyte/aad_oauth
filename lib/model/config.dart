@@ -234,7 +234,7 @@ class Config {
                     ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
                     : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/token')
                 : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token'),
-        aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
+        aOptions = aOptions ?? AndroidOptions(),
         cacheLocation = cacheLocation ?? CacheLocation.localStorage,
         redirectUri = redirectUri ?? getDefaultRedirectUri();
 }

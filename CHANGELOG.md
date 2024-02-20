@@ -4,18 +4,26 @@
 
 ## [1.0.1] - 20230215
 
-- Optionally avoid prompting popup on web logout https://github.com/Earlybyte/aad_oauth/pull/277 (by @phildupuis)
-- Fix/inline linter rules to prevent conflict https://github.com/Earlybyte/aad_oauth/pull/279 (by @mikedigit)
-- **Breaking** Update willpopscope to popscope https://github.com/Earlybyte/aad_oauth/pull/291 (by @elijahjohnston) fix: either upgrade Flutter to 3.16 or downgrade AAD_OAUTH to 1.0.0
+- Optionally avoid prompting popup on web logout https://github.com/Earlybyte/aad_oauth/pull/277 (by
+  @phildupuis)
+- Fix/inline linter rules to prevent conflict https://github.com/Earlybyte/aad_oauth/pull/279 (by
+  @mikedigit)
+- **Breaking** Update willpopscope to popscope https://github.com/Earlybyte/aad_oauth/pull/291 (by
+  @elijahjohnston) fix: either upgrade Flutter to 3.16 or downgrade AAD_OAUTH to 1.0.0
 - Add login hint for web https://github.com/Earlybyte/aad_oauth/pull/292 (by @elijahjohnston)
-- ✨ feat: add onPageFinished function in Config https://github.com/Earlybyte/aad_oauth/pull/280 (by @tajjacob)
+- ✨ feat: add onPageFinished function in Config https://github.com/Earlybyte/aad_oauth/pull/280 (by
+  @tajjacob)
 
 ## [1.0.0] - 20231010
 
-- Add ADFS support for mobile applications https://github.com/Earlybyte/aad_oauth/pull/270 (by @AndreasHassing)
-- Add explicit and implicit refresh token https://github.com/Earlybyte/aad_oauth/pull/260 (by @easazade)
-- Plugins: update multiple plugins and ui https://github.com/Earlybyte/aad_oauth/pull/257 (by @tajjacob)
-- Remove client secret from Azure AD B2C config instructions in README https://github.com/Earlybyte/aad_oauth/pull/252 (by @OssiPesonen)
+- Add ADFS support for mobile applications https://github.com/Earlybyte/aad_oauth/pull/270 (by
+  @AndreasHassing)
+- Add explicit and implicit refresh token https://github.com/Earlybyte/aad_oauth/pull/260 (by
+  @easazade)
+- Plugins: update multiple plugins and ui https://github.com/Earlybyte/aad_oauth/pull/257 (by
+  @tajjacob)
+- Remove client secret from Azure AD B2C config instructions in
+  README https://github.com/Earlybyte/aad_oauth/pull/252 (by @OssiPesonen)
 - Update deps https://github.com/Earlybyte/aad_oauth/pull/245 (by @Zazo032)
 - Authority improvements https://github.com/Earlybyte/aad_oauth/pull/236 (by @Zazo032)
 - Handle pop in the webview https://github.com/Earlybyte/aad_oauth/pull/233 (by @xhoi-xhafaj)
@@ -23,24 +31,31 @@
 ## [0.4.4] - 20230516
 
 - Add cacheLocation configuration https://github.com/Earlybyte/aad_oauth/pull/220 (by @tigloo)
-- Always use myMSALObj.acquireTokenSilent to get fresh token https://github.com/Earlybyte/aad_oauth/pull/226 (by @ruicraveiro)
-- Added custom domain url with tenant Id for B2C with Azure Front Door https://github.com/Earlybyte/aad_oauth/pull/227 (by @jochemvanweelde)
+- Always use myMSALObj.acquireTokenSilent to get fresh
+  token https://github.com/Earlybyte/aad_oauth/pull/226 (by @ruicraveiro)
+- Added custom domain url with tenant Id for B2C with Azure Front
+  Door https://github.com/Earlybyte/aad_oauth/pull/227 (by @jochemvanweelde)
 - Check navigator state https://github.com/Earlybyte/aad_oauth/pull/229 (by @easazade)
 
 ## [0.4.3] - 20230327
 
-- Adding postLogoutRedirectUri - Sign-out with a redirect https://github.com/Earlybyte/aad_oauth/pull/217
+- Adding postLogoutRedirectUri - Sign-out with a
+  redirect https://github.com/Earlybyte/aad_oauth/pull/217
 - Update flutter_secure_storage to 8.0.0 https://github.com/Earlybyte/aad_oauth/pull/216
-- Refresh authResult from cache in getAccessToken and getIdToken https://github.com/Earlybyte/aad_oauth/pull/215
+- Refresh authResult from cache in getAccessToken and
+  getIdToken https://github.com/Earlybyte/aad_oauth/pull/215
 - Add `hasCachedAccountInformation` getter support https://github.com/Earlybyte/aad_oauth/pull/210
-- Custom parameters to support dynamic UI customization for B2C custom policies https://github.com/Earlybyte/aad_oauth/pull/207
+- Custom parameters to support dynamic UI customization for B2C custom
+  policies https://github.com/Earlybyte/aad_oauth/pull/207
 
 ## [0.4.2] - 20230124
 
 - Add MockCoreOAuth for testing https://github.com/Earlybyte/aad_oauth/pull/185.
-- Update flutter_secure_storage to ^7.0.1, bump minor dependency versions https://github.com/Earlybyte/aad_oauth/pull/192
+- Update flutter_secure_storage to ^7.0.1, bump minor dependency
+  versions https://github.com/Earlybyte/aad_oauth/pull/192
 - Fix request code issue in google signIn https://github.com/Earlybyte/aad_oauth/pull/193
-- Add optional parameter origin header for mobile token request https://github.com/Earlybyte/aad_oauth/pull/177
+- Add optional parameter origin header for mobile token
+  request https://github.com/Earlybyte/aad_oauth/pull/177
 - Fix net::ERR_CACHE_MISS on release https://github.com/Earlybyte/aad_oauth/pull/198
 - Update Webview https://github.com/Earlybyte/aad_oauth/pull/199
 - Add Azure B2C support for Flutter Web https://github.com/Earlybyte/aad_oauth/pull/201
@@ -48,8 +63,8 @@
 ## [0.4.1] - 20221124
 
 - Added web redirect authentication flow option https://github.com/Earlybyte/aad_oauth/pull/174.
-  - Must use at least version 2.13.1 of MSAL library from MS in index.html.
-  - Calculates an appropriate default redirect URI on mobile and web if not provided.
+    - Must use at least version 2.13.1 of MSAL library from MS in index.html.
+    - Calculates an appropriate default redirect URI on mobile and web if not provided.
 - Add userAgent parameter to WebView https://github.com/Earlybyte/aad_oauth/pull/181
 - Fix exception behavior for the web version https://github.com/Earlybyte/aad_oauth/pull/170.
 - Breaking: Improve exceptions handling https://github.com/Earlybyte/aad_oauth/pull/168.
@@ -58,13 +73,15 @@
 
 ## [0.4.0] - 20220523
 
-- Breaking: Use webview_flutter plugin (requires android minSDK >= 20) https://github.com/Earlybyte/aad_oauth/pull/121, https://github.com/Earlybyte/aad_oauth/pull/124
+- Breaking: Use webview_flutter plugin (requires android minSDK >=
+    20) https://github.com/Earlybyte/aad_oauth/pull/121, https://github.com/Earlybyte/aad_oauth/pull/124
 - Requires passing the same navigatorKey to Config() and MaterialApp() to support
   interactive login.
 - Removed unnecessary calls to set screen size - calls to these APIs must be
   removed from apps (setWebViewScreenSize and setWebViewScreenSizeFromMedia).
-  - webview_flutter automatically adjusts the webview size.
-- Update flutter_secure_storage and add android options to config https://github.com/Earlybyte/aad_oauth/pull/128, https://github.com/Earlybyte/aad_oauth/pull/134
+    - webview_flutter automatically adjusts the webview size.
+- Update flutter_secure_storage and add android options to
+  config https://github.com/Earlybyte/aad_oauth/pull/128, https://github.com/Earlybyte/aad_oauth/pull/134
 
 ## [0.3.1] - 20200808
 
@@ -107,8 +124,10 @@
 
 ## [0.1.7] - 20190430
 
-- Expose Redirect URL property in config.dart file to public https://github.com/Earlybyte/aad_oauth/pull/9
-- Expose webview rect area to public for customization https://github.com/Earlybyte/aad_oauth/pull/12
+- Expose Redirect URL property in config.dart file to
+  public https://github.com/Earlybyte/aad_oauth/pull/9
+- Expose webview rect area to public for
+  customization https://github.com/Earlybyte/aad_oauth/pull/12
 
 ## [0.1.6] - 20190419
 
