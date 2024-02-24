@@ -5,7 +5,6 @@ import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/failure.dart';
 import 'package:aad_oauth/model/token.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../request_code.dart';
@@ -23,9 +22,8 @@ class MobileOAuth extends CoreOAuth {
   /// [config] Parameters according to official Microsoft Documentation.
   MobileOAuth(Config config)
       : _authStorage = AuthStorage(
-          FlutterSecureStorage(),
-          aOptions: config.aOptions,
           tokenIdentifier: config.tokenIdentifier,
+          aOptions: config.aOptions,
         ),
         _requestCode = RequestCode(config),
         _requestToken = RequestToken(config);

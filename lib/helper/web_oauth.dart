@@ -50,7 +50,6 @@ external void jsRefreshToken(
 
 class WebOAuth extends CoreOAuth {
   final Config config;
-
   WebOAuth(this.config) {
     jsInit(MsalConfig.construct(
         tenant: config.tenant,

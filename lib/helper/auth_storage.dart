@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'dart:convert' show jsonEncode, jsonDecode;
-
 import 'package:aad_oauth/model/token.dart';
+import 'dart:convert' show jsonEncode, jsonDecode;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthStorage {
@@ -10,10 +9,9 @@ class AuthStorage {
   final Token emptyToken = Token();
 
   AuthStorage(
-    this._secureStorage, {
-    String tokenIdentifier = 'Token',
-    required AndroidOptions aOptions,
-  }) : _tokenIdentifier = tokenIdentifier;
+      {String tokenIdentifier = 'Token', required AndroidOptions aOptions})
+      : _tokenIdentifier = tokenIdentifier,
+        _secureStorage = FlutterSecureStorage(aOptions: aOptions);
 
   Future<void> saveTokenToCache(Token token) async {
     var data = Token.toJsonMap(token);

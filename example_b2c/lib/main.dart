@@ -34,7 +34,6 @@ class _MyAppState extends State<MyApp> {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
