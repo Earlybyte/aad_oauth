@@ -48,8 +48,8 @@
 ## [0.4.1] - 20221124
 
 - Added web redirect authentication flow option https://github.com/Earlybyte/aad_oauth/pull/174.
-    - Must use at least version 2.13.1 of MSAL library from MS in index.html.
-    - Calculates an appropriate default redirect URI on mobile and web if not provided.
+  - Must use at least version 2.13.1 of MSAL library from MS in index.html.
+  - Calculates an appropriate default redirect URI on mobile and web if not provided.
 - Add userAgent parameter to WebView https://github.com/Earlybyte/aad_oauth/pull/181
 - Fix exception behavior for the web version https://github.com/Earlybyte/aad_oauth/pull/170.
 - Breaking: Improve exceptions handling https://github.com/Earlybyte/aad_oauth/pull/168.
@@ -63,7 +63,7 @@
   interactive login.
 - Removed unnecessary calls to set screen size - calls to these APIs must be
   removed from apps (setWebViewScreenSize and setWebViewScreenSizeFromMedia).
-    - webview_flutter automatically adjusts the webview size.
+  - webview_flutter automatically adjusts the webview size.
 - Update flutter_secure_storage and add android options to config https://github.com/Earlybyte/aad_oauth/pull/128, https://github.com/Earlybyte/aad_oauth/pull/134
 
 ## [0.3.1] - 20200808
