@@ -41,9 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
     appBar: AppBar(
       title: Text('AAD OAuth Demo'),
     ),
-    onPageFinished: (String url) {
-      log('onPageFinished: $url');
-    },
   );
   final AadOAuth oauth = AadOAuth(config);
 
