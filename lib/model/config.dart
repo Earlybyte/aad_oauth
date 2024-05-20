@@ -222,19 +222,97 @@ class Config {
     this.postLogoutRedirectUri,
     this.appBar,
     this.onPageFinished,
-  })  : authorizationUrl = customAuthorizationUrl ??
-            (isB2C
-                ? (customDomainUrlWithTenantId == null
-                    ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
-                    : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/authorize')
-                : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize'),
+  })
+      : authorizationUrl = customAuthorizationUrl ??
+      (isB2C
+          ? (customDomainUrlWithTenantId == null
+          ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
+          : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/authorize')
+          : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize'),
         tokenUrl = customTokenUrl ??
             (isB2C
                 ? (customDomainUrlWithTenantId == null
-                    ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
-                    : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/token')
+                ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
+                : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/token')
                 : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token'),
         aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
         cacheLocation = cacheLocation ?? CacheLocation.localStorage,
         redirectUri = redirectUri ?? getDefaultRedirectUri();
+
+  Config copyWith({
+    String? tenant,
+    String? policy,
+    String? clientId,
+    String? responseType,
+    String? redirectUri,
+    String? scope,
+    bool? webUseRedirect,
+    String? responseMode,
+    String? state,
+    String? prompt,
+    String? codeChallenge,
+    String? codeChallengeMethod,
+    String? nonce,
+    String? tokenIdentifier,
+    String? clientSecret,
+    String? resource,
+    bool? isB2C,
+    String? customAuthorizationUrl,
+    String? customTokenUrl,
+    String? customDomainUrlWithTenantId,
+    String? loginHint,
+    String? domainHint,
+    String? codeVerifier,
+    String? userAgent,
+    bool? isStub,
+    Widget? loader,
+    AndroidOptions? aOptions,
+    CacheLocation? cacheLocation,
+    GlobalKey<NavigatorState>? navigatorKey,
+    String? origin,
+    Map<String, String>? customParameters,
+    String? postLogoutRedirectUri,
+    PreferredSizeWidget? appBar,
+    Function(String url)? onPageFinished,
+  }) {
+    return Config(
+      tenant: tenant ?? this.tenant,
+      policy: policy ?? this.policy,
+      clientId: clientId ?? this.clientId,
+      responseType: responseType ?? this.responseType,
+      redirectUri: redirectUri ?? this.redirectUri,
+      scope: scope ?? this.scope,
+      webUseRedirect: webUseRedirect ?? this.webUseRedirect,
+      responseMode: responseMode ?? this.responseMode,
+      state: state ?? this.state,
+      prompt: prompt ?? this.prompt,
+      codeChallenge: codeChallenge ?? this.codeChallenge,
+      codeChallengeMethod: codeChallengeMethod ?? this.codeChallengeMethod,
+      nonce: nonce ?? this.nonce,
+      tokenIdentifier: tokenIdentifier ?? this.tokenIdentifier,
+      clientSecret: clientSecret ?? this.clientSecret,
+      resource: resource ?? this.resource,
+      isB2C: isB2C ?? this.isB2C,
+      customAuthorizationUrl: customAuthorizationUrl ??
+          this.customAuthorizationUrl,
+      customTokenUrl: customTokenUrl ?? this.customTokenUrl,
+      customDomainUrlWithTenantId: customDomainUrlWithTenantId ??
+          this.customDomainUrlWithTenantId,
+      loginHint: loginHint ?? this.loginHint,
+      domainHint: domainHint ?? this.domainHint,
+      codeVerifier: codeVerifier ?? this.codeVerifier,
+      userAgent: userAgent ?? this.userAgent,
+      isStub: isStub ?? this.isStub,
+      loader: loader ?? this.loader,
+      aOptions: aOptions ?? this.aOptions,
+      cacheLocation: cacheLocation ?? this.cacheLocation,
+      navigatorKey: navigatorKey ?? this.navigatorKey,
+      origin: origin ?? this.origin,
+      customParameters: customParameters ?? this.customParameters,
+      postLogoutRedirectUri:
+      postLogoutRedirectUri ?? this.postLogoutRedirectUri,
+      appBar: appBar ?? this.appBar,
+      onPageFinished: onPageFinished ?? this.onPageFinished,
+    );
+  }
 }
