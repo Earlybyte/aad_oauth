@@ -23,4 +23,4 @@ jobs:
           days-before-stale: 60
           days-before-close: 31
           exempt-issue-labels: 'pinned, security'
-          close-issue-message: false
+          close-issue-message: 'Closing this issue due to lack of activity.'
