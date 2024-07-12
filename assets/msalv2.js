@@ -59,6 +59,22 @@ var aadOauth = (function () {
   // Will return the authentication result on success and update the
   // global authResult variable.
   async function silentlyAcquireToken() {
+    try {
+      // The redirect handler task will complete with auth results if we
+      // were redirected from AAD. If not, it will complete with null
+      // We must wait for it to complete before we allow the login to
+      // attempt to acquire a token silently, and then progress to interactive
+      // login (if silent acquisition fails).
+      let result = await redirectHandlerTask;
+      if (result !== null) {
+        authResult = result;
+        return authResult;
+      }
+    }
+    catch (error) {
+      authResultError = null;
+    }
+
     const account = getAccount();
     if (account == null) {
       return null;
@@ -102,23 +118,6 @@ var aadOauth = (function () {
   /// to attempt to refresh the token using an interactive login.
 
   async function login(refreshIfAvailable, useRedirect, onSuccess, onError) {
-    try {
-      // The redirect handler task will complete with auth results if we
-      // were redirected from AAD. If not, it will complete with null
-      // We must wait for it to complete before we allow the login to
-      // attempt to acquire a token silently, and then progress to interactive
-      // login (if silent acquisition fails).
-      let result = await redirectHandlerTask;
-      if (result !== null) {
-        authResult = result;
-      }
-    }
-    catch (error) {
-      authResultError = error;
-      onError(authResultError);
-      return;
-    }
-
     // Try to sign in silently, assuming we have already signed in and have
     // a cached access token
     await silentlyAcquireToken()
