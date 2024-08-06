@@ -11,7 +11,7 @@ class RequestCode {
   final AuthorizationRequest _authorizationRequest;
   final String _redirectUriHost;
   late NavigationDelegate _navigationDelegate;
-  // late WebViewCookieManager _cookieManager;
+  late WebViewCookieManager _cookieManager;
   String? _code;
 
   RequestCode(Config config)
@@ -21,7 +21,7 @@ class RequestCode {
     _navigationDelegate = NavigationDelegate(
       onNavigationRequest: _onNavigationRequest,
     );
-    // _cookieManager = WebViewCookieManager();
+    _cookieManager = WebViewCookieManager();
   }
 
   Future<String?> requestCode() async {
@@ -30,7 +30,6 @@ class RequestCode {
     final urlParams = _constructUrlParams();
     final launchUri = Uri.parse('${_authorizationRequest.url}?$urlParams');
     final controller = WebViewController();
-    final cookieManager = WebViewCookieManager();
     await controller.setNavigationDelegate(_navigationDelegate);
     await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
 
@@ -103,7 +102,7 @@ class RequestCode {
   }
 
   Future<void> clearCookies() async {
-    await WebViewCookieManager().clearCookies();
+    await _cookieManager.clearCookies();
   }
 
   String _constructUrlParams() => _mapToQueryParams(
