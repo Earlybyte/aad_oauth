@@ -57,7 +57,9 @@ class Config {
   final String? state;
 
   /// Indicates the type of user interaction that is required.
-  /// The only valid values at this time are *login*, *none*, and *consent*.
+  /// The only valid values at this time are *login*, *none*, *consent*, and *select_account*.
+  /// If *select_account* is wanting to be used, the user must have at least signed in once and
+  /// when logging out, the *clearCookies* value must be false.
   final String? prompt;
 
   /// Used to secure authorization code grants via Proof Key for Code Exchange (PKCE).
