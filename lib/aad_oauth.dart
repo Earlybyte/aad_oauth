@@ -37,8 +37,8 @@ class AadOAuth {
   Future<String?> getIdToken() async => _coreOAuth.getIdToken();
 
   /// Perform Azure AD logout.
-  Future<void> logout({bool showWebPopup = true}) async =>
-      _coreOAuth.logout(showPopup: showWebPopup);
+  Future<void> logout({bool showWebPopup = true, bool clearCookies = true}) async =>
+      _coreOAuth.logout(showPopup: showWebPopup, clearCookies: clearCookies);
 
   /// Checks if MSAL has cached information
   Future<bool> get hasCachedAccountInformation async =>

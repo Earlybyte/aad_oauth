@@ -132,7 +132,7 @@ class WebOAuth extends CoreOAuth {
   }
 
   @override
-  Future<void> logout({bool showPopup = true}) async {
+  Future<void> logout({bool showPopup = true, bool clearCookies = true}) async {
     final completer = Completer<void>();
 
     jsLogout(
