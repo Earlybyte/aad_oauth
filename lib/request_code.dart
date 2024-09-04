@@ -20,6 +20,9 @@ class RequestCode {
         _redirectUriHost = Uri.parse(config.redirectUri).host {
     _navigationDelegate = NavigationDelegate(
       onNavigationRequest: _onNavigationRequest,
+      onPageStarted: config.onPageStarted,
+      onPageFinished: config.onPageFinished, 
+      onWebResourceError: config.onWebResourceError,
     );
     _cookieManager = WebViewCookieManager();
   }
@@ -36,13 +39,6 @@ class RequestCode {
     await controller.setBackgroundColor(Colors.transparent);
     await controller.setUserAgent(_config.userAgent);
     await controller.loadRequest(launchUri);
-    if (_config.onPageFinished != null) {
-      await controller.setNavigationDelegate(
-        NavigationDelegate(
-          onPageFinished: _config.onPageFinished,
-        ),
-      );
-    }
 
     final webView = WebViewWidget(controller: controller);
 
