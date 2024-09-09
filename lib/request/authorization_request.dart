@@ -16,6 +16,8 @@ class AuthorizationRequest {
           'response_type': config.responseType,
           'redirect_uri': config.redirectUri,
           'scope': config.scope,
+          'lc': config.localeCode
+              .toString(), // 1036 = FR, 1046 = PT-BR, https://ss64.com/locale.html
         } {
     if (config.state != null) {
       parameters.putIfAbsent('state', () => config.state!);
