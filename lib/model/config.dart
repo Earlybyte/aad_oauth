@@ -176,6 +176,10 @@ class Config {
   /// add onWebResourceError callback
   Function(WebResourceError error)? onWebResourceError;
 
+  // LocaleCode for lc WebView internationalization - Windows Locale Code (numeric)
+  // check the site https://ss64.com/locale.html for more information
+  int? localeCode;
+
   /// Determine an appropriate redirect URI for AAD authentication.
   /// On web, it is the location that the application is being served from.
   /// On mobile, it is https://login.live.com/oauth20_desktop.srf
@@ -232,7 +236,8 @@ class Config {
       this.appBar,
       this.onPageStarted,
       this.onPageFinished,
-      this.onWebResourceError})
+      this.onWebResourceError,
+      this.localeCode})
       : authorizationUrl = customAuthorizationUrl ??
             (isB2C
                 ? (customDomainUrlWithTenantId == null
@@ -285,7 +290,8 @@ class Config {
       PreferredSizeWidget? appBar,
       Function(String url)? onPageStarted,
       Function(String url)? onPageFinished,
-      Function(WebResourceError error)? onWebResourceError}) {
+      Function(WebResourceError error)? onWebResourceError,
+      int? localeCode}) {
     return Config(
         tenant: tenant ?? this.tenant,
         policy: policy ?? this.policy,
@@ -325,6 +331,7 @@ class Config {
         appBar: appBar ?? this.appBar,
         onPageStarted: onPageStarted ?? this.onPageStarted,
         onPageFinished: onPageFinished ?? this.onPageFinished,
-        onWebResourceError: onWebResourceError ?? this.onWebResourceError);
+        onWebResourceError: onWebResourceError ?? this.onWebResourceError,
+        localeCode: localeCode ?? this.localeCode);
   }
 }
