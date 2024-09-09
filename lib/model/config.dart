@@ -2,6 +2,7 @@ import 'package:aad_oauth/model/cache_location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 /// Parameters according to official Microsoft Documentation:
 /// - Azure AD https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow
@@ -166,8 +167,18 @@ class Config {
   /// add an app bar to the login page
   PreferredSizeWidget? appBar;
 
+  /// add onPageStarted callback
+  Function(String url)? onPageStarted;
+
   /// add onPageFinished callback
   Function(String url)? onPageFinished;
+
+  /// add onWebResourceError callback
+  Function(WebResourceError error)? onWebResourceError;
+
+  // LocaleCode for lc WebView internationalization - Windows Locale Code (numeric)
+  // check the site https://ss64.com/locale.html for more information
+  int? localeCode;
 
   /// Determine an appropriate redirect URI for AAD authentication.
   /// On web, it is the location that the application is being served from.
@@ -189,132 +200,138 @@ class Config {
   }
 
   /// Azure AD OAuth Configuration. Look at individual fields for description.
-  Config({
-    required this.tenant,
-    this.policy,
-    required this.clientId,
-    this.responseType = 'code',
-    String? redirectUri,
-    required this.scope,
-    this.webUseRedirect = false,
-    this.responseMode,
-    this.state,
-    this.prompt,
-    this.codeChallenge,
-    this.codeChallengeMethod,
-    this.nonce = '12345',
-    this.tokenIdentifier = 'Token',
-    this.clientSecret,
-    this.resource,
-    this.isB2C = false,
-    this.customAuthorizationUrl,
-    this.customTokenUrl,
-    this.customDomainUrlWithTenantId,
-    this.loginHint,
-    this.domainHint,
-    this.codeVerifier,
-    this.userAgent,
-    this.isStub = false,
-    this.loader = const SizedBox(),
-    AndroidOptions? aOptions,
-    CacheLocation? cacheLocation,
-    required this.navigatorKey,
-    this.origin,
-    this.customParameters = const {},
-    this.postLogoutRedirectUri,
-    this.appBar,
-    this.onPageFinished,
-  })
+  Config(
+      {required this.tenant,
+      this.policy,
+      required this.clientId,
+      this.responseType = 'code',
+      String? redirectUri,
+      required this.scope,
+      this.webUseRedirect = false,
+      this.responseMode,
+      this.state,
+      this.prompt,
+      this.codeChallenge,
+      this.codeChallengeMethod,
+      this.nonce = '12345',
+      this.tokenIdentifier = 'Token',
+      this.clientSecret,
+      this.resource,
+      this.isB2C = false,
+      this.customAuthorizationUrl,
+      this.customTokenUrl,
+      this.customDomainUrlWithTenantId,
+      this.loginHint,
+      this.domainHint,
+      this.codeVerifier,
+      this.userAgent,
+      this.isStub = false,
+      this.loader = const SizedBox(),
+      AndroidOptions? aOptions,
+      CacheLocation? cacheLocation,
+      required this.navigatorKey,
+      this.origin,
+      this.customParameters = const {},
+      this.postLogoutRedirectUri,
+      this.appBar,
+      this.onPageStarted,
+      this.onPageFinished,
+      this.onWebResourceError,
+      this.localeCode})
       : authorizationUrl = customAuthorizationUrl ??
-      (isB2C
-          ? (customDomainUrlWithTenantId == null
-          ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
-          : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/authorize')
-          : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize'),
+            (isB2C
+                ? (customDomainUrlWithTenantId == null
+                    ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/authorize'
+                    : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/authorize')
+                : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/authorize'),
         tokenUrl = customTokenUrl ??
             (isB2C
                 ? (customDomainUrlWithTenantId == null
-                ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
-                : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/token')
+                    ? 'https://$tenant.b2clogin.com/$tenant.onmicrosoft.com/$policy/oauth2/v2.0/token'
+                    : '$customDomainUrlWithTenantId/$policy/oauth2/v2.0/token')
                 : 'https://login.microsoftonline.com/$tenant/oauth2/v2.0/token'),
         aOptions = aOptions ?? AndroidOptions(encryptedSharedPreferences: true),
         cacheLocation = cacheLocation ?? CacheLocation.localStorage,
         redirectUri = redirectUri ?? getDefaultRedirectUri();
 
-  Config copyWith({
-    String? tenant,
-    String? policy,
-    String? clientId,
-    String? responseType,
-    String? redirectUri,
-    String? scope,
-    bool? webUseRedirect,
-    String? responseMode,
-    String? state,
-    String? prompt,
-    String? codeChallenge,
-    String? codeChallengeMethod,
-    String? nonce,
-    String? tokenIdentifier,
-    String? clientSecret,
-    String? resource,
-    bool? isB2C,
-    String? customAuthorizationUrl,
-    String? customTokenUrl,
-    String? customDomainUrlWithTenantId,
-    String? loginHint,
-    String? domainHint,
-    String? codeVerifier,
-    String? userAgent,
-    bool? isStub,
-    Widget? loader,
-    AndroidOptions? aOptions,
-    CacheLocation? cacheLocation,
-    GlobalKey<NavigatorState>? navigatorKey,
-    String? origin,
-    Map<String, String>? customParameters,
-    String? postLogoutRedirectUri,
-    PreferredSizeWidget? appBar,
-    Function(String url)? onPageFinished,
-  }) {
+  Config copyWith(
+      {String? tenant,
+      String? policy,
+      String? clientId,
+      String? responseType,
+      String? redirectUri,
+      String? scope,
+      bool? webUseRedirect,
+      String? responseMode,
+      String? state,
+      String? prompt,
+      String? codeChallenge,
+      String? codeChallengeMethod,
+      String? nonce,
+      String? tokenIdentifier,
+      String? clientSecret,
+      String? resource,
+      bool? isB2C,
+      String? customAuthorizationUrl,
+      String? customTokenUrl,
+      String? customDomainUrlWithTenantId,
+      String? loginHint,
+      String? domainHint,
+      String? codeVerifier,
+      String? userAgent,
+      bool? isStub,
+      Widget? loader,
+      AndroidOptions? aOptions,
+      CacheLocation? cacheLocation,
+      GlobalKey<NavigatorState>? navigatorKey,
+      String? origin,
+      Map<String, String>? customParameters,
+      String? postLogoutRedirectUri,
+      PreferredSizeWidget? appBar,
+      Function(String url)? onPageStarted,
+      Function(String url)? onPageFinished,
+      Function(WebResourceError error)? onWebResourceError,
+      int? localeCode}) {
     return Config(
-      tenant: tenant ?? this.tenant,
-      policy: policy ?? this.policy,
-      clientId: clientId ?? this.clientId,
-      responseType: responseType ?? this.responseType,
-      redirectUri: redirectUri ?? this.redirectUri,
-      scope: scope ?? this.scope,
-      webUseRedirect: webUseRedirect ?? this.webUseRedirect,
-      responseMode: responseMode ?? this.responseMode,
-      state: state ?? this.state,
-      prompt: prompt ?? this.prompt,
-      codeChallenge: codeChallenge ?? this.codeChallenge,
-      codeChallengeMethod: codeChallengeMethod ?? this.codeChallengeMethod,
-      nonce: nonce ?? this.nonce,
-      tokenIdentifier: tokenIdentifier ?? this.tokenIdentifier,
-      clientSecret: clientSecret ?? this.clientSecret,
-      resource: resource ?? this.resource,
-      isB2C: isB2C ?? this.isB2C,
-      customAuthorizationUrl: customAuthorizationUrl ??
-          this.customAuthorizationUrl,
-      customTokenUrl: customTokenUrl ?? this.customTokenUrl,
-      customDomainUrlWithTenantId: customDomainUrlWithTenantId ??
-          this.customDomainUrlWithTenantId,
-      loginHint: loginHint ?? this.loginHint,
-      domainHint: domainHint ?? this.domainHint,
-      codeVerifier: codeVerifier ?? this.codeVerifier,
-      userAgent: userAgent ?? this.userAgent,
-      isStub: isStub ?? this.isStub,
-      loader: loader ?? this.loader,
-      aOptions: aOptions ?? this.aOptions,
-      cacheLocation: cacheLocation ?? this.cacheLocation,
-      navigatorKey: navigatorKey ?? this.navigatorKey,
-      origin: origin ?? this.origin,
-      customParameters: customParameters ?? this.customParameters,
-      postLogoutRedirectUri:
-      postLogoutRedirectUri ?? this.postLogoutRedirectUri,
-      appBar: appBar ?? this.appBar,
-      onPageFinished: onPageFinished ?? this.onPageFinished,
-    );
+        tenant: tenant ?? this.tenant,
+        policy: policy ?? this.policy,
+        clientId: clientId ?? this.clientId,
+        responseType: responseType ?? this.responseType,
+        redirectUri: redirectUri ?? this.redirectUri,
+        scope: scope ?? this.scope,
+        webUseRedirect: webUseRedirect ?? this.webUseRedirect,
+        responseMode: responseMode ?? this.responseMode,
+        state: state ?? this.state,
+        prompt: prompt ?? this.prompt,
+        codeChallenge: codeChallenge ?? this.codeChallenge,
+        codeChallengeMethod: codeChallengeMethod ?? this.codeChallengeMethod,
+        nonce: nonce ?? this.nonce,
+        tokenIdentifier: tokenIdentifier ?? this.tokenIdentifier,
+        clientSecret: clientSecret ?? this.clientSecret,
+        resource: resource ?? this.resource,
+        isB2C: isB2C ?? this.isB2C,
+        customAuthorizationUrl:
+            customAuthorizationUrl ?? this.customAuthorizationUrl,
+        customTokenUrl: customTokenUrl ?? this.customTokenUrl,
+        customDomainUrlWithTenantId:
+            customDomainUrlWithTenantId ?? this.customDomainUrlWithTenantId,
+        loginHint: loginHint ?? this.loginHint,
+        domainHint: domainHint ?? this.domainHint,
+        codeVerifier: codeVerifier ?? this.codeVerifier,
+        userAgent: userAgent ?? this.userAgent,
+        isStub: isStub ?? this.isStub,
+        loader: loader ?? this.loader,
+        aOptions: aOptions ?? this.aOptions,
+        cacheLocation: cacheLocation ?? this.cacheLocation,
+        navigatorKey: navigatorKey ?? this.navigatorKey,
+        origin: origin ?? this.origin,
+        customParameters: customParameters ?? this.customParameters,
+        postLogoutRedirectUri:
+            postLogoutRedirectUri ?? this.postLogoutRedirectUri,
+        appBar: appBar ?? this.appBar,
+        onPageStarted: onPageStarted ?? this.onPageStarted,
+        onPageFinished: onPageFinished ?? this.onPageFinished,
+        onWebResourceError: onWebResourceError ?? this.onWebResourceError,
+        localeCode: localeCode ?? this.localeCode);
   }
 }
