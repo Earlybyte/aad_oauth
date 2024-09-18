@@ -12,9 +12,27 @@ import 'model/config.dart';
 
 /// Authenticates a user with Azure Active Directory using OAuth2.0.
 class AadOAuth {
-  final CoreOAuth _coreOAuth;
+  CoreOAuth _coreOAuth;
+  Config _config;
 
-  AadOAuth(Config config) : _coreOAuth = CoreOAuth.fromConfig(config);
+  AadOAuth(Config config)
+      : _coreOAuth = CoreOAuth.fromConfig(config),
+        _config = config;
+
+  /// Changes dynamically language displayed in the login/register form
+  void setLanguage(String languageCode) {
+    const localesKey = 'ui_locales';
+
+    final updatedParameters = Map.of(_config.customParameters);
+    updatedParameters[localesKey] = languageCode;
+
+    final updatedConfig = _config.copyWith(
+      customParameters: updatedParameters,
+    );
+
+    _config = updatedConfig;
+    _coreOAuth = CoreOAuth.fromConfig(_config);
+  }
 
   /// Perform Azure AD login.
   ///
