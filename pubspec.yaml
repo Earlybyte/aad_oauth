@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_secure_storage: ^9.0.0
-  webview_flutter: ^4.4.1
+  flutter_inappwebview: ^6.1.5
   js: ^0.6.7
   http: ^1.1.0
   shared_preferences: ^2.2.1

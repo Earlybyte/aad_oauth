@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import 'model/config.dart';
 import 'request/authorization_request.dart';
@@ -10,41 +10,62 @@ class RequestCode {
   final Config _config;
   final AuthorizationRequest _authorizationRequest;
   final String _redirectUriHost;
-  late NavigationDelegate _navigationDelegate;
-  late WebViewCookieManager _cookieManager;
+  late InAppWebViewController? _controller;
+  late CookieManager _cookieManager;
   String? _code;
 
   RequestCode(Config config)
       : _config = config,
         _authorizationRequest = AuthorizationRequest(config),
         _redirectUriHost = Uri.parse(config.redirectUri).host {
-    _navigationDelegate = NavigationDelegate(
-      onNavigationRequest: _onNavigationRequest,
-    );
-    _cookieManager = WebViewCookieManager();
+    _cookieManager = CookieManager.instance();
+  }
+
+  Future<NavigationActionPolicy?> _shouldOverrideUrlLoading(
+      InAppWebViewController controller,
+      NavigationAction navigationAction) async {
+    try {
+      var url = navigationAction.request.url;
+      if (url == null) {
+        _config.navigatorKey.currentState!.pop();
+        return NavigationActionPolicy.CANCEL;
+      }
+
+      if (url.queryParameters['error'] != null) {
+        _config.navigatorKey.currentState!.pop();
+      }
+
+      var checkHost = url.host == _redirectUriHost;
+      if (url.queryParameters['code'] != null && checkHost) {
+        _code = url.queryParameters['code'];
+        _config.navigatorKey.currentState!.pop();
+      }
+    } catch (_) {}
+    return NavigationActionPolicy.ALLOW;
   }
 
   Future<String?> requestCode() async {
     _code = null;
 
     final urlParams = _constructUrlParams();
-    final launchUri = Uri.parse('${_authorizationRequest.url}?$urlParams');
-    final controller = WebViewController();
-    await controller.setNavigationDelegate(_navigationDelegate);
-    await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-
-    await controller.setBackgroundColor(Colors.transparent);
-    await controller.setUserAgent(_config.userAgent);
-    await controller.loadRequest(launchUri);
-    if (_config.onPageFinished != null) {
-      await controller.setNavigationDelegate(
-        NavigationDelegate(
-          onPageFinished: _config.onPageFinished,
-        ),
-      );
-    }
-
-    final webView = WebViewWidget(controller: controller);
+    final webView = InAppWebView(
+      shouldOverrideUrlLoading: _shouldOverrideUrlLoading,
+      initialSettings: InAppWebViewSettings(
+          useShouldOverrideUrlLoading: true,
+          userAgent: _config.userAgent,
+          transparentBackground: true),
+      initialUrlRequest: URLRequest(
+        url: WebUri('${_authorizationRequest.url}?$urlParams'),
+      ),
+      onWebViewCreated: (controller) {
+        _controller = controller;
+      },
+      onLoadStop: (controller, url) {
+        if (_config.onPageFinished != null) {
+          _config.onPageFinished!(url.toString());
+        }
+      },
+    );
 
     if (_config.navigatorKey.currentState == null) {
       throw Exception(
@@ -61,12 +82,13 @@ class RequestCode {
           appBar: _config.appBar,
           body: PopScope(
             canPop: false,
-            onPopInvoked: (bool didPop) async {
+            onPopInvokedWithResult: (didPop, result) async {
               if (didPop) return;
-              if (await controller.canGoBack()) {
-                await controller.goBack();
+              if (_controller != null && await _controller!.canGoBack()) {
+                await _controller!.goBack();
                 return;
               }
+
               final NavigatorState navigator = Navigator.of(context);
               navigator.pop();
             },
@@ -82,27 +104,8 @@ class RequestCode {
     return _code;
   }
 
-  Future<NavigationDecision> _onNavigationRequest(
-      NavigationRequest request) async {
-    try {
-      var uri = Uri.parse(request.url);
-
-      if (uri.queryParameters['error'] != null) {
-        _config.navigatorKey.currentState!.pop();
-      }
-
-      var checkHost = uri.host == _redirectUriHost;
-
-      if (uri.queryParameters['code'] != null && checkHost) {
-        _code = uri.queryParameters['code'];
-        _config.navigatorKey.currentState!.pop();
-      }
-    } catch (_) {}
-    return NavigationDecision.navigate;
-  }
-
   Future<void> clearCookies() async {
-    await _cookieManager.clearCookies();
+    await _cookieManager.deleteAllCookies();
   }
 
   String _constructUrlParams() => _mapToQueryParams(
