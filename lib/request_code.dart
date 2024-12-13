@@ -40,6 +40,7 @@ class RequestCode {
       await controller.setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: _config.onPageFinished,
+          onNavigationRequest: _onNavigationRequest,
         ),
       );
     }
