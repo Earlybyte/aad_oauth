@@ -164,6 +164,15 @@ dependencies:
   aad_oauth: "^1.0.1"
 ```
 
+## Language support
+
+You can change your default user flow page language by defining:
+
+```dart
+final AadOAuth oauth = new AadOAuth(config);
+oauth.setLanguage('en')
+```
+
 ## Contribution
 
 Contributions can be submitted as pull requests and are highly welcomed. Changes will be bundled together into a release. You can find the next release date and past releases in the [CHANGELOG file](CHANGELOG.md).
