@@ -6,8 +6,8 @@ import 'dart:async';
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/failure.dart';
 import 'package:aad_oauth/model/token.dart';
-import 'package:dartz/dartz.dart';
 
+import 'fp/either.dart';
 import 'model/config.dart';
 
 /// Authenticates a user with Azure Active Directory using OAuth2.0.
@@ -41,6 +41,5 @@ class AadOAuth {
       _coreOAuth.logout(showPopup: showWebPopup, clearCookies: clearCookies);
 
   /// Checks if MSAL has cached information
-  Future<bool> get hasCachedAccountInformation async =>
-      _coreOAuth.hasCachedAccountInformation;
+  Future<bool> get hasCachedAccountInformation async => _coreOAuth.hasCachedAccountInformation;
 }

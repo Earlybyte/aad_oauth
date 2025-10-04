@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 20251004
+
+- breaking change: Remove dartz dependency
+
+
+### Migration guide
+
+**Dartz is no longer used in the library.**. 
+
+Replace all dartz `Either` with aad_oauth `Either`: you just have to remove all `dartz` import and 
+import `package:aad_oauth/fp/either.dart` instead.
+
+
 ## [1.0.1] - 20230215
 
 - Optionally avoid prompting popup on web logout https://github.com/Earlybyte/aad_oauth/pull/277 (by @phildupuis)
