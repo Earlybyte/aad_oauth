@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/foundation.dart';
@@ -115,8 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var accessToken = await oauth.getAccessToken();
     if (accessToken != null) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(accessToken)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(accessToken)));
     }
   }
 
@@ -125,8 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content:
-            Text('HasCachedAccountInformation: $hasCachedAccountInformation'),
+        content: Text('HasCachedAccountInformation: $hasCachedAccountInformation'),
       ),
     );
   }
