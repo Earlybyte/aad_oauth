@@ -16,7 +16,6 @@ dependencies:
   js: ^0.6.7
   http: ^1.1.0
   shared_preferences: ^2.2.1
-  dartz: ^0.10.1
   equatable: ^2.0.5
 
 dev_dependencies:

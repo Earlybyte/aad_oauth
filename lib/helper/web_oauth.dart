@@ -6,12 +6,12 @@ library msauth;
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:aad_oauth/fp/either.dart';
 import 'package:aad_oauth/helper/core_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/failure.dart';
 import 'package:aad_oauth/model/msalconfig.dart';
 import 'package:aad_oauth/model/token.dart';
-import 'package:dartz/dartz.dart';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 
@@ -91,23 +91,19 @@ class WebOAuth extends CoreOAuth {
   }
 
   @override
-  Future<bool> get hasCachedAccountInformation =>
-      Future<bool>.value(jsHasCachedAccountInformation());
+  Future<bool> get hasCachedAccountInformation => Future<bool>.value(jsHasCachedAccountInformation());
 
   @override
-  Future<Either<Failure, Token>> login(
-      {bool refreshIfAvailable = false}) async {
+  Future<Either<Failure, Token>> login({bool refreshIfAvailable = false}) async {
     final completer = Completer<Either<Failure, Token>>();
 
     jsLogin(
       refreshIfAvailable,
       config.webUseRedirect,
-      allowInterop(
-          (value) => completer.complete(Right(Token(accessToken: value)))),
+      allowInterop((value) => completer.complete(Right(Token(accessToken: value)))),
       allowInterop((error) => completer.complete(Left(AadOauthFailure(
             errorType: ErrorType.accessDeniedOrAuthenticationCanceled,
-            message:
-                'Access denied or authentication canceled. Error: ${error.toString()}',
+            message: 'Access denied or authentication canceled. Error: ${error.toString()}',
           )))),
     );
 
@@ -119,12 +115,10 @@ class WebOAuth extends CoreOAuth {
     final completer = Completer<Either<Failure, Token>>();
 
     jsRefreshToken(
-      allowInterop(
-          (value) => completer.complete(Right(Token(accessToken: value)))),
+      allowInterop((value) => completer.complete(Right(Token(accessToken: value)))),
       allowInterop((error) => completer.complete(Left(AadOauthFailure(
             errorType: ErrorType.accessDeniedOrAuthenticationCanceled,
-            message:
-                'Access denied or authentication canceled. Error: ${error.toString()}',
+            message: 'Access denied or authentication canceled. Error: ${error.toString()}',
           )))),
     );
 
