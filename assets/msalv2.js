@@ -12,47 +12,76 @@ var aadOauth = (function () {
     loginHint: null
   };
 
+  function deriveAuthorityFromAuthorizationUrl(authorizationUrl) {
+    const oauthSuffixes = ['/oauth2/v2.0/authorize', '/oauth2/authorize'];
+
+    for (const suffix of oauthSuffixes) {
+      if (authorizationUrl.endsWith(suffix)) {
+        let authority = authorizationUrl.substring(0, authorizationUrl.length - suffix.length);
+        if (!authority.endsWith('/')) {
+          authority += '/';
+        }
+        return authority;
+      }
+    }
+
+    return authorizationUrl.endsWith('/') ? authorizationUrl : authorizationUrl + '/';
+  }
+
   // Initialise the myMSALObj for the given client, authority and scope
- function init(config) {
-     // TODO: Add support for other MSAL configuration
-     var authData = {
-         clientId: config.clientId,
-         authority: config.isB2C ? "https://" + config.tenant + ".b2clogin.com/tfp/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant,
-         knownAuthorities: [ config.tenant + ".b2clogin.com", "login.microsoftonline.com"],
-         redirectUri: config.redirectUri,
-     };
-     var postLogoutRedirectUri = {
-         postLogoutRedirectUri: config.postLogoutRedirectUri,
-     };
-     var msalConfig = {
-         auth: config?.postLogoutRedirectUri == null ? {
-             ...authData,
-         } : {
-             ...authData,
-             ...postLogoutRedirectUri,
-         },
-         cache: {
-             cacheLocation: config.cacheLocation,
-             storeAuthStateInCookie: false,
-         },
-     };
+  function init(config) {
+    let authority;
+    if (config.customAuthorizationUrl) {
+      authority = deriveAuthorityFromAuthorizationUrl(config.customAuthorizationUrl);
+    } else {
+      authority = config.isB2C ? "https://" + config.tenant + ".b2clogin.com/tfp/" + config.tenant + ".onmicrosoft.com/" + config.policy + "/" : "https://login.microsoftonline.com/" + config.tenant;
+    }
 
-     if (typeof config.scope === "string") {
-         tokenRequest.scopes = config.scope.split(" ");
-     } else {
-         tokenRequest.scopes = config.scope;
-     }
+    const isCustomDomain = !authority.includes('microsoftonline.com') &&
+      !authority.includes('b2clogin.com');
 
-     tokenRequest.extraQueryParameters = JSON.parse(config.customParameters);
-     tokenRequest.prompt = config.prompt;
-     tokenRequest.loginHint = config.loginHint;
+    const knownAuthorities = isCustomDomain
+      ? [new URL(authority).host]
+      : [config.tenant + ".b2clogin.com", "login.microsoftonline.com"];
 
-     myMSALObj = new msal.PublicClientApplication(msalConfig);
-     // Register Callbacks for Redirect flow and record the task so we
-     // can await its completion in the login API
+    var authData = {
+      clientId: config.clientId,
+      authority: authority,
+      knownAuthorities: knownAuthorities,
+      redirectUri: config.redirectUri,
+    };
+    var postLogoutRedirectUri = {
+      postLogoutRedirectUri: config.postLogoutRedirectUri,
+    };
+    var msalConfig = {
+      auth: config?.postLogoutRedirectUri == null ? {
+        ...authData,
+      } : {
+        ...authData,
+        ...postLogoutRedirectUri,
+      },
+      cache: {
+        cacheLocation: config.cacheLocation,
+        storeAuthStateInCookie: false,
+      },
+    };
 
-     redirectHandlerTask = myMSALObj.handleRedirectPromise();
- }
+    if (typeof config.scope === "string") {
+      tokenRequest.scopes = config.scope.split(" ");
+    } else {
+      tokenRequest.scopes = config.scope;
+    }
+
+    tokenRequest.extraQueryParameters = JSON.parse(config.customParameters);
+    tokenRequest.prompt = config.prompt;
+    tokenRequest.loginHint = config.loginHint;
+
+    myMSALObj = new msal.PublicClientApplication(msalConfig);
+    // Register Callbacks for Redirect flow and record the task so we
+    // can await its completion in the login API
+
+    redirectHandlerTask = myMSALObj.handleRedirectPromise();
+  }
 
   // Tries to silently acquire a token. Will return null if a token
   // could not be acquired or if no cached account credentials exist.

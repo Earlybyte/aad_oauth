@@ -8,10 +8,13 @@ class AuthStorage {
   final String _tokenIdentifier;
   final Token emptyToken = Token();
 
-  AuthStorage(
-      {String tokenIdentifier = 'Token', required AndroidOptions aOptions})
-      : _tokenIdentifier = tokenIdentifier,
-        _secureStorage = FlutterSecureStorage(aOptions: aOptions);
+  AuthStorage({
+    String tokenIdentifier = 'Token',
+    required AndroidOptions aOptions,
+    required IOSOptions iOptions,
+  })  : _tokenIdentifier = tokenIdentifier,
+        _secureStorage =
+            FlutterSecureStorage(aOptions: aOptions, iOptions: iOptions);
 
   Future<void> saveTokenToCache(Token token) async {
     var data = Token.toJsonMap(token);

@@ -22,9 +22,9 @@ class MobileOAuth extends CoreOAuth {
   /// [config] Parameters according to official Microsoft Documentation.
   MobileOAuth(Config config)
       : _authStorage = AuthStorage(
-          tokenIdentifier: config.tokenIdentifier,
-          aOptions: config.aOptions,
-        ),
+            tokenIdentifier: config.tokenIdentifier,
+            aOptions: config.aOptions,
+            iOptions: config.iOptions),
         _requestCode = RequestCode(config),
         _requestToken = RequestToken(config);
 

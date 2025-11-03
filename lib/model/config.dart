@@ -139,6 +139,9 @@ class Config {
   /// android storage options for shared preferences - defaults to encrypting shared prefs
   AndroidOptions aOptions;
 
+  /// ios storage options for secure storage
+  IOSOptions iOptions;
+
   /// Cache location used when authenticating with a web client.
   /// "CacheLocation.localStorage" - Local browser storage (default)
   /// "CacheLocation.sessionStorage" - Session context
@@ -217,6 +220,7 @@ class Config {
     this.isStub = false,
     this.loader = const SizedBox(),
     AndroidOptions? aOptions,
+    this.iOptions = IOSOptions.defaultOptions,
     CacheLocation? cacheLocation,
     required this.navigatorKey,
     this.origin,
@@ -269,6 +273,7 @@ class Config {
     bool? isStub,
     Widget? loader,
     AndroidOptions? aOptions,
+    IOSOptions? iOptions,
     CacheLocation? cacheLocation,
     GlobalKey<NavigatorState>? navigatorKey,
     String? origin,
@@ -307,6 +312,7 @@ class Config {
       isStub: isStub ?? this.isStub,
       loader: loader ?? this.loader,
       aOptions: aOptions ?? this.aOptions,
+      iOptions: iOptions ?? this.iOptions,
       cacheLocation: cacheLocation ?? this.cacheLocation,
       navigatorKey: navigatorKey ?? this.navigatorKey,
       origin: origin ?? this.origin,
