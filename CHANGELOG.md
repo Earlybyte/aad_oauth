@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Update flutter_secure_storage to 10.3.1 and enable automatic Android cipher migration.
+- Increase the minimum Flutter version to 3.19 and Android SDK version to 23.
+
 ## [1.0.1] - 20230215
 
 - Optionally avoid prompting popup on web logout https://github.com/Earlybyte/aad_oauth/pull/277 (by @phildupuis)
