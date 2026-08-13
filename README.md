@@ -18,7 +18,7 @@ Supported Flows:
 
 For using this library you have to create an azure app at the [Azure App registration portal](https://apps.dev.microsoft.com/). Use native app as platform type (with callback URL: <https://login.live.com/oauth20_desktop.srf>).
 
-Your minSdkVersion must be >= 20 in `android/app/build.gradle` section `android / defaultConfig` to support webview_flutter. Version 19 may build but will likely fail at runtime.
+Your minSdkVersion must be >= 23 in `android/app/build.gradle` section `android / defaultConfig` to support flutter_secure_storage 10.x.
 
 If your app does not have the `android.permission.INTERNET` permission you must add it to the AndroidManifest
 `<uses-permission android:name="android.permission.INTERNET"/>`
